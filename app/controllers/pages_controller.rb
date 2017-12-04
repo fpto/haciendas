@@ -24,7 +24,7 @@ class PagesController < ApplicationController
     @date_difs = {}
     @date_difs = @max_dates.merge(@min_dates) { |k, v1, v2| (v1 - v2).to_i }
     #Now we need to divide each element of  weight_gains with date_difs
-    @daily_weight_gains = @weight_gains.merge(@date_difs) { |k, v1, v2| v1 / v2 }
+    @daily_weight_gains = @weight_gains.merge(@date_difs) { |k, v1, v2| if v2 != 0 then v1 / v2 else 0 end }
     #Finally we sum them up and then divide them by the number of animals
     @sum_daily_weight_gains = 0
     @daily_weight_gains.each {|key,value| @sum_daily_weight_gains += value}
