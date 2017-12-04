@@ -6,7 +6,6 @@
       <tr>
         <th>Número</th>
         <!--<th>Specie</th>-->
-        <th>Nacimiento</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -16,10 +15,9 @@
         <tr>
           <td><%= animal.animal_number %></td>
           <!--<td><%= animal.species %></td>-->
-          <td><%= animal.birthday %></td>
-          <td><%= link_to 'M', animal %>
-            <%= link_to 'E', edit_animal_path(animal) %>
-            <%= link_to 'B', animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
+          <td><%= link_to 'Detalles', animal %>
+            <%= link_to 'Editar', edit_animal_path(animal) %>
+            <%= link_to 'Borrar', animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
           </td>
         </tr>
       <% end %>
