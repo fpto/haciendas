@@ -9,21 +9,20 @@
   </head>
 
   <body>
-<div class="container">
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <%= link_to "Rancho", '/', :method => :get, :class => "nav-link" %>
-    </li>
-    <li class="nav-item">
-      <%= link_to "Animales", '/animals', :method => :get, :class => "nav-link" %>
-    </li>
-    <li class="nav-item">
-      <%= link_to "Pesos", '/weights', :method => :get, :class => "nav-link" %>
-    </li>
 
-</ul>
-</div>
+    <div class="container"
+      <ul class="nav nav-tabs justify-content-center" >
+        <li class="nav-item">
+          <%= link_to "Rancho", '/', :method => :get, :class => "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Animales", '/animals', :method => :get, :class => "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Pesos", '/weights', :method => :get, :class => "nav-link" %>
+        </li>
+      </ul>
+    </div>
     <%= yield %>
-
   </body>
 </html>

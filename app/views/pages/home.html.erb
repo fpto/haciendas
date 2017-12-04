@@ -4,25 +4,32 @@
     <p class="lead">Sistema de Control de Peso para Bovino</p>
   </div>
 </div>
-<div class="container">
-  <h2>Inventario de Bovino</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th># de Animales</th>
-        <th>Peso Promedio</th>
-        <th>Días desde Ingreso</th>
-        <th>Ganancia de Peso Diaria</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= @number_of_animals %></td>
-        <td><%= @average_max_weight %></td>
-        <td><%= @average_date_dif %></td>
-        <td><%= @average_daily_gains %> </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container kpi-box">
+  <div class = "row">
+    <div class="card col-xs-3" >
+      <div class="card-body">
+        <h3 class="card-title">Animales</h3>
+        <h2 class="card-subtitle mb-2 text-muted"><%= @number_of_animals %></h2>
+      </div>
+    </div>
+    <div class="card col-xs-3" >
+      <div class="card-body">
+        <h3 class="card-title">Peso</h3>
+        <h2 class="card-subtitle mb-2 text-muted"><%= @average_max_weight.round(2) %></h2>
+      </div>
+    </div>
+    <div class="card col-xs-3">
+      <div class="card-body">
+        <h3 class="card-title">Días</h3>
+        <h2 class="card-subtitle mb-2 text-muted"><%= @average_date_dif.round %></h2>
+      </div>
+    </div>
+    <div class="card col-xs-3" >
+      <div class="card-body">
+        <h3 class="card-title">Ganancia</h3>
+        <h2 class="card-subtitle mb-2 text-muted"><%= @average_daily_gains.round(2) %> </h2>
+      </div>
+    </div>
+  </div>
 </div>
 <%= link_to "Ver Animales", '/animals', :method => :get, :class => "btn btn-primary btn-lg btn-block" %>
