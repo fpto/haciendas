@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ranch</title>
+    <title>Rancho</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,6 +9,21 @@
   </head>
 
   <body>
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <%= link_to "Rancho", '/', :method => :get, :class => "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "Animales", '/animals', :method => :get, :class => "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "Pesos", '/weights', :method => :get, :class => "nav-link" %>
+    </li>
+
+</ul>
+</div>
     <%= yield %>
+
   </body>
 </html>

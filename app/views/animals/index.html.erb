@@ -11,20 +11,20 @@
       </tr>
     </thead>
 
-  <tbody>
-    <% @animals.each do |animal| %>
-      <tr>
-        <td><%= animal.animal_number %></td>
-        <td><%= animal.species %></td>
-        <td><%= animal.birthday %></td>
-        <td><%= link_to 'Mostrar', animal %></td>
-        <td><%= link_to 'Editar', edit_animal_path(animal) %></td>
-        <td><%= link_to 'Borrar', animal, method: :delete, data: { confirm: 'Estás seguro?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'Nuevo Animal', new_animal_path, :class => "btn btn-primary btn-lg"%>
+    <tbody>
+      <% @animals.each do |animal| %>
+        <tr>
+          <td><%= animal.animal_number %></td>
+          <td><%= animal.species %></td>
+          <td><%= animal.birthday %></td>
+          <td><%= link_to 'Mostrar', animal %></td>
+          <td><%= link_to 'Editar', edit_animal_path(animal) %></td>
+          <td><%= link_to 'Borrar', animal, method: :delete, data: { confirm: 'Estás seguro?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </br>
+  <%= link_to 'Nuevo Animal', new_animal_path, :class => "btn btn-primary btn-lg"%>
+</div>
+</div>
