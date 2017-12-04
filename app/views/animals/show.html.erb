@@ -1,29 +1,41 @@
 <p id="notice"><%= notice %></p>
+<div class = "container">
+  <p>
+    <h1><strong>Animal number: <%= @animal.animal_number %> </h1>
+  </p>
 
-<p>
-  <strong>Animal number:</strong>
-  <%= @animal.animal_number %>
-</p>
+  <p>
+    <strong>Specie:</strong>
+    <%= @animal.species %>
+  </p>
 
-<p>
-  <strong>Species:</strong>
-  <%= @animal.species %>
-</p>
+  <p>
+    <strong>Birthday:</strong>
+    <%= @animal.birthday %>
+  </p>
 
-<p>
-  <strong>Birthday:</strong>
-  <%= @animal.birthday %>
-</p>
-
-<%= link_to 'Edit', edit_animal_path(@animal) %> |
-<%= link_to 'Back', animals_path %>
-
-<div class="cards row">
-  <% @weights.each do |d| %>
-  <div class="card col-xs-4">
-        <p><%= d.weight %></p>
-        <p><%= d.date %></p>
-    <%= link_to "See more", weight_path(d) %>
-  </div>
-  <% end %>
+  <%= link_to 'Editar', edit_animal_path(@animal) %> |
+  <%= link_to 'Atrás', animals_path %>
 </div>
+
+<div class="container">
+  <h4>Historial de Peso</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Peso</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+  <tbody>
+    <% @weights.each do |w| %>
+      <tr>
+        <td><%= w.date %></td>
+        <td><%= w.weight %></td>
+        <td><%= link_to "Más info", weight_path(w) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
