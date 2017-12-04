@@ -19,9 +19,10 @@
 li.nav-item{
   list-style-type: none;
   margin: 10px;
-  padding: 1px;
+  padding-right: 10px;
   float: left;
   font-size: 2em;
+  border-right: 1px solid #bbb;
 }
 
 li a.nav-item {
@@ -30,6 +31,10 @@ li a.nav-item {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+li.nav-item:last-child {
+    border-right: none;
 }
 
 

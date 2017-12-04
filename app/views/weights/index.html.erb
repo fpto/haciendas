@@ -21,9 +21,11 @@
           <td><%= weight.date %></td>
           <td><%= weight.weight %></td>
           <td><%= weight.note %></td>
-          <td><%= link_to 'Mostrar', weight %></td>
-          <td><%= link_to 'Editar', edit_weight_path(weight) %></td>
-          <td><%= link_to 'Borrar', weight, method: :delete, data: { confirm: 'Estás seguro?' } %></td>
+          <td>
+            <%= link_to 'M', weight %>
+            <%= link_to 'E', edit_weight_path(weight) %>
+            <%= link_to 'B', weight, method: :delete, data: { confirm: 'Estás seguro?' } %>
+          </td>
         </tr>
       <% end %>
     </tbody>
