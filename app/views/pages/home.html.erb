@@ -1,6 +1,27 @@
-<div class="main">
+<div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1>Hello my name is Fabricio</h1>
-    <p>I make Rails apps.</p>
+    <h1 class="display-3">Haciendas</h1>
+    <p class="lead">Sistema de Control de Peso para Bovino</p>
   </div>
+</div>
+<div class="container">
+  <h2>Inventario de Bovino</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th># de Animales</th>
+        <th>Peso Promedio</th>
+        <th>Días desde Ingreso</th>
+        <th>Ganancia de Peso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @number_of_animals %></td>
+        <td><%= @average_max_weight %></td>
+        <td><%= @average_date_dif %></td>
+        <td><%= @average_daily_gains %> </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
