@@ -15,7 +15,7 @@
     </thead>
 
     <tbody>
-      <% @weights.each do |weight| %>
+      <% @weights.order('animal_id').each do |weight| %>
         <tr>
           <td><%= weight.animal_id %></td>
           <td><%= weight.date %></td>

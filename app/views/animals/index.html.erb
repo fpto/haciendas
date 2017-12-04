@@ -11,7 +11,7 @@
     </thead>
 
     <tbody>
-      <% @animals.each do |animal| %>
+      <% @animals.order('id').each do |animal| %>
         <tr>
           <td><%= animal.animal_number %></td>
           <!--<td><%= animal.species %></td>-->
