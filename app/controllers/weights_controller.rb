@@ -15,6 +15,7 @@ class WeightsController < ApplicationController
   # GET /weights/new
   def new
     @weight = Weight.new
+    @animals = Animal.all
   end
 
   # GET /weights/1/edit

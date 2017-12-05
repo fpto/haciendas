@@ -11,22 +11,22 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :animal_number %>
     <%= form.number_field :animal_number, id: :animal_animal_number %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :species %>
-    <%= form.text_field :species, id: :animal_species %>
+    <%= form.select :species, ['bovino', 'ovino'] %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :birthday %>
     <%= form.date_select :birthday, id: :animal_birthday %>
   </div>
 
-  <div class="actions">
+  <div class="form-group">
     <%= form.submit %>
   </div>
 <% end %>

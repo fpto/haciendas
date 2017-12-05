@@ -11,22 +11,23 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :animal_id %>
-    <%= form.number_field :animal_id, id: :weight_animal_id %>
+    <!--<%= form.number_field :animal_id, id: :weight_animal_id %>-->
+    <%= form.select :animal_id, @animals.collect { |animal| [animal.animal_number] } %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :date %>
     <%= form.date_select :date, id: :weight_date %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :weight %>
     <%= form.text_field :weight, id: :weight_weight %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :note %>
     <%= form.text_area :note, id: :weight_note %>
   </div>
