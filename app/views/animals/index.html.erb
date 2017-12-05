@@ -1,6 +1,10 @@
 <p id="notice"><%= notice %></p>
 <div class="container">
-  <h2>Animales</h2>
+  <div class = "row">
+    <h2 class="col-sm-6">Animales</h2>
+    <%= link_to 'Nuevo', new_animal_path, :class => "btn btn-primary new-btn col-sm-6"%>
+  </div>
+
   <table class="table">
     <thead>
       <tr>
