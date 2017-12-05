@@ -17,6 +17,12 @@
  @import "bootstrap";
 
 /*Simple Navigation Styles*/
+#navigation{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 li.nav-item{
   list-style-type: none;
   margin: 10px;
@@ -59,4 +65,13 @@ td{
 
 .kpi-box{
   margin-bottom: 2em;
+}
+.jumbotron{
+  background-image: url(toros.jpg) ;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  color: white;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  text-align: center;
 }
