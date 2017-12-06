@@ -29,5 +29,7 @@ class PagesController < ApplicationController
     @sum_daily_weight_gains = 0
     @daily_weight_gains.each {|key,value| @sum_daily_weight_gains += value}
     @average_daily_gains = @sum_daily_weight_gains /@number_of_animals
+
+    @data = Weight.totals_by_year_month
   end
 end
