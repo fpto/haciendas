@@ -13,8 +13,7 @@
 
   <div class="form-group">
     <%= form.label :animal_id %>
-    <!--<%= form.number_field :animal_id, id: :weight_animal_id %>-->
-    <%= form.select :animal_id, @animals.collect { |animal| [animal.animal_number] } %>
+    <%= form.collection_select(:animal_id, Animal.all, :id, :animal_number)  %>
   </div>
 
   <div class="form-group">
