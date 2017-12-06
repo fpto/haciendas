@@ -7,7 +7,6 @@
   <thead>
     <tr>
       <th>Número</th>
-      <th>Tipo</th>
       <th>Area</th>
       <th>Hacienda</th>
       <th colspan="3"> Acciones</th>
@@ -19,7 +18,6 @@
       <% if plot.plot_type == 'bovino' then %>
         <tr>
           <td><%= plot.number %></td>
-          <td><%= plot.plot_type %></td>
           <td><%= plot.area %></td>
           <td><%= plot.ranch %></td>
           <td>
@@ -39,7 +37,6 @@
   <thead>
     <tr>
       <th>Número</th>
-      <th>Tipo</th>
       <th>Area</th>
       <th>Hacienda</th>
       <th colspan="3"> Acciones</th>
@@ -51,7 +48,6 @@
       <% if plot.plot_type == 'ovino' then %>
         <tr>
           <td><%= plot.number %></td>
-          <td><%= plot.plot_type %></td>
           <td><%= plot.area %></td>
           <td><%= plot.ranch %></td>
           <td>
@@ -69,5 +65,5 @@
 
 <br>
 
-<%= link_to 'New Plot', new_plot_path %>
+<%= link_to 'Nuevo Potrero', new_plot_path %>
 </div>
