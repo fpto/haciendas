@@ -12,3 +12,8 @@ Weight.create(animal_id: 1, weight: 300, date: '2017-01-01')
 Weight.create(animal_id: 1, weight: 320, date: '2017-01-20')
 Weight.create(animal_id: 2, weight: 300, date: '2017-01-01')
 Weight.create(animal_id: 2, weight: 320, date: '2017-01-20')
+
+plot1 = Plot.create(number:1, area: 20, ranch:"sauces", plot_type: "ovino")
+plot2 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "ovino")
+plot3 = Plot.create(number:1, area: 20, ranch:"sauces", plot_type: "bovino")
+plot4 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "bovino")

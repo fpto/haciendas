@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+  <div class="container">
+
+
+  <p>
+    <strong>Número:</strong>
+    <%= @plot.number %>
+  </p>
+
+  <p>
+    <strong>Area:</strong>
+    <%= @plot.area %>
+  </p>
+
+  <p>
+    <strong>Hacienda:</strong>
+    <%= @plot.ranch %>
+  </p>
+
+  <p>
+    <strong>Tipo:</strong>
+    <%= @plot.plot_type %>
+  </p>
+
+
+  <%= link_to 'Editar', edit_plot_path(@plot) %> |
+  <%= link_to 'Atrás', plots_path %>
+</div>
+
+<div class="container">
+  <h4>Historial de Evaluaciones</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Maleza</th>
+        <th>Pasturas</th>
+        <th>Cercas</th>
+        <th>Promedio</th>
+      </tr>
+    </thead>
+
+  <tbody>
+    <% @plot_evaluations.each do |pe| %>
+      <tr>
+        <td><%= pe.date.strftime("%d/%m/%y") %></td>
+        <td><%= pe.weed_score %></td>
+        <td><%= pe.pasture_score %></td>
+        <td><%= pe.fences_score %></td>
+        <td><%= ((pe.weed_score + pe.pasture_score + pe.fences_score).to_f / 3).round(2) %></td>
+        <td><%= link_to "Más info", plot_evaluation_path(pe) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

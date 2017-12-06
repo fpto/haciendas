@@ -1,0 +1,45 @@
+<%= form_with(model: plot, local: true) do |form| %>
+  <% if plot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(plot.errors.count, "error") %> prohibited this plot from being saved:</h2>
+
+      <ul>
+      <% plot.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :number, 'Número' %>
+    <%= form.text_field :number, id: :plot_number %>
+
+  </div>
+
+  <div class="field">
+    <%= form.label :area, 'Area' %>
+    <%= form.text_field :area, id: :plot_area %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ranch, 'Hacienda' %>
+    <!--<%= form.text_field :ranch, id: :plot_ranch %>-->
+    <%= form.select :ranch, ['sauces', 'laureles'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :plot_type, 'Tipo' %>
+    <!--<%= form.text_field :plot_type, id: :plot_plot_type %>-->
+    <%= form.select :plot_type, ['bovino', 'ovino'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :comment,'Comentario' %>
+    <%= form.text_area :comment, id: :plot_comment %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

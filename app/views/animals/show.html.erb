@@ -39,13 +39,15 @@
       </tr>
     </thead>
 
-  <tbody>
-    <% @weights.each do |w| %>
-      <tr>
-        <td><%= w.date.strftime("%d/%m/%y") %></td>
-        <td><%= w.weight %></td>
-        <td><%= link_to "Más info", weight_path(w) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <tbody>
+      <% @weights.each do |w| %>
+        <tr>
+          <td><%= w.date.strftime("%d/%m/%y") %></td>
+          <td><%= w.weight %></td>
+          <td><%= link_to "Más info", weight_path(w) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+</div>

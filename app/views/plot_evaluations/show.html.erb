@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+<div class = :container>
+  <p>
+    <strong>Potrero:</strong>
+    <%= @plot_evaluation.plot_id %>
+  </p>
+
+  <p>
+    <strong>Date:</strong>
+    <%= @plot_evaluation.date %>
+  </p>
+
+  <p>
+    <strong>Weed score:</strong>
+    <%= @plot_evaluation.weed_score %>
+  </p>
+
+  <p>
+    <strong>Pasture score:</strong>
+    <%= @plot_evaluation.pasture_score %>
+  </p>
+
+  <p>
+    <strong>Fences score:</strong>
+    <%= @plot_evaluation.fences_score %>
+  </p>
+
+  <p>
+    <strong>Comment:</strong>
+    <%= @plot_evaluation.comment %>
+  </p>
+
+  <%= link_to 'Edit', edit_plot_evaluation_path(@plot_evaluation) %> |
+  <%= link_to 'Back', plot_evaluations_path %>
+</div>

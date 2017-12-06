@@ -1,0 +1,48 @@
+<%= form_with(model: plot_evaluation, local: true) do |form| %>
+  <% if plot_evaluation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(plot_evaluation.errors.count, "error") %> prohibited this plot_evaluation from being saved:</h2>
+
+      <ul>
+      <% plot_evaluation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :plot_id %>
+    <!--<%= form.text_field :plot_id, id: :plot_evaluation_plot_id %>-->
+    <%= form.collection_select(:plot_id, Plot.all, :id, :number)  %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.date_select :date, id: :plot_evaluation_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :weed_score %>
+    <%= form.number_field :weed_score, id: :plot_evaluation_weed_score %>
+  </div>
+
+  <div class="field">
+    <%= form.label :pasture_score %>
+    <%= form.number_field :pasture_score, id: :plot_evaluation_pasture_score %>
+  </div>
+
+  <div class="field">
+    <%= form.label :fences_score %>
+    <%= form.number_field :fences_score, id: :plot_evaluation_fences_score %>
+  </div>
+
+  <div class="field">
+    <%= form.label :comment %>
+    <%= form.text_area :comment, id: :plot_evaluation_comment %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

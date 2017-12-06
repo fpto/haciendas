@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171203043209) do
+ActiveRecord::Schema.define(version: 20171206180146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,28 @@ ActiveRecord::Schema.define(version: 20171203043209) do
     t.integer "animal_number"
     t.string "species"
     t.date "birthday"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "plot_evaluations", force: :cascade do |t|
+    t.bigint "plot_id"
+    t.date "date"
+    t.integer "weed_score"
+    t.integer "pasture_score"
+    t.integer "fences_score"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plot_id"], name: "index_plot_evaluations_on_plot_id"
+  end
+
+  create_table "plots", force: :cascade do |t|
+    t.string "number"
+    t.float "area"
+    t.string "ranch"
+    t.string "plot_type"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -33,4 +55,5 @@ ActiveRecord::Schema.define(version: 20171203043209) do
     t.index ["animal_id"], name: "index_weights_on_animal_id"
   end
 
+  add_foreign_key "plot_evaluations", "plots"
 end

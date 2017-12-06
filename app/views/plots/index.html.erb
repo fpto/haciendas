@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+<div class="container">
+
+<h1>Plots</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Tipo</th>
+      <th>Area</th>
+      <th>Hacienda</th>
+      <th colspan="3"> Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @plots.order('number').each do |plot| %>
+      <tr>
+        <td><%= plot.number %></td>
+        <td><%= plot.plot_type %></td>
+        <td><%= plot.area %></td>
+        <td><%= plot.ranch %></td>
+        <td>
+          <%= link_to 'M', plot, :title => "Más detalles"  %>
+          <%= link_to 'E', edit_plot_path(plot),:title => "Editar" %>
+          <%= link_to 'B', plot, method: :delete, data: { confirm: 'Está seguro?' }, :title => "Borrar" %>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Plot', new_plot_path %>
+</div>
