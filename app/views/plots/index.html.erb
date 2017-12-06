@@ -14,7 +14,7 @@
   </thead>
 
   <tbody>
-    <% @plots.order('number').each do |plot| %>
+    <% @plots.each do |plot| %>
       <% if plot.plot_type == 'bovino' then %>
         <tr>
           <td><%= plot.number %></td>
@@ -44,7 +44,7 @@
   </thead>
 
   <tbody>
-    <% @plots.order('number').each do |plot| %>
+    <% @plots.each do |plot| %>
       <% if plot.plot_type == 'ovino' then %>
         <tr>
           <td><%= plot.number %></td>

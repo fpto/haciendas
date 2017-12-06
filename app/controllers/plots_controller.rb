@@ -4,7 +4,7 @@ class PlotsController < ApplicationController
   # GET /plots
   # GET /plots.json
   def index
-    @plots = Plot.all
+    @plots = Plot.all.order('number')
   end
 
   # GET /plots/1
