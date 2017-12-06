@@ -21,7 +21,7 @@
       <% @weights.order('animal_id').each do |weight| %>
         <tr>
           <td><%= weight.animal_id %></td>
-          <td><%= weight.date %></td>
+          <td><%= weight.date.strftime("%d/%m/%y") %></td>
           <td><%= weight.weight %></td>
           <td><%= weight.note %></td>
           <td>

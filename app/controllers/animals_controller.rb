@@ -10,8 +10,16 @@ class AnimalsController < ApplicationController
   # GET /animals/1
   # GET /animals/1.json
   def show
-    @animal = Animal.find(params[:id]) 
+    @animal = Animal.find(params[:id])
     @weights = @animal.weights
+    @max_weight =  @weights.maximum(:weight)
+    @min_weight =  @weights.minimum(:weight)
+    @weight_gain = @max_weight - @min_weight
+    @first_weight = @weights.minimum(:date)
+    @last_weight = @weights.maximum(:date)
+    @date_dif = (@last_weight - @first_weight).to_i
+    @daily_weight_gain = @weight_gain / @date_dif
+    @since_weight = (Date.today - @last_weight).to_i
   end
 
   # GET /animals/new
