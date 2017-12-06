@@ -6,4 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# animal1 = Animal.create(number:1, species: "Bovino", birthday: "2017-1-1")
+animal1 = Animal.create(animal_number:1, species: "Bovino", birthday: "2017-1-1")
+animal1 = Animal.create(animal_number:2, species: "Bovino", birthday: "2017-1-2")
+Weight.create(animal_id: 1, weight: 300, date: '2017-01-01')
+Weight.create(animal_id: 1, weight: 320, date: '2017-01-20')
+Weight.create(animal_id: 2, weight: 300, date: '2017-01-01')
+Weight.create(animal_id: 2, weight: 320, date: '2017-01-20')
