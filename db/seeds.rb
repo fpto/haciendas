@@ -17,3 +17,8 @@ plot1 = Plot.create(number:1, area: 20, ranch:"sauces", plot_type: "ovino")
 plot2 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "ovino")
 plot3 = Plot.create(number:1, area: 20, ranch:"sauces", plot_type: "bovino")
 plot4 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "bovino")
+
+PlotEvaluation.create(plot_id: 1, date: '2017-12-1', weed_score: 3, pasture_score: 2, fences_score: 3)
+PlotEvaluation.create(plot_id: 1, date: '2017-11-1', weed_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 2, date: '2017-11-1', weed_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 2, date: '2017-21-1', weed_score: 4, pasture_score: 4, fences_score: 5)
