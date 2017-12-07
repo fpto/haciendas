@@ -12,23 +12,27 @@ class AnimalsController < ApplicationController
   def show
     @animal = Animal.find(params[:id])
     @weights = @animal.weights
-
       @max_weight =  @weights.maximum(:weight)
-    if @max_weigh != nil then
       @min_weight =  @weights.minimum(:weight)
+      # Dealing when no weights
+      @max_weight ||= 0
+      @min_weight ||= 0
+
       @weight_gain = @max_weight - @min_weight
       @first_weight = @weights.minimum(:date)
       @last_weight = @weights.maximum(:date)
+      # Dealing when no weights
+      @first_weight ||= 0
+      @last_weight ||= 0
       @date_dif = (@last_weight - @first_weight).to_i
-      @daily_weight_gain = (@weight_gain / @date_dif).round(2)
-      @since_weight = (Date.today - @last_weight).to_i
-
-    # When there is no weights
-    else
-      @weight_gain = "N/A"
-      @daily_weight_gain = "N/A"
-      @since_weight = "N/A"
-    end
+      # Dealing when no weights
+      if @date_dif != 0 then
+        @daily_weight_gain = (@weight_gain / @date_dif).round(2)
+        @since_weight = (Date.today - @last_weight).to_i
+      else
+        @daily_weight_gain = "N/A"
+        @since_weight = "N/A"
+      end
   end
 
   # GET /animals/new
