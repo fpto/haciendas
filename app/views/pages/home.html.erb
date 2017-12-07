@@ -6,29 +6,37 @@
 </div>
 <div class="container kpi-box">
   <div class = "row">
-    <div class="card col-xs-3" >
+    <div class="card col-xs-2" >
       <div class="card-body">
         <h3 class="card-title">Animales</h3>
         <h2 class="card-subtitle mb-2 text-muted"><%= @number_of_animals %></h2>
       </div>
     </div>
-    <div class="card col-xs-3" >
+    <div class="card col-xs-2" >
       <div class="card-body">
         <h3 class="card-title">Peso</h3>
         <h2 class="card-subtitle mb-2 text-muted"><%= @average_max_weight.round(2) %></h2>
       </div>
     </div>
-    <div class="card col-xs-3">
+    <div class="card col-xs-2">
       <div class="card-body">
         <h3 class="card-title">Días</h3>
         <h2 class="card-subtitle mb-2 text-muted"><%= @average_date_dif.round %></h2>
       </div>
     </div>
-    <div class="card col-xs-3" >
+    <div class="card col-xs-2" >
       <div class="card-body">
         <h3 class="card-title">Ganancia</h3>
         <h2 class="card-subtitle mb-2 text-muted">
           <%= @average_daily_gains.round(2) %> lbs
+        </h2>
+      </div>
+    </div>
+    <div class="card col-xs-2" >
+      <div class="card-body">
+        <h3 class="card-title">Potreros</h3>
+        <h2 class="card-subtitle mb-2 text-muted">
+          <%= @average_recent_plot_score %> 
         </h2>
       </div>
     </div>

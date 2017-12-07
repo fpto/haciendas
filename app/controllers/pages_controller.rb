@@ -30,6 +30,22 @@ class PagesController < ApplicationController
     @daily_weight_gains.each {|key,value| @sum_daily_weight_gains += value}
     @average_daily_gains = @sum_daily_weight_gains /@number_of_animals
 
+    # For the graph
     @data = Weight.totals_by_year_month
+
+    # For the Plot Scores
+    # TODO Filter out the score by plot_type
+    @recent_scores_bovinos = PlotEvaluation.select('plots.plot_type, plot_evaluations.plot_id,
+    plot_evaluations.date,
+    ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average').joins(:plot)
+    @sum_av_scores = 0
+    @recent_scores_bovinos.each {|p| @sum_av_scores += p.average}
+    @count_av_scores = 0
+    @recent_scores_bovinos.each {|p| @count_av_scores += 1}
+    @average_recent_plot_score = (@sum_av_scores / @count_av_scores).round(2)
+
+
+
+
   end
 end
