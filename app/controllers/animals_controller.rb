@@ -18,8 +18,8 @@ class AnimalsController < ApplicationController
     date(NOW()) - MIN(weights.date) as days_in_ranch,
     MAX(weights.date) - MIN(weights.date) as days_between_weights,
     date(NOW()) - MAX(weights.date) as days_since_last_weight,
-    ROUND(CAST((MAX(weights.weight) - MIN(weights.weight))/(MAX(weights.date) - MIN(weights.date)) as decimal),2) AS daily_gained"
-  ).joins("LEFT JOIN weights ON animals.animal_number = weights.animal_id")
+    ROUND(CAST((MAX(weights.weight) - MIN(weights.weight)/NULLIF(MAX(weights.weight) - MIN(weights.weight),0)) as decimal),2) AS daily_gained"
+  ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
   .group("1,2")
   .order("1 ASC")
   end
