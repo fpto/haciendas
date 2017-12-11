@@ -10,7 +10,12 @@
       <tr>
         <th>Número</th>
         <!--<th>Specie</th>-->
+        <th>En Hacienda</th>
+        <th>Último Peso</th>
+        <th> Sin pesar </th>
+        <th>GDP</th>
         <th>Acciones</th>
+
       </tr>
     </thead>
 
@@ -18,10 +23,14 @@
       <% @animals.order('id').each do |animal| %>
         <tr>
           <td><%= animal.animal_number %></td>
+          <td><%= animal.days_in_ranch %> </td>
+          <td><%= animal.last_weight %></td>
+          <td><%= animal.days_since_last_weight %></td>
+          <td><%= animal.daily_gained %></td>
           <!--<td><%= animal.species %></td>-->
-          <td><%= link_to 'Detalles', animal %>
-            <%= link_to 'Editar', edit_animal_path(animal) %>
-            <%= link_to 'Borrar', animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
+          <td><%= link_to 'M', animal %>
+            <%= link_to 'E', edit_animal_path(animal) %>
+            <%= link_to 'B', animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
           </td>
         </tr>
       <% end %>
