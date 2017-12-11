@@ -7,7 +7,10 @@
   <thead>
     <tr>
       <th>Número</th>
-      <th>Area</th>
+      <th>Maleza</th>
+      <th>Pasturas</th>
+      <th>Cercas</th>
+      <th>Promedio</th>
       <th>Hacienda</th>
       <th colspan="3"> Acciones</th>
     </tr>
@@ -18,7 +21,10 @@
       <% if plot.plot_type == 'bovino' then %>
         <tr>
           <td><%= plot.number %></td>
-          <td><%= plot.area %></td>
+          <td><%= plot.weed_score %></td>
+          <td><%= plot.pasture_score %></td>
+          <td><%= plot.fences_score %></td>
+          <td><%= plot.average %></td>
           <td><%= plot.ranch %></td>
           <td>
             <%= link_to 'M', plot, :title => "Más detalles"  %>
@@ -37,7 +43,10 @@
   <thead>
     <tr>
       <th>Número</th>
-      <th>Area</th>
+      <th>Maleza</th>
+      <th>Pasturas</th>
+      <th>Cercas</th>
+      <th>Promedio</th>
       <th>Hacienda</th>
       <th colspan="3"> Acciones</th>
     </tr>
@@ -48,7 +57,10 @@
       <% if plot.plot_type == 'ovino' then %>
         <tr>
           <td><%= plot.number %></td>
-          <td><%= plot.area %></td>
+          <td><%= plot.weed_score %></td>
+          <td><%= plot.pasture_score %></td>
+          <td><%= plot.fences_score %></td>
+          <td><%= plot.average %></td>
           <td><%= plot.ranch %></td>
           <td>
             <%= link_to 'M', plot, :title => "Más detalles"  %>
