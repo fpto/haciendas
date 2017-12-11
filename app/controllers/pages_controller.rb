@@ -35,15 +35,26 @@ class PagesController < ApplicationController
 
     # For the Plot Scores
     # TODO Filter out the score by plot_type
-    @recent_scores_bovinos = PlotEvaluation.select('plots.plot_type, plot_evaluations.plot_id,
-    plot_evaluations.date,
-    ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average').joins(:plot)
-    @sum_av_scores = 0
-    @recent_scores_bovinos.each {|p| @sum_av_scores += p.average}
-    @count_av_scores = 0
-    @recent_scores_bovinos.each {|p| @count_av_scores += 1}
-    @average_recent_plot_score = (@sum_av_scores / @count_av_scores).round(2)
-
+    @recent_scores = PlotEvaluation.select(
+      "plot_evaluations.id,
+      plot_evaluations.plot_id,
+      plots.number,
+      plots.plot_type as pt,
+      ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
+      .joins("JOIN plots ON plot_evaluations.plot_id = plots.id")
+      .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
+    #Bovinos
+    @sum_av_scores_b = 0
+    @recent_scores.each {|p| if p.pt == 'bovino' then @sum_av_scores_b += p.average end}
+    @count_av_scores_b = 0
+    @recent_scores.each {|p|if p.pt == 'bovino'  then @count_av_scores_b += 1 end}
+    @average_recent_plot_score_b = if @count_av_scores_b > 0 then (@sum_av_scores_b / @count_av_scores_b).round(2) else "N/A" end
+    #Ovinos
+    @sum_av_scores_o = 0
+    @recent_scores.each {|p| if p.pt == 'ovino' then @sum_av_scores_o += p.average end}
+    @count_av_scores_o = 0
+    @recent_scores.each {|p| if p.pt == 'ovino' then @count_av_scores_o += 1 end}
+    @average_recent_plot_score_o = if @count_av_scores_o > 0 then (@sum_av_scores_o / @count_av_scores_o).round(2) else "N/A" end
 
 
 
