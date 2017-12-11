@@ -1,7 +1,13 @@
 <p id="notice"><%= notice %></p>
 <div class="container">
+<div class="row">
 
-<h1>Potreros</h1>
+
+
+<h1 class="col-sm-4">Potreros</h1>
+<%= link_to 'Nuevo Potrero', new_plot_path, :class => "btn btn-primary new-btn col-sm-4"%>
+<%= link_to 'Nueva Evaluación', new_plot_evaluation_path, :class => "btn btn-primary new-btn col-sm-4"%>
+</div>
 <h2>Bovino</h2>
 <table class="table">
   <thead>
@@ -77,5 +83,6 @@
 
 <br>
 
-<%= link_to 'Nuevo Potrero', new_plot_path %>
+<%= link_to 'Nuevo Potrero', new_plot_path, :class => "btn btn-primary new-btn col-sm-4"%>
+<%= link_to 'Nueva Evaluación', new_plot_evaluation_path, :class => "btn btn-primary new-btn col-sm-4"%>
 </div>

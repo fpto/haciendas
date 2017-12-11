@@ -1,8 +1,9 @@
 <p id="notice"><%= notice %></p>
 <div class="container">
   <div class = "row">
-    <h2 class="col-sm-6">Animales</h2>
-    <%= link_to 'Nuevo', new_animal_path, :class => "btn btn-primary new-btn col-sm-6"%>
+    <h2 class="col-sm-4">Animales</h2>
+    <%= link_to 'Nuevo Animal', new_animal_path, :class => "btn btn-primary new-btn col-sm-4"%>
+    <%= link_to 'Nuevo Peso', new_weight_path, :class => "btn btn-primary new-btn col-sm-4"%>
   </div>
 
   <table class="table">
@@ -37,6 +38,7 @@
     </tbody>
   </table>
   </br>
-  <%= link_to 'Nuevo', new_animal_path, :class => "btn btn-primary btn-lg new-btn"%>
+  <%= link_to 'Nuevo Animal', new_animal_path, :class => "btn btn-primary btn-lg new-btn"%>
+  <%= link_to 'Nuevo Peso', new_weight_path, :class => "btn btn-primary btn-lg new-btn"%>
 </div>
 </div>
