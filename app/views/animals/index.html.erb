@@ -15,7 +15,7 @@
         <th>Último Peso</th>
         <th> Sin pesar </th>
         <th>GDP</th>
-        <th>Acciones</th>
+        <th></th>
 
       </tr>
     </thead>
@@ -29,9 +29,9 @@
           <td><%= animal.days_since_last_weight %></td>
           <td><%= animal.daily_gained %></td>
           <!--<td><%= animal.species %></td>-->
-          <td><%= link_to 'M', animal %>
-            <%= link_to 'E', edit_animal_path(animal) %>
-            <%= link_to 'B', animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
+          <td><%= link_to image_tag("info.png", border: 0, title: "Más información"), animal %>
+            <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_animal_path(animal) %>
+            <%= link_to image_tag("close.png", border: 0, title: "Borrar"), animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
           </td>
         </tr>
       <% end %>

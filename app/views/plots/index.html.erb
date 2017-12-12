@@ -18,7 +18,7 @@
       <th>Cercas</th>
       <th>Promedio</th>
       <th>Hacienda</th>
-      <th colspan="3"> Acciones</th>
+      <th colspan="3"> </th>
     </tr>
   </thead>
 
@@ -33,9 +33,9 @@
           <td><%= plot.average %></td>
           <td><%= plot.ranch %></td>
           <td>
-            <%= link_to 'M', plot, :title => "Más detalles"  %>
-            <%= link_to 'E', edit_plot_path(plot),:title => "Editar" %>
-            <%= link_to 'B', plot, method: :delete, data: { confirm: 'Está seguro?' }, :title => "Borrar" %>
+            <%= link_to image_tag("info.png", border: 0, title: "Más información"), plot  %>
+            <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_plot_path(plot) %>
+            <%= link_to image_tag("close.png", border: 0, title: "Borrar"), plot, method: :delete, data: { confirm: 'Está seguro?' } %>
           </td>
           <td></td>
           <td></td>
@@ -54,7 +54,7 @@
       <th>Cercas</th>
       <th>Promedio</th>
       <th>Hacienda</th>
-      <th colspan="3"> Acciones</th>
+      <th colspan="3"> </th>
     </tr>
   </thead>
 
@@ -69,9 +69,9 @@
           <td><%= plot.average %></td>
           <td><%= plot.ranch %></td>
           <td>
-            <%= link_to 'M', plot, :title => "Más detalles"  %>
-            <%= link_to 'E', edit_plot_path(plot),:title => "Editar" %>
-            <%= link_to 'B', plot, method: :delete, data: { confirm: 'Está seguro?' }, :title => "Borrar" %>
+            <%= link_to image_tag("info.png", border: 0, title: "Más información"), plot  %>
+            <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_plot_path(plot) %>
+            <%= link_to image_tag("close.png", border: 0, title: "Borrar"), plot, method: :delete, data: { confirm: 'Está seguro?' } %>
           </td>
           <td></td>
           <td></td>
