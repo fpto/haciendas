@@ -5,9 +5,9 @@ class PlotsController < ApplicationController
   # GET /plots.json
   def index
     # @plots = Plot.all.order('CAST(number AS int)')
-    @plots = PlotEvaluation.select(
-      "plot_evaluations.id,
-      plot_evaluations.plot_id,
+    @plots = Plot.select(
+      "plot_evaluations.id as plot_evaluation,
+      plot_evaluations.plot_id as plot_id,
       plots.number as number,
       plots.ranch,
       plots.plot_type as plot_type,
@@ -15,7 +15,7 @@ class PlotsController < ApplicationController
       plot_evaluations.pasture_score as pasture_score,
       plot_evaluations.fences_score as fences_score,
       ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
-      .joins("JOIN plots ON plot_evaluations.plot_id = plots.id")
+      .joins("LEFT JOIN plot_evaluations ON plot_evaluations.plot_id = plots.id")
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
   end
 

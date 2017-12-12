@@ -14,7 +14,7 @@
   <div class="field">
     <%= form.label :plot_id %>
     <!--<%= form.text_field :plot_id, id: :plot_evaluation_plot_id %>-->
-    <%= form.collection_select(:plot_id, Plot.all, :id, :number)  %>
+    <%= form.collection_select(:plot_id, Plot.all, :id, :number_with_type)  %>
   </div>
 
   <div class="field">

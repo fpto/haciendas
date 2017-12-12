@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 <div class = :container>
   <p>
-    <strong>Potrero:</strong>
+    <strong>ID-Potrero:</strong>
     <%= @plot_evaluation.plot_id %>
   </p>
 
@@ -30,6 +30,7 @@
     <%= @plot_evaluation.comment %>
   </p>
 
-  <%= link_to 'Edit', edit_plot_evaluation_path(@plot_evaluation) %> |
-  <%= link_to 'Back', plot_evaluations_path %>
+  <%= link_to 'Editar', edit_plot_evaluation_path(@plot_evaluation) %> |
+  <%= link_to 'Atrás', plot_evaluations_path %> |
+  <%= link_to 'Borrar', @plot_evaluation, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %>
 </div>
