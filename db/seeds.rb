@@ -34,3 +34,5 @@ PlotEvaluation.create(plot_id: 3, date: '2017-11-1', weed_score: 3, pasture_scor
 PlotEvaluation.create(plot_id: 3, date: '2017-12-1', weed_score: 2, pasture_score: 4, fences_score: 5)
 PlotEvaluation.create(plot_id: 4, date: '2017-11-1', weed_score: 2, pasture_score: 4, fences_score: 5)
 PlotEvaluation.create(plot_id: 4, date: '2017-12-1', weed_score: 4, pasture_score: 4, fences_score: 5)
+
+fabricio = User.create(first_name: 'Fabricio', last_name: 'Puerto', email: 'fabricio.puerto@outlook.com', password: 'masuca', password_confirmation: 'masuca')
