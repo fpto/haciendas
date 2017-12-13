@@ -1,4 +1,8 @@
 class PlotEvaluationsController < ApplicationController
+  before_action :require_user, only: [:new, :create, :edit, :destroy]
+  before_action :require_editor, only: [:new, :create, :edit]
+  before_action :require_admin, only: [:new, :create, :edit, :destroy]
+  
   before_action :set_plot_evaluation, only: [:show, :edit, :update, :destroy]
 
   # GET /plot_evaluations

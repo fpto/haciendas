@@ -1,8 +1,8 @@
 class AnimalsController < ApplicationController
   #Requires user
-  before_action :require_user, only: [:show, :edit, :destroy]
-  before_action :require_editor, only: [:show, :edit]
-  before_action :require_admin, only: [:show, :edit, :destroy]
+  before_action :require_user, only: [:new, :create, :edit, :destroy]
+  before_action :require_editor, only: [:new, :create, :edit]
+  before_action :require_admin, only: [:new, :create, :edit, :destroy]
 
   before_action :set_animal, only: [:show, :edit, :update, :destroy]
 
