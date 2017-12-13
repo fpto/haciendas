@@ -1,5 +1,12 @@
+<div class ="container signup" >
+  <h1>Ahora inicie sesión</h1>
 <%= form_for(:session, url: login_path) do |f| %>
-  <%= f.email_field :email, :placeholder => "Email" %>
-  <%= f.password_field :password, :placeholder => "Password" %>
-  <%= f.submit "Log in", class: "btn-submit" %>
+  <div class="form-group">
+  <%= f.email_field :email, :placeholder => "Correo electrónico"%>
+  </div>
+  <div class="form-group" >
+    <%= f.password_field :password, :placeholder => "Contraseña" %>
+  </div>
+  <%= f.submit "Iniciar sesión", class: "btn-submit" %>
 <% end %>
+</div>
