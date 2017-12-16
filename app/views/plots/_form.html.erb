@@ -39,6 +39,11 @@
     <%= form.text_area :comment, id: :plot_comment %>
   </div>
 
+  <div class="field">
+    <%= form.label :boundaries,'Frontereas' %>
+    <%= form.text_area :boundaries, id: :plot_boundaries, :placeholder => "{lat: 0, lng: 0}, {lat:0, lng: 0}, {lat:0, lng:0}" %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

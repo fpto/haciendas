@@ -15,6 +15,7 @@
   <p>
     <strong>Area:</strong>
     <%= @plot.area %>
+
   </p>
 
   <p>
@@ -80,13 +81,7 @@
        });
 
        // Define the LatLng coordinates for the polygon.
-       var triangleCoords = [
-       {lat: 15.484526, lng: -86.409336},
-       {lat:15.483420, lng: -86.408842},
-       {lat:15.483152, lng: -86.407779},
-       {lat:15.483669, lng: -86.405410},
-       {lat:15.487005, lng:-86.405706}
-       ];
+       var triangleCoords = [<%= @plot.boundaries %>];
 
        // Construct the polygon.
        var bermudaTriangle = new google.maps.Polygon({
@@ -133,3 +128,5 @@
    <script async defer
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD958KcviL2p1LIo8_PrFgnP8IQY0bbaN4&callback=initMap">
    </script>
+   <strong>Fronteras:</strong>
+   <%= @plot.boundaries %>
