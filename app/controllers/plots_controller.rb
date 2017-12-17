@@ -87,6 +87,6 @@ class PlotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plot_params
-      params.require(:plot).permit(:number, :area, :ranch, :plot_type, :comment)
+      params.require(:plot).permit(:number, :area, :ranch, :plot_type, :comment, :boundaries)
     end
 end
