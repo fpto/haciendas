@@ -76,7 +76,7 @@
      function initMap() {
        map = new google.maps.Map(document.getElementById('map'), {
          zoom: 18,
-         center: <%= if @plot.boundaries =! "" then p @plot.boundaries[0, @plot.boundaries.index('}')] + "}" else "{lat: 15.481249, lng: -86.411314}" end %>,
+         center: <%= if @plot.boundaries == "" then "{lat: 15.481249, lng: -86.411314}"  else p @plot.boundaries[0, @plot.boundaries.index('}')] + "}" end %>,
 
          mapTypeId: 'satellite'
        });
