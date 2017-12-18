@@ -21,6 +21,7 @@ class PlotsController < ApplicationController
       ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
       .joins("LEFT JOIN plot_evaluations ON plot_evaluations.plot_id = plots.id")
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
+      .order("plots.id")
   end
 
   # GET /plots/1
