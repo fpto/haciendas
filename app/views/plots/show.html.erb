@@ -75,8 +75,8 @@
 
      function initMap() {
        map = new google.maps.Map(document.getElementById('map'), {
-         zoom: 15,
-         center: {lat: 15.486499,  lng: -86.404033},
+         zoom: 18,
+         center: <%= p @plot.boundaries[0, @plot.boundaries.index('}')] + "}" %>,
          mapTypeId: 'satellite'
        });
 
