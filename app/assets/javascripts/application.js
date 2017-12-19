@@ -17,3 +17,4 @@
 //= require_tree .
 
 //= require gmaps/google
+//= require bootstrap_sb_admin_base_v2
