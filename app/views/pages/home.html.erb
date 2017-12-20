@@ -1,58 +1,140 @@
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-3">Haciendas</h1>
-    <p class="lead">Sistema de Control de Peso para Bovino</p>
-  </div>
-</div>
-<div class="container kpi-box">
+<div class="page-wrapper kpi-box" style="min-height: 731px;">
   <div class = "row">
-    <div class="card col-xs-2" >
-      <div class="card-body">
-        <h3 class="card-title">Animales</h3>
-        <h2 class="card-subtitle mb-2 text-muted"><%= @number_of_animals %></h2>
-      </div>
-    </div>
-    <div class="card col-xs-2" >
-      <div class="card-body">
-        <h3 class="card-title">Peso</h3>
-        <h2 class="card-subtitle mb-2 text-muted"><%= @average_max_weight.round(2) %></h2>
-      </div>
-    </div>
-    <div class="card col-xs-2">
-      <div class="card-body">
-        <h3 class="card-title">Días</h3>
-        <h2 class="card-subtitle mb-2 text-muted"><%= @average_date_dif.round %></h2>
-      </div>
-    </div>
-    <div class="card col-xs-2" >
-      <div class="card-body">
-        <h3 class="card-title">Ganancia</h3>
-        <h2 class="card-subtitle mb-2 text-muted">
-          <%= @average_daily_gains.round(2) %> lbs
-        </h2>
-      </div>
-    </div>
-    <div class="card col-xs-2" >
-      <div class="card-body">
-        <h3 class="card-title">Pt. Bovinos</h3>
-        <h2 class="card-subtitle mb-2 text-muted">
-          <%= @average_recent_plot_score_b %>
-        </h2>
-      </div>
-    </div>
-    <div class="card col-xs-2" >
-      <div class="card-body">
-        <h3 class="card-title">Pt. Ovinos</h3>
-        <h2 class="card-subtitle mb-2 text-muted">
-          <%= @average_recent_plot_score_o %>
-        </h2>
-      </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-exchange fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @number_of_animals %></div>
+              <div>Animales</div>
+            </div>
+          </div>
+        </div>
+        <a href="/animals">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
     </div>
   </div>
-</div>
-<%= link_to "Ver Animales", '/animals', :method => :get, :class => "btn btn-primary btn-lg btn-block" %>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-green">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-tasks fa-5x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%= @average_max_weight.round(2) %></div>
+            <div>Peso Promedio</div>
+          </div>
+        </div>
+      </div>
+      <a href="/animals">
+        <div class="panel-footer">
+          <span class="pull-left">Ver detalles</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-yellow">
+      <div class="panel-heading">
+          <div class="row">
+              <div class="col-xs-3">
+                  <i class="fa fa-calendar-o fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                  <div class="huge"><%= @average_date_dif.round %></div>
+                  <div>Días desde Ingreso</div>
+              </div>
+          </div>
+      </div>
+      <a href="/animals">
+        <div class="panel-footer">
+            <span class="pull-left">Ver detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+          <div class="panel-heading">
+              <div class="row">
+                  <div class="col-xs-3">
+                      <i class="fa fa-truck fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                      <div class="huge"><%= @average_daily_gains.round(2) %></div>
+                      <div>Ganancia de Peso Diaria</div>
+                  </div>
+              </div>
+          </div>
+          <a href="/animals">
+              <div class="panel-footer">
+                  <span class="pull-left">View Details</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+              </div>
+          </a>
+      </div>
+  </div>
 
-<div class= "container">
+  <div class="col-lg-6 col-md-6">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-th fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                    <div class="huge"><%= @average_recent_plot_score_b %></div>
+                    <div>Potreros Bovinos</div>
+                </div>
+            </div>
+        </div>
+        <a href="/plots">
+            <div class="panel-footer">
+                <span class="pull-left">Detalles</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="col-lg-6 col-md-6">
+  <div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-3">
+                <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+                <div class="huge"><%= @average_recent_plot_score_o %></div>
+                <div>Potreros Ovinos</div>
+            </div>
+        </div>
+    </div>
+    <a href="/plots">
+        <div class="panel-footer">
+            <span class="pull-left">Ver detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+        </div>
+    </a>
+  </div>
+</div>
+
+<!--<div class= "container">
 <h2> Animales por Pesado</h2>
   <div id="chart" style="width: auto; height: 600px;"></div>
 
@@ -76,4 +158,4 @@
 
   <% end -%>
 
-</div>
+</div>-->

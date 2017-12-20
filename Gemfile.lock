@@ -51,6 +51,9 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap_sb_admin_base_v2 (0.3.6)
+      font-awesome-rails
+      jquery-rails
     builder (3.2.3)
     byebug (9.1.0)
     capybara (2.16.1)
@@ -78,6 +81,8 @@ GEM
     ffi (1.9.18-java)
     ffi (1.9.18-x64-mingw32)
     ffi (1.9.18-x86-mingw32)
+    font-awesome-rails (4.7.0.2)
+      railties (>= 3.2, < 5.2)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     gmaps4rails (2.1.2)
@@ -218,6 +223,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-sass
+  bootstrap_sb_admin_base_v2
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)

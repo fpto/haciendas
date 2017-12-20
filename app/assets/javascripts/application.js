@@ -11,9 +11,10 @@
 // about supported directives.
 //
 //= require rails-ujs
-//= require jquery
 //= require bootstrap-sprockets
+//= require jquery
 //= require turbolinks
 //= require_tree .
 
 //= require gmaps/google
+//= require bootstrap_sb_admin_base_v2

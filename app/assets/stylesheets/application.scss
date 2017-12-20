@@ -12,7 +12,9 @@
  *
  *= require_tree .
  *= require_self
- */
+ *= require font-awesome
+ *= require bootstrap_sb_admin_base_v2
+*/
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
@@ -45,12 +47,6 @@ li.nav-item:last-child {
 }
 
 /*Table styles*/
-th{
-  font-size: 3rem;
-}
-td{
-  font-size: 3rem;
-}
 .new-btn{
   vertical-align: middle;
   font-size: 2rem;
