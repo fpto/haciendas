@@ -16,14 +16,20 @@
         <i class="fa fa-caret-down"></i>
       </a>
       <ul class="dropdown-menu dropdown-user">
+        <% if current_user %>
         <li>
-          <%= link_to '<i class="fa fa-user fa-fw"></i>Profile</a>'.html_safe, user_path(current_user) %>
+          <i class="fa fa-user fa-fw"></i><%= current_user.first_name %>
         </li>
         <li class="divider"></li>
         <li>
-          <%= link_to '<i class="fa fa-sign-out fa-fw"></i>Logout</a>'.html_safe, logout_path, :method=>'delete' %>
+          <%= link_to '<i class="fa fa-sign-out fa-fw"></i>Cerrar sesión'.html_safe, logout_path, method: "delete" %>
+        </li>
+        <% else %>
+          <li><%= link_to "Iniciar sesión", 'login' %></a></li>
+          <li><%= link_to "Registrarse", 'signup' %></a></li>
+        <% end %>
       </ul>
-    </li>
+
   </ul>
 
   <div class="navbar-default sidebar" role="navigation">
@@ -32,27 +38,16 @@
         <li>
           <a href="/">
             <i class="fa fa-dashboard fa-fw"></i>
-            Hacienda</a>
+            Tablero</a>
         </li>
-<!--        <li>
-          <a href="/animals"><i class="fa fa-bar-chart-o fa-fw"></i> Animales<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level collapse">
-            <li>
-              <%= link_to 'Ver animales', '/' %>
-            </li>
-            <li>
-              <%= link_to 'Create new sensor', '/' %>
-            </li>
-          </ul>
-        </li>-->
         <li>
           <a href="/animals">
-            <i class="fa  fa-info-circle fa-fw"></i>
+            <i class="fa fa-bar-chart-o fa-fw"></i>
             Animales</a>
         </li>
         <li>
           <a href="/plots">
-            <i class="fa  fa-info-circle fa-fw"></i>
+            <i class="fa fa-th fa-fw"></i>
             Potreros</a>
         </li>
       </ul>
