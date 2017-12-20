@@ -36,6 +36,7 @@ gem 'bcrypt', '~> 3.1.7'
 # for Sass bootstrap
 gem 'bootstrap-sass'
 gem 'jquery-rails'
+gem 'jquery-turbolinks'
 
 # configures app to serve static assets
 gem 'rails_12factor', group: :production
