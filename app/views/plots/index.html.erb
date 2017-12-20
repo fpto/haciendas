@@ -37,11 +37,9 @@
                   <td><%= plot.average %></td>
                   <td><%= plot.ranch %></td>
                   <td>
-                    <%= link_to image_tag("info.png", border: 0, title: "Más información"), plot_path(plot.plot_id)  %>
-                    <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_plot_path(plot.plot_id) %>
+                    <%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), plot_path(plot.plot_id)  %>
+                    <%= link_to image_tag("editing.png", border: 0,size: "15x15", title: "Editar"), edit_plot_path(plot.plot_id) %>
                   </td>
-                  <td></td>
-                  <td></td>
                 </tr>
               <% end %>
             <% end %>
@@ -72,11 +70,9 @@
                   <td><%= plot.average %></td>
                   <td><%= plot.ranch %></td>
                   <td>
-                    <%= link_to image_tag("info.png", border: 0, title: "Más información"), plot_path(plot.plot_id)  %>
-                    <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_plot_path(plot.plot_id) %>
+                    <%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), plot_path(plot.plot_id)  %>
+                    <%= link_to image_tag("editing.png", border: 0, size: "15x15", title: "Editar"), edit_plot_path(plot.plot_id) %>
                   </td>
-                  <td></td>
-                  <td></td>
                 </tr>
               <% end %>
             <% end %>

@@ -34,12 +34,12 @@
               <td><%= animal.days_since_last_weight %></td>
               <td><%= animal.daily_gained %></td>
               <!--<td><%= animal.species %></td>-->
-              <td><%= link_to image_tag("info.png", border: 0, size: "10x10", title: "Más información"), animal %>
+              <td><%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), animal %>
                 <% if current_user && (current_user.editor? or  current_user.admin?)%>
-                <%= link_to image_tag("editing.png", border: 0, title: "Editar"), edit_animal_path(animal) %>
+                <%= link_to image_tag("editing.png", border: 0,size: "15x15", title: "Editar"), edit_animal_path(animal) %>
                 <% end %>
                 <% if current_user && current_user.admin? %>
-                <%= link_to image_tag("close.png", border: 0, title: "Borrar"), animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
+                <%= link_to image_tag("close.png", border: 0, size: "15x15", title: "Borrar"), animal, method: :delete, data: { confirm: 'Estás seguro?' } %>
                 <% end %>
               </td>
             </tr>
