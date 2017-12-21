@@ -28,7 +28,23 @@ class PagesController < ApplicationController
     #Finally we sum them up and then divide them by the number of animals
     @sum_daily_weight_gains = 0
     @daily_weight_gains.each {|key,value| @sum_daily_weight_gains += value}
-    @average_daily_gains = @sum_daily_weight_gains /@number_of_animals
+    @average_daily_gain = @sum_daily_weight_gains /@number_of_animals
+    # This calculates the average daily gain during stay
+    # I use in the home page now the latest daily gain, since it's more dynamic
+
+    # This is to calculate the latest two weights of each animal
+    @latest_weights = Weight.select("animal_id,
+    ROUND(CAST((MAX(weight)- MIN(weight)) /  NULLIF(MAX(date) - MIN(DATE),0) as decimal),2) as daily_gain").where("(
+			SELECT 	COUNT(*)
+			FROM 	weights  f
+			WHERE f.animal_id = weights.animal_id AND
+				  f.weight >= weights.weight
+		) <= 2").group("animal_id")
+    @sum_latest_daily_gains = 0
+    @latest_weights.each do |animal|
+      @sum_latest_daily_gains += animal.daily_gain
+    end
+    @latest_average_daily_gain = @sum_latest_daily_gains / @number_of_animals
 
     # For the graph
     @data = Weight.totals_by_year_month
