@@ -34,18 +34,23 @@ class PagesController < ApplicationController
 
     # This is to calculate the latest two weights of each animal
     @latest_weights = Weight.select("animal_id,
-    (MAX(weight)- MIN(weight)) /  NULLIF(MAX(date) - MIN(DATE),0)  as daily_gain").where("(
+    (MAX(weight) - MIN(weight)) as wg,
+      (MAX(weight)- MIN(weight)) /  NULLIF(MAX(date) - MIN(DATE),0)  as daily_gain").where("(
 			SELECT 	COUNT(*)
 			FROM 	weights  f
 			WHERE f.animal_id = weights.animal_id AND
 				  f.weight >= weights.weight
 		) <= 2").group("animal_id")
     @sum_latest_daily_gains = 0
+    @animals_with_gain = 0
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
       @sum_latest_daily_gains += animal.daily_gain
+      if animal.wg > 0
+        @animals_with_gain += 1
+      end
     end
-    @latest_average_daily_gain = @sum_latest_daily_gains / @number_of_animals
+    @latest_average_daily_gain = @sum_latest_daily_gains / @animals_with_gain
 
     # For the graph
     @data = Weight.totals_by_year_month
