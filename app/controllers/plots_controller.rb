@@ -22,8 +22,11 @@ class PlotsController < ApplicationController
       ROUND(CAST((plot_evaluations.weed_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
       .joins("LEFT JOIN plot_evaluations ON plot_evaluations.plot_id = plots.id")
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
-      .order("plots.id")
-      @animals = Animal.select(
+      .order("plots.ranch, plots.id")
+
+      # We pull animal información in order to calculate ranch load
+      # They require plots and animals to have evaluations and weights
+    @animals = Animal.select(
         "	animals.animal_number as animal_number,
       animals.id as id,
       animals.species as species,
@@ -41,11 +44,57 @@ class PlotsController < ApplicationController
     ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
     .group("1,2")
     .order("1 ASC")
-  @sauces_load = 0
-  @sauces_area = 0
-  @laureles_area = 0
-  @plots.each{ |plot| if plot.ranch == 'sauces' then @sauces_area += plot.area end }
-  @plots.each{ |plot| if plot.ranch == 'laureles' then @laureles_area += plot.area end }
+
+    # TODO Make distinction of Ovino and Bovino plots
+    @sauces_area = 0
+    @laureles_area = 0
+    # Only consider bovino plots
+    @plots.each{ |plot| if plot.ranch == 'sauces' and plot.plot_type == 'bovino' then @sauces_area += plot.area end }
+    @plots.each{ |plot| if plot.ranch == 'laureles' then @laureles_area += plot.area end }
+    @sauces_animals = 0
+    @laureles_animals = 0
+    @animals.each{ |animal| if animal.ranch == 'sauces' then @sauces_animals += 1 end}
+    @animals.each{ |animal| if animal.ranch == 'laureles' then @laureles_animals += 1 end}
+    @sauces_load = 0
+    @laureles_load = 0
+    if @sauces_animals > 0 then
+      @sauces_load = @sauces_area / @sauces_animals
+    end
+    if @laureles_animals > 0 then
+      @laureles_load = @laureles_area / @laureles_animals
+    end
+
+    # Calculate Score per ranch
+    @sauces_plots_b = @sauces_plots_o = @sauces_plots_o = @laureles_plots =@sum_plot_avg_sauces_b = @sum_plot_avg_sauces_o =  @sum_plot_avg_laureles = 0
+    @plots.each{ |plot|
+      case plot.ranch
+      when 'sauces'
+        if plot.plot_type == 'bovino' then
+        @sauces_plots_b += 1
+        @sum_plot_avg_sauces_b += plot.average
+        else
+          @sauces_plots_o += 1
+          @sum_plot_avg_sauces_o += plot.average
+        end
+      when 'laureles'
+        @laureles_plots += 1
+        @sum_plot_avg_laureles += plot.average
+      end }
+    @score_plots_sauces_b =0
+    @score_plots_sauces_o =0
+    @score_plots_laureles =0
+    if @sauces_plots_b > 0 then
+      @score_plots_sauces_b = @sum_plot_avg_sauces_b / @sauces_plots_b
+    end
+    if @sauces_plots_o > 0 then
+      @score_plots_sauces_o = @sum_plot_avg_sauces_o / @sauces_plots_o
+    end
+    if @laureles_plots > 0 then
+      @score_plots_laureles = @sum_plot_avg_laureles / @laureles_plots
+    end
+
+
+
   end
 
   # GET /plots/1

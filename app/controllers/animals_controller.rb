@@ -13,6 +13,7 @@ class AnimalsController < ApplicationController
     @animals = Animal.select(
       "	animals.animal_number as animal_number,
     animals.id as id,
+    animals.ranch as ranch,
     animals.species as species,
   COUNT(weights.weight) as weighted,
     MIN(weights.weight) as initial_weight,
@@ -114,6 +115,6 @@ class AnimalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def animal_params
-      params.require(:animal).permit(:animal_number, :species, :birthday)
+      params.require(:animal).permit(:animal_number, :species, :birthday, :ranch)
     end
 end

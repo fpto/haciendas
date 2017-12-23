@@ -3,17 +3,167 @@
 <% end %>
 <% content_for :panel_heading do %>Potreros<% end %>
 <p id="notice"><%= notice %></p>
-<div class = "row pull-right">
-  <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-sm-6"%>
-  <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-sm-6"%>
-</div>
-<div class = "container">
-<div class = "row">
-  <div class = "col-sm-6">
-    Los sauces: <%= @sauces_area %> Mzs.
-    Los laureles: <%= @laureles_area %> Mzs.
+
+<div class="page-wrapper kpi-box" style="min-height: 731px;">
+  <div class = "row">
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"> <%= @sauces_area %></div>
+              <div>Sauces: Mzs.</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-green">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-th fa-5x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"> <%= @laureles_area %></div>
+            <div>Laureles: Mzs.</div>
+          </div>
+        </div>
+      </div>
+      <a href="/plots">
+        <div class="panel-footer">
+          <span class="pull-left">Detalles</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
   </div>
 </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"> <%= @sauces_load %></div>
+              <div>Sauces: Mzs/Bovino</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-green">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-th fa-5x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"> <%= @laureles_load %></div>
+            <div>Laureles: Mzs/Bovino</div>
+          </div>
+        </div>
+      </div>
+      <a href="/plots">
+        <div class="panel-footer">
+          <span class="pull-left">Detalles</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+  </div>
+</div>
+<div class="col-lg-3 col-md-6">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-3">
+          <i class="fa fa-th fa-5x"></i>
+        </div>
+        <div class="col-xs-9 text-right">
+          <div class="huge"> <%= @score_plots_sauces_b  %></div>
+          <div>Sauces: Calificación Bovinos</div>
+        </div>
+      </div>
+    </div>
+    <a href="/plots">
+      <div class="panel-footer">
+        <span class="pull-left">Detalles</span>
+        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+        <div class="clearfix"></div>
+      </div>
+    </a>
+</div>
+</div>
+<div class="col-lg-3 col-md-6">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-3">
+        <i class="fa fa-th fa-5x"></i>
+      </div>
+      <div class="col-xs-9 text-right">
+        <div class="huge"> <%= @score_plots_sauces_o %></div>
+        <div>Sauces: Calificación Ovinos</div>
+      </div>
+    </div>
+  </div>
+  <a href="/plots">
+    <div class="panel-footer">
+      <span class="pull-left">Detalles</span>
+      <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+      <div class="clearfix"></div>
+    </div>
+  </a>
+</div>
+</div>
+<div class="col-lg-3 col-md-6">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-3">
+        <i class="fa fa-th fa-5x"></i>
+      </div>
+      <div class="col-xs-9 text-right">
+        <div class="huge"> <%= @score_plots_laureles %></div>
+        <div>Laureles: Calificación Bovino</div>
+      </div>
+    </div>
+  </div>
+  <a href="/plots">
+    <div class="panel-footer">
+      <span class="pull-left">Detalles</span>
+      <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+      <div class="clearfix"></div>
+    </div>
+  </a>
+</div>
+</div>
+
+  <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-3"%>
+  <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-3"%>
+
 </div>
 <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 

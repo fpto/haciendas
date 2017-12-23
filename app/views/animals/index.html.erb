@@ -29,7 +29,7 @@
           <% @animals.order('id').each do |animal| %>
             <tr>
               <td><%= animal.animal_number %></td>
-              <td><%= animal.days_in_ranch %> </td>
+              <td><%= animal.days_in_ranch %>-<%= animal.ranch %> </td>
               <td><%= animal.last_weight %></td>
               <td><%= animal.days_since_last_weight %></td>
               <td><%= animal.daily_gained %></td>
