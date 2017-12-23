@@ -34,6 +34,7 @@ class PagesController < ApplicationController
 
     # This is to calculate the latest two weights of each animal
     @latest_weights = Weight.select("animal_id,
+    (MAX(date) - MIN(date)) as days_between_weights,
     (MAX(weight) - MIN(weight)) as wg,
       (MAX(weight)- MIN(weight)) /  NULLIF(MAX(date) - MIN(DATE),0)  as daily_gain").where("(
 			SELECT 	COUNT(*)
@@ -46,7 +47,7 @@ class PagesController < ApplicationController
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
       @sum_latest_daily_gains += animal.daily_gain
-      if animal.wg > 0
+      if animal.days_between_weights > 0
         @animals_with_gain += 1
       end
     end
