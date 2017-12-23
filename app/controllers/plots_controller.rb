@@ -57,11 +57,11 @@ class PlotsController < ApplicationController
     @animals.each{ |animal| if animal.ranch == 'laureles' then @laureles_animals += 1 end}
     @sauces_load = 0
     @laureles_load = 0
-    if @sauces_animals > 0 then
-      @sauces_load = @sauces_area / @sauces_animals
+    if @sauces_area > 0 then
+      @sauces_load =  @sauces_animals / @sauces_area
     end
-    if @laureles_animals > 0 then
-      @laureles_load = @laureles_area / @laureles_animals
+    if @laureles_area > 0 then
+      @laureles_load =  @laureles_animals / @laureles_area
     end
 
     # Calculate Score per ranch
