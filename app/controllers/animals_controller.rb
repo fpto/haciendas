@@ -9,7 +9,7 @@ class AnimalsController < ApplicationController
   # GET /animals
   # GET /animals.json
   def index
-    #@animals = Animal.all
+    # This query is used for the table and it uses first and initial weight
     @animals = Animal.select(
       "	animals.animal_number as animal_number,
     animals.id as id,
@@ -28,24 +28,41 @@ class AnimalsController < ApplicationController
     ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
     .group("1,2")
     .order("1 ASC")
+    # This query is used to calculate GDP with latest weights
+    @latest_weights = Weight.select(
+      "animals.ranch as ranch,
+    weights.animal_id,
+    MAX(weights.weight) as last_weight,
+    NULLIF(MAX(weights.weight)- MIN(weights.weight),0) as gained_weight,
+    MAX(weights.date) - MIN(weights.date) as days_between_weights,
+    ROUND(CAST((MAX(weights.weight)- MIN(weights.weight)) /  NULLIF(MAX(weights.date) - MIN(weights.date),0) as decimal),2) as daily_gain")
+    .joins("LEFT JOIN animals ON animals.id = weights.animal_id")
+    .where("(
+			SELECT 	COUNT(*)
+			FROM 	weights  f
+			WHERE f.animal_id = weights.animal_id AND
+				  f.weight >= weights.weight
+		) <= 2")
+    .group("weights.animal_id,  animals.ranch")
     @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
     @animals_laureles = @laureles_last_weights = @laureles_daily_gain = @laureles_with_gain =@laureles_average_weight = @laureles_avg_daily_gain  =0
-    @animals.each{ |animal|
+    @latest_weights.each{ |animal|
+      animal.daily_gain ||= 0
+      animal.days_between_weights ||= 0
       case animal.ranch
       when 'sauces'
         @animals_sauces += 1
         @sauces_last_weights += animal.last_weight
-        animal.daily_gained ||= 0
-        @sauces_daily_gain += animal.daily_gained
-        if animal.weight_gain > 0 then
+        @sauces_daily_gain += animal.daily_gain
+        if animal.days_between_weights > 0 then
           @sauces_with_gain += 1
         end
       when 'laureles'
         @animals_laureles += 1
         @laureles_last_weights += animal.last_weight
-        animal.daily_gained ||= 0
-        @laureles_daily_gain += animal.daily_gained
-        if animal.weight_gain > 0 then
+        animal.daily_gain ||= 0
+        @laureles_daily_gain += animal.daily_gain
+        if animal.days_between_weights > 0 then
           @laureles_with_gain += 1
         end
       end
