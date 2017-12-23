@@ -15,7 +15,7 @@ class AnimalsController < ApplicationController
     animals.id as id,
     animals.ranch as ranch,
     animals.species as species,
-  COUNT(weights.weight) as weighted,
+    COUNT(weights.weight) as weighted,
     MIN(weights.weight) as initial_weight,
     MAX(weights.weight) as last_weight,
     MAX(weights.weight) - MIN(weights.weight) AS weight_gain,
@@ -25,9 +25,43 @@ class AnimalsController < ApplicationController
     MAX(weights.date) - MIN(weights.date) as days_between_weights,
     date(NOW()) - MAX(weights.date) as days_since_last_weight,
     ROUND(CAST((MAX(weights.weight) - MIN(weights.weight))/ (NULLIF((MAX(weights.date) - MIN(weights.date)),0)) as decimal),2) AS daily_gained"
-  ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
-  .group("1,2")
-  .order("1 ASC")
+    ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
+    .group("1,2")
+    .order("1 ASC")
+    @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
+    @animals_laureles = @laureles_last_weights = @laureles_daily_gain = @laureles_with_gain =@laureles_average_weight = @laureles_avg_daily_gain  =0
+    @animals.each{ |animal|
+      case animal.ranch
+      when 'sauces'
+        @animals_sauces += 1
+        @sauces_last_weights += animal.last_weight
+        animal.daily_gained ||= 0
+        @sauces_daily_gain += animal.daily_gained
+        if animal.weight_gain > 0 then
+          @sauces_with_gain += 1
+        end
+      when 'laureles'
+        @animals_laureles += 1
+        @laureles_last_weights += animal.last_weight
+        animal.daily_gained ||= 0
+        @laureles_daily_gain += animal.daily_gained
+        if animal.weight_gain > 0 then
+          @laureles_with_gain += 1
+        end
+      end
+      }
+    if @animals_sauces > 0 then
+      @sauces_average_weight = @sauces_last_weights / @animals_sauces
+    end
+    if @animals_laureles > 0 then
+      @laureles_average_weight = @laureles_last_weights / @animals_laureles
+    end
+    if @sauces_with_gain > 0 then
+      @sauces_avg_daily_gain = @sauces_daily_gain / @sauces_with_gain
+    end
+    if @laureles_with_gain > 0 then
+      @laureles_avg_daily_gain = @laureles_daily_gain / @laureles_with_gain
+    end
   end
 
   # GET /animals/1
