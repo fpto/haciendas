@@ -28,28 +28,8 @@
       </div>
     </div>
 
-  <div class="col-lg-3 col-md-6">
-    <div class="panel panel-green">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-xs-3">
-            <i class="fa fa-th fa-5x"></i>
-          </div>
-          <div class="col-xs-9 text-right">
-            <div class="huge"> <%= @animals_laureles %></div>
-            <div>Laureles: Animales</div>
-          </div>
-        </div>
-      </div>
-      <a href="/animals">
-        <div class="panel-footer">
-          <span class="pull-left">Detalles</span>
-          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-          <div class="clearfix"></div>
-        </div>
-      </a>
-  </div>
-</div>
+
+
 <div class="col-lg-3 col-md-6">
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -71,29 +51,6 @@
       </div>
     </a>
   </div>
-</div>
-
-<div class="col-lg-3 col-md-6">
-<div class="panel panel-green">
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-xs-3">
-        <i class="fa fa-th fa-5x"></i>
-      </div>
-      <div class="col-xs-9 text-right">
-        <div class="huge"> <%= @laureles_average_weight.round(2) %></div>
-        <div>Laureles: Peso</div>
-      </div>
-    </div>
-  </div>
-  <a href="/animals">
-    <div class="panel-footer">
-      <span class="pull-left">Detalles</span>
-      <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-      <div class="clearfix"></div>
-    </div>
-  </a>
-</div>
 </div>
 <div class="col-lg-3 col-md-6">
   <div class="panel panel-primary">
@@ -117,6 +74,63 @@
     </a>
   </div>
 </div>
+<div class ="col-lg-3 col-md-6">
+  <div class = "row">
+    <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-11"%>
+  </div>
+  <div class = "row">
+    <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-11"%>
+</div>
+</div>
+</div>
+
+<div class = "row">
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-green">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-th fa-5x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"> <%= @animals_laureles %></div>
+            <div>Laureles: Animales</div>
+          </div>
+        </div>
+      </div>
+      <a href="/animals">
+        <div class="panel-footer">
+          <span class="pull-left">Detalles</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+  </div>
+  </div>
+<div class="col-lg-3 col-md-6">
+<div class="panel panel-green">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-3">
+        <i class="fa fa-th fa-5x"></i>
+      </div>
+      <div class="col-xs-9 text-right">
+        <div class="huge"> <%= @laureles_average_weight.round(2) %></div>
+        <div>Laureles: Peso</div>
+      </div>
+    </div>
+  </div>
+  <a href="/animals">
+    <div class="panel-footer">
+      <span class="pull-left">Detalles</span>
+      <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+      <div class="clearfix"></div>
+    </div>
+  </a>
+</div>
+</div>
+
+
 
 <div class="col-lg-3 col-md-6">
 <div class="panel panel-green">
@@ -141,16 +155,9 @@
 </div>
 </div>
 
-<div class ="col-lg-3 col-md-6">
-  <div class = "row">
-    <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-11"%>
-  </div>
-  <div class = "row">
-    <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-11"%>
+
 </div>
-</div>
-</div>
-  
+
 
   <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 
