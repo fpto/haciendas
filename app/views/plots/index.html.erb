@@ -37,7 +37,7 @@
               <i class="fa fa-th fa-5x"></i>
             </div>
             <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @sauces_load %></div>
+              <div class="huge"> <%= @sauces_load.round(2) %></div>
               <div>Sauces: Mzs/Bovino</div>
             </div>
           </div>
@@ -81,7 +81,7 @@
             <i class="fa fa-th fa-5x"></i>
           </div>
           <div class="col-xs-9 text-right">
-            <div class="huge"> <%= @laureles_load %></div>
+            <div class="huge"> <%= @laureles_load.round(2) %></div>
             <div>Laureles: Mzs/Bovino</div>
           </div>
         </div>
@@ -103,7 +103,7 @@
           <i class="fa fa-th fa-5x"></i>
         </div>
         <div class="col-xs-9 text-right">
-          <div class="huge"> <%= @score_plots_sauces_b  %></div>
+          <div class="huge"> <%= @score_plots_sauces_b.round(2)  %></div>
           <div>Sauces: Calificación Bovinos</div>
         </div>
       </div>
@@ -125,7 +125,7 @@
         <i class="fa fa-th fa-5x"></i>
       </div>
       <div class="col-xs-9 text-right">
-        <div class="huge"> <%= @score_plots_sauces_o %></div>
+        <div class="huge"> <%= @score_plots_sauces_o.round(2) %></div>
         <div>Sauces: Calificación Ovinos</div>
       </div>
     </div>
@@ -147,7 +147,7 @@
         <i class="fa fa-th fa-5x"></i>
       </div>
       <div class="col-xs-9 text-right">
-        <div class="huge"> <%= @score_plots_laureles %></div>
+        <div class="huge"> <%= @score_plots_laureles.round(2) %></div>
         <div>Laureles: Calificación Bovino</div>
       </div>
     </div>
