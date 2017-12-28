@@ -30,20 +30,31 @@ class AnimalsController < ApplicationController
     .order("1 ASC")
     # This query is used to calculate GDP with latest weights
     @latest_weights = Weight.select(
-      "animals.ranch as ranch,
-    weights.animal_id,
-    MAX(weights.weight) as last_weight,
-    NULLIF(MAX(weights.weight)- MIN(weights.weight),0) as gained_weight,
-    MAX(weights.date) - MIN(weights.date) as days_between_weights,
-    ROUND(CAST((MAX(weights.weight)- MIN(weights.weight)) /  NULLIF(MAX(weights.date) - MIN(weights.date),0) as decimal),2) as daily_gain")
-    .joins("LEFT JOIN animals ON animals.id = weights.animal_id")
-    .where("(
-			SELECT 	COUNT(*)
-			FROM 	weights  f
-			WHERE f.animal_id = weights.animal_id AND
-				  f.weight >= weights.weight
-		) <= 2")
-    .group("weights.animal_id,  animals.ranch")
+      "weights.weight as id,
+      dates.animal_id as animal_id,
+      animals.animal_number as animal_number,
+    animals.ranch as ranch,
+    weights.weight as last_weight,
+    dates.latest_date - dates.before_date as days_between_weights,
+    date(NOW()) - dates.latest_date as days_since_last_weight,
+    weights.weight - w2.weight as weight_change,
+    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
+    .joins("JOIN (
+     SELECT
+    	animal_id,
+    	MAX(weights.date) as latest_date,
+    	MIN(weights.DATE) as before_date
+    	FROM   weights
+    	WHERE
+    		(
+    			SELECT 	COUNT(*)
+    			FROM 	weights  f
+    			WHERE f.animal_id = weights.animal_id AND
+    				  f.weight >= weights.weight
+    		) <= 2
+    	GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
+      JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
+      JOIN animals ON animals.id = dates.animal_id").order("animal_id")
     @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
     @animals_laureles = @laureles_last_weights = @laureles_daily_gain = @laureles_with_gain =@laureles_average_weight = @laureles_avg_daily_gain  =0
     @latest_weights.each{ |animal|
