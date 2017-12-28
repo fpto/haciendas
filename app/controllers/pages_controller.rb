@@ -33,15 +33,30 @@ class PagesController < ApplicationController
     # I use in the home page now the latest daily gain, since it's more dynamic
 
     # This is to calculate the latest two weights of each animal
-    @latest_weights = Weight.select("animal_id,
-    (MAX(date) - MIN(date)) as days_between_weights,
-    (MAX(weight) - MIN(weight)) as wg,
-      (MAX(weight)- MIN(weight)) /  NULLIF(MAX(date) - MIN(DATE),0)  as daily_gain").where("(
-			SELECT 	COUNT(*)
-			FROM 	weights  f
-			WHERE f.animal_id = weights.animal_id AND
-				  f.weight >= weights.weight
-		) <= 2").group("animal_id")
+    @latest_weights = Weight.select(
+      "dates.animal_id as animal_id,
+      animals.ranch as ranch,
+    weights.weight as last_weight,
+    dates.latest_date - dates.before_date as days_between_weights,
+    date(NOW()) - dates.latest_date as days_since_last_weight,
+    weights.weight - w2.weight as wg,
+    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
+    .joins("JOIN (
+     SELECT
+      animal_id,
+      MAX(weights.date) as latest_date,
+      MIN(weights.DATE) as before_date
+      FROM   weights
+      WHERE
+        (
+          SELECT 	COUNT(*)
+          FROM 	weights  f
+          WHERE f.animal_id = weights.animal_id AND
+              f.weight >= weights.weight
+        ) <= 2
+      GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
+      JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
+      JOIN animals ON animals.id = dates.animal_id").order("animal_id")
     @sum_latest_daily_gains = 0
     @animals_with_gain = 0
     @latest_weights.each do |animal|

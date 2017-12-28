@@ -9,25 +9,6 @@ class AnimalsController < ApplicationController
   # GET /animals
   # GET /animals.json
   def index
-    # This query is used for the table and it uses first and initial weight
-    @animals = Animal.select(
-      "	animals.animal_number as animal_number,
-    animals.id as id,
-    animals.ranch as ranch,
-    animals.species as species,
-    COUNT(weights.weight) as weighted,
-    MIN(weights.weight) as initial_weight,
-    MAX(weights.weight) as last_weight,
-    MAX(weights.weight) - MIN(weights.weight) AS weight_gain,
-    MIN(weights.date) as first_weight,
-    MAX(weights.date) as last_weighted,
-    date(NOW()) - MIN(weights.date) as days_in_ranch,
-    MAX(weights.date) - MIN(weights.date) as days_between_weights,
-    date(NOW()) - MAX(weights.date) as days_since_last_weight,
-    ROUND(CAST((MAX(weights.weight) - MIN(weights.weight))/ (NULLIF((MAX(weights.date) - MIN(weights.date)),0)) as decimal),2) AS daily_gained"
-    ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
-    .group("1,2")
-    .order("1 ASC")
     # This query is used to calculate GDP with latest weights
     @latest_weights = Weight.select(
       "weights.weight as id,
