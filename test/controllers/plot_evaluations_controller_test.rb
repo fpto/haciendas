@@ -17,7 +17,7 @@ class PlotEvaluationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create plot_evaluation" do
     assert_difference('PlotEvaluation.count') do
-      post plot_evaluations_url, params: { plot_evaluation: { comment: @plot_evaluation.comment, date: @plot_evaluation.date, fences_score: @plot_evaluation.fences_score, pasture_score: @plot_evaluation.pasture_score, plot_id: @plot_evaluation.plot_id, weed_score: @plot_evaluation.weed_score } }
+      post plot_evaluations_url, params: { plot_evaluation: { comment: @plot_evaluation.comment, date: @plot_evaluation.date, fences_score: @plot_evaluation.fences_score, pasture_score: @plot_evaluation.pasture_score, plot_id: @plot_evaluation.plot_id, water_score: @plot_evaluation.water_score } }
     end
 
     assert_redirected_to plot_evaluation_url(PlotEvaluation.last)
@@ -34,7 +34,7 @@ class PlotEvaluationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update plot_evaluation" do
-    patch plot_evaluation_url(@plot_evaluation), params: { plot_evaluation: { comment: @plot_evaluation.comment, date: @plot_evaluation.date, fences_score: @plot_evaluation.fences_score, pasture_score: @plot_evaluation.pasture_score, plot_id: @plot_evaluation.plot_id, weed_score: @plot_evaluation.weed_score } }
+    patch plot_evaluation_url(@plot_evaluation), params: { plot_evaluation: { comment: @plot_evaluation.comment, date: @plot_evaluation.date, fences_score: @plot_evaluation.fences_score, pasture_score: @plot_evaluation.pasture_score, plot_id: @plot_evaluation.plot_id, water_score: @plot_evaluation.water_score } }
     assert_redirected_to plot_evaluation_url(@plot_evaluation)
   end
 

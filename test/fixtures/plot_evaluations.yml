@@ -3,7 +3,7 @@
 one:
   plot: one
   date: 2017-12-06
-  weed_score: 1
+  water_score: 1
   pasture_score: 1
   fences_score: 1
   comment: MyText
@@ -11,7 +11,7 @@ one:
 two:
   plot: two
   date: 2017-12-06
-  weed_score: 1
+  water_score: 1
   pasture_score: 1
   fences_score: 1
   comment: MyText

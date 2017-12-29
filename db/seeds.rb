@@ -32,15 +32,15 @@ plot2 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "ovino", boun
 plot3 = Plot.create(number:1, area: 20, ranch:"sauces", plot_type: "bovino", boundaries: "{lat: 15.484526, lng: -86.409336}, {lat:15.483420, lng: -86.408842}, {lat:15.483152, lng: -86.407779}, {lat:15.483669, lng: -86.405410}, {lat:15.487005, lng:-86.405706}")
 plot4 = Plot.create(number:2, area: 20, ranch:"sauces", plot_type: "bovino", boundaries: "{lat: 15.484526, lng: -86.409336}, {lat:15.483420, lng: -86.408842}, {lat:15.483152, lng: -86.407779}, {lat:15.483669, lng: -86.405410}, {lat:15.487005, lng:-86.405706}")
 
-PlotEvaluation.create(plot_id: 1, date: '2017-11-1', weed_score: 3, pasture_score: 2, fences_score: 3)
-PlotEvaluation.create(plot_id: 1, date: '2017-12-1', weed_score: 2, pasture_score: 4, fences_score: 5)
-PlotEvaluation.create(plot_id: 2, date: '2017-11-1', weed_score: 2, pasture_score: 4, fences_score: 5)
-PlotEvaluation.create(plot_id: 2, date: '2017-12-1', weed_score: 4, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 1, date: '2017-11-1', water_score: 3, pasture_score: 2, fences_score: 3)
+PlotEvaluation.create(plot_id: 1, date: '2017-12-1', water_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 2, date: '2017-11-1', water_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 2, date: '2017-12-1', water_score: 4, pasture_score: 4, fences_score: 5)
 
-PlotEvaluation.create(plot_id: 3, date: '2017-11-1', weed_score: 3, pasture_score: 2, fences_score: 3)
-PlotEvaluation.create(plot_id: 3, date: '2017-12-1', weed_score: 2, pasture_score: 4, fences_score: 5)
-PlotEvaluation.create(plot_id: 4, date: '2017-11-1', weed_score: 2, pasture_score: 4, fences_score: 5)
-PlotEvaluation.create(plot_id: 4, date: '2017-12-1', weed_score: 4, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 3, date: '2017-11-1', water_score: 3, pasture_score: 2, fences_score: 3)
+PlotEvaluation.create(plot_id: 3, date: '2017-12-1', water_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 4, date: '2017-11-1', water_score: 2, pasture_score: 4, fences_score: 5)
+PlotEvaluation.create(plot_id: 4, date: '2017-12-1', water_score: 4, pasture_score: 4, fences_score: 5)
 
 fabricio = User.create(first_name: 'Fabricio', last_name: 'Puerto', email: 'fabricio.puerto@outlook.com', password: 'fabri', password_confirmation: 'fabri', role: 'admin')
 charly = User.create(first_name: 'Charly', last_name: 'Armijo', email: 'charlyarmijo22@gmail.com', password: 'charly', password_confirmation: 'charly', role: 'editor')

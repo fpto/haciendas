@@ -42,7 +42,7 @@
             <thead>
               <tr>
                 <th>Fecha</th>
-                <th>Maleza</th>
+                <th>Agua</th>
                 <th>Pasturas</th>
                 <th>Cercas</th>
                 <th>Promedio</th>
@@ -53,10 +53,10 @@
               <% @plot_evaluations.each do |pe| %>
                 <tr>
                   <td><%= if pe.date != nil then pe.date.strftime("%d/%m/%y") end %></td>
-                  <td><%= pe.weed_score %></td>
+                  <td><%= pe.water_score %></td>
                   <td><%= pe.pasture_score %></td>
                   <td><%= pe.fences_score %></td>
-                  <td><%= ((pe.weed_score + pe.pasture_score + pe.fences_score).to_f / 3).round(2) %></td>
+                  <td><%= ((pe.water_score + pe.pasture_score + pe.fences_score).to_f / 3).round(2) %></td>
                   <td><%= link_to image_tag("info.png", border: 0, title: "Más información"), plot_evaluation_path(pe) %></td>
                 </tr>
               <% end %>

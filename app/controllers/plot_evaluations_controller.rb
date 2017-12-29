@@ -73,6 +73,6 @@ class PlotEvaluationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plot_evaluation_params
-      params.require(:plot_evaluation).permit(:plot_id, :date, :weed_score, :pasture_score, :fences_score, :comment)
+      params.require(:plot_evaluation).permit(:plot_id, :date, :water_score, :pasture_score, :fences_score, :comment)
     end
 end
