@@ -1,5 +1,10 @@
 <div class="page-wrapper kpi-box" style="min-height: 731px;">
   <div class = "row">
+    <!-- Animals and weight Section -->
+    <!-- Bovine Section -->
+    <div class="container">
+      <h2> Bovinos</h2>
+    </div>
     <div class="col-lg-3 col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading">
@@ -8,8 +13,8 @@
               <i class="fa fa-exchange fa-5x"></i>
             </div>
             <div class="col-xs-9 text-right">
-              <div class="huge"><%= @number_of_animals %></div>
-              <div>Animales</div>
+              <div class="huge"><%= @animals_b %></div>
+              <div>Toretes</div>
             </div>
           </div>
         </div>
@@ -20,62 +25,62 @@
             <div class="clearfix"></div>
           </div>
         </a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-md-6">
-    <div class="panel panel-green">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-xs-3">
-            <i class="fa fa-tasks fa-5x"></i>
-          </div>
-          <div class="col-xs-9 text-right">
-            <div class="huge"><%= @average_max_weight.round(2) %></div>
-            <div>Peso Promedio</div>
-          </div>
-        </div>
       </div>
-      <a href="/animals">
-        <div class="panel-footer">
-          <span class="pull-left">Ver detalles</span>
-          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-          <div class="clearfix"></div>
-        </div>
-      </a>
     </div>
-  </div>
-  <div class="col-lg-3 col-md-6">
-    <div class="panel panel-yellow">
-      <div class="panel-heading">
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
           <div class="row">
-              <div class="col-xs-3">
-                  <i class="fa fa-calendar-o fa-5x"></i>
-              </div>
-              <div class="col-xs-9 text-right">
-                  <div class="huge"><%= @average_date_dif.round %></div>
-                  <div>Días desde Ingreso</div>
-              </div>
+            <div class="col-xs-3">
+              <i class="fa fa-tasks fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_latest_weight_b.round(2) %></div>
+              <div>Peso Promedio</div>
+            </div>
           </div>
-      </div>
-      <a href="/animals">
-        <div class="panel-footer">
+        </div>
+        <a href="/animals">
+          <div class="panel-footer">
             <span class="pull-left">Ver detalles</span>
             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
             <div class="clearfix"></div>
-        </div>
-      </a>
+          </div>
+        </a>
+      </div>
     </div>
-  </div>
-  <div class="col-lg-3 col-md-6">
-      <div class="panel panel-red">
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-calendar-o fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                    <div class="huge"><%= @sum_days_in_ranch_b %></div>
+                    <div>Días desde Ingreso</div>
+                </div>
+            </div>
+        </div>
+        <a href="/animals">
+          <div class="panel-footer">
+              <span class="pull-left">Ver detalles</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
           <div class="panel-heading">
               <div class="row">
                   <div class="col-xs-3">
                       <i class="fa fa-truck fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                      <div class="huge"><%= @latest_average_daily_gain.round(2) %></div>
-                      <div>Ganancia de Peso Diaria</div>
+                      <div class="huge"><%= @latest_average_daily_gain_b.round(2) %></div>
+                      <div>GDP</div>
                   </div>
               </div>
           </div>
@@ -87,53 +92,384 @@
               </div>
           </a>
       </div>
-  </div>
-
-  <div class="col-lg-6 col-md-6">
-    <div class="panel panel-primary">
+    </div>
+    <!-- Ovine Section -->
+    <div class="container">
+      <h2> Ovinos</h2>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-yellow">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-exchange fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @animals_b %></div>
+              <div>Ovejos</div>
+            </div>
+          </div>
+        </div>
+        <a href="/animals">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-yellow">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-tasks fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_latest_weight_o.round(2) %></div>
+              <div>Peso Promedio</div>
+            </div>
+          </div>
+        </div>
+        <a href="/animals">
+          <div class="panel-footer">
+            <span class="pull-left">Ver detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-yellow">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-3">
-                    <i class="fa fa-th fa-5x"></i>
+                    <i class="fa fa-calendar-o fa-5x"></i>
                 </div>
                 <div class="col-xs-9 text-right">
-                    <div class="huge"><%= @average_recent_plot_score_b %></div>
-                    <div>Potreros Bovinos</div>
+                    <div class="huge"><%= @avg_days_in_ranch_o.round %></div>
+                    <div>Días desde Ingreso</div>
                 </div>
             </div>
         </div>
-        <a href="/plots">
-            <div class="panel-footer">
-                <span class="pull-left">Detalles</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-            </div>
+        <a href="/animals">
+          <div class="panel-footer">
+              <span class="pull-left">Ver detalles</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+          </div>
         </a>
+      </div>
     </div>
-</div>
-<div class="col-lg-6 col-md-6">
-  <div class="panel panel-green">
-    <div class="panel-heading">
-        <div class="row">
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-yellow">
+          <div class="panel-heading">
+              <div class="row">
+                  <div class="col-xs-3">
+                      <i class="fa fa-truck fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                      <div class="huge"><%= @latest_average_daily_gain_o.round(2) %></div>
+                      <div>GDP</div>
+                  </div>
+              </div>
+          </div>
+          <a href="/animals">
+              <div class="panel-footer">
+                  <span class="pull-left">View Details</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+              </div>
+          </a>
+      </div>
+    </div>
+  </div>
+  <div class = "row">
+    <!-- Plot section -->
+    <!-- Los Sauces - Bovine plots -->
+    <div class="container">
+      <h2> Potreros</h2>
+      <h4>Los Sauces - Bovinos</h4>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Pastura</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
             <div class="col-xs-3">
                 <i class="fa fa-th fa-5x"></i>
             </div>
             <div class="col-xs-9 text-right">
-                <div class="huge"><%= @average_recent_plot_score_o %></div>
-                <div>Potreros Ovinos</div>
+                <div class="huge"><%= @average_recent_plot_score_o.round() %></div>
+                <div>Cercas</div>
             </div>
+          </div>
         </div>
+        <a href="/plots">
+          <div class="panel-footer">
+              <span class="pull-left">Ver detalles</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
     </div>
-    <a href="/plots">
-        <div class="panel-footer">
-            <span class="pull-left">Ver detalles</span>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Agua</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
             <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Toretes/Mz</div>
+            </div>
+          </div>
         </div>
-    </a>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
-</div>
-
+  <!-- Los Sauces - Ovine plots -->
+  <div class = "row">
+    <div class="container">
+      <h4>Los Sauces - Ovinos</h4>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Pastura</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+                <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+                <div class="huge"><%= @average_recent_plot_score_o.round() %></div>
+                <div>Cercas</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+              <span class="pull-left">Ver detalles</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Agua</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Toretes/Mz</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- Los Laureles - Bovine plots -->
+  <div class = "row">
+    <div class="container">
+      <h4>Los Laureles - Bovinos</h4>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Pastura</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+                <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+                <div class="huge"><%= @average_recent_plot_score_o.round() %></div>
+                <div>Cercas</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+              <span class="pull-left">Ver detalles</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Agua</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-th fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @average_recent_plot_score_b.round() %></div>
+              <div>Toretes/Mz</div>
+            </div>
+          </div>
+        </div>
+        <a href="/plots">
+          <div class="panel-footer">
+            <span class="pull-left">Detalles</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 <!--<div class= "container">
 <h2> Animales por Pesado</h2>
   <div id="chart" style="width: auto; height: 600px;"></div>
