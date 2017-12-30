@@ -80,9 +80,6 @@ class PagesController < ApplicationController
 
     #Every animal should have a weight for data to be accurate
 
-    # Calculate the average Max weight:
-    @average_max_weight = 777
-
     @days_in_ranch = Weight.select("weights.animal_id as animal_id, animals.species as species,
       animals.ranch as ranch,  date(NOW()) - MIN(weights.date) as days_in_ranch  ")
     .joins("JOIN animals ON animals.id = weights.animal_id").group("weights.animal_id, animals.species, animals.ranch")
@@ -117,26 +114,94 @@ class PagesController < ApplicationController
     @recent_scores = PlotEvaluation.select(
       "plot_evaluations.id,
       plot_evaluations.plot_id,
-      plots.number,
+      plots.number as number,
       plots.plot_type as pt,
+      plots.ranch as ranch,
+      plots.area as area,
+      plot_evaluations.water_score as water_score,
+      plot_evaluations.pasture_score as pasture_score,
+      plot_evaluations.fences_score as fences_score,
       ROUND(CAST((plot_evaluations.water_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
       .joins("JOIN plots ON plot_evaluations.plot_id = plots.id")
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
     # Plot  Calculations for Los Sauces
-    #Bovinos
-    @sum_av_scores_b = 0
-    @recent_scores.each {|p| if p.pt == 'bovino' then @sum_av_scores_b += p.average end}
-    @count_av_scores_b = 0
-    @recent_scores.each {|p|if p.pt == 'bovino'  then @count_av_scores_b += 1 end}
-    @average_recent_plot_score_b = if @count_av_scores_b > 0 then (@sum_av_scores_b / @count_av_scores_b).round(2) else "N/A" end
-    #Ovinos
-    @sum_av_scores_o = 0
-    @recent_scores.each {|p| if p.pt == 'ovino' then @sum_av_scores_o += p.average end}
-    @count_av_scores_o = 0
-    @recent_scores.each {|p| if p.pt == 'ovino' then @count_av_scores_o += 1 end}
-    @average_recent_plot_score_o = if @count_av_scores_o > 0 then (@sum_av_scores_o / @count_av_scores_o).round(2) else "N/A" end
+    #Bovinos & Ovinos
+    @sum_pasture_scores_b_s = @sum_pasture_scores_o_s = @sum_pasture_scores_b_l = 0
+    @sum_water_scores_b_s = @sum_water_scores_o_s = @sum_water_scores_b_l = 0
+    @sum_fences_scores_b_s = @sum_fences_scores_o_s = @sum_fences_scores_b_l = 0
+
+    @sum_av_scores_b_s =  @count_scores_b_s = 0
+    @sum_av_scores_o_s =  @count_scores_o_s = 0
+    @sum_av_scores_b_l =  @count_scores_b_l = 0
+    @sum_sauces_area_b = @sum_sauces_area_o = 0
+    @sum_laureles_area_b = 0
+
+    @recent_scores.each {|p|
+      if p.ranch == 'sauces' then
+        if p.pt == 'bovino' then
+          @sum_av_scores_b_s += p.average
+          @count_scores_b_s += 1
+          @sum_pasture_scores_b_s += p.pasture_score
+          @sum_water_scores_b_s += p.water_score
+          @sum_fences_scores_b_s += p.fences_score
+          @sum_sauces_area_b += p.area
+        end
+        if p.pt == 'ovino'  then
+          @sum_av_scores_o_s += p.average
+          @count_scores_o_s += 1
+          @sum_pasture_scores_o_s += p.pasture_score
+          @sum_water_scores_o_s += p.water_score
+          @sum_fences_scores_o_s += p.fences_score
+          @sum_sauces_area_o += p.area
+        end
+
+      end
+      if p.ranch == 'laureles' then
+        if p.pt == 'bovino' then
+          @sum_av_scores_b_l += p.average
+          @count_scores_b_l += 1
+          @sum_pasture_scores_b_l += p.pasture_score
+          @sum_water_scores_b_l += p.water_score
+          @sum_fences_scores_b_l += p.fences_score
+          @sum_laureles_area_b += p.area
+        end
+      end
+    }
+
+    @average_recent_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_av_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
+    @average_pasture_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_pasture_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
+    @average_fences_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_fences_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
+    @average_water_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_water_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
 
 
 
+    @average_recent_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_av_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
+    @average_pasture_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_pasture_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
+    @average_fences_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_fences_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
+    @average_water_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_water_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
+
+    @average_recent_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_av_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
+    @average_pasture_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_pasture_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
+    @average_fences_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_fences_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
+    @average_water_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_water_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
+
+    @animals_b_s = @animals_o_s = @animals_b_l = 0
+    @latest_weights.each{ |animal|
+      if animal.ranch == 'sauces' then
+        if  animal.species == 'bovino' then
+          @animals_b_s += 1
+        end
+        if animal.species == 'ovino' then
+          @animals_o_s += 1
+        end
+      end
+      if animal.ranch == 'laureles' and animal.species == 'bovino' then
+        @animals_b_l += 1
+      end
+
+      }
+    @average_plot_load_b_s = if @animals_b_s > 0 then (@sum_sauces_area_b / @animals_b_s).round(2) else "N/A" end
+    @average_plot_load_o_s = if @animals_o_s > 0 then (@sum_sauces_area_o / @animals_o_s).round(2) else "N/A" end
+    @average_plot_load_b_l = if @animals_b_l > 0 then (@sum_laureles_area_b / @animals_b_s).round(2) else "N/A" end
   end
 end
