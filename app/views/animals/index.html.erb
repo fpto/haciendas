@@ -4,150 +4,13 @@
 <% content_for :panel_heading do %>Animales<% end %>
 <p id="notice"><%= notice %></p>
 <div class="page-wrapper" style="min-height: 731px;">
-  <!--KPI Cards-->
-  <!-- Los Sauces -->
   <div class = "row">
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @animals_sauces %></div>
-              <div>Sauces: Animales</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @sauces_average_weight.round(2) %></div>
-              <div>Sauces: Peso</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @sauces_avg_daily_gain.round(2) %></div>
-              <div>Sauces: GDP</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class ="col-lg-3 col-md-6">
+      <div class ="col-lg-3 col-md-6">
       <div class = "row">
         <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-11"%>
       </div>
       <div class = "row">
         <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-11"%>
-      </div>
-    </div>
-  </div>
-  <!-- Los Laureles -->
-  <div class = "row">
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-green">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @animals_laureles %></div>
-              <div>Laureles: Animales</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-green">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @laureles_average_weight.round(2) %></div>
-              <div>Laureles: Peso</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-green">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-th fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge"> <%= @laureles_avg_daily_gain.round(2) %></div>
-              <div>Laureles: GDP</div>
-            </div>
-          </div>
-        </div>
-        <a href="/animals">
-          <div class="panel-footer">
-            <span class="pull-left">Detalles</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
       </div>
     </div>
   </div>
@@ -192,4 +55,5 @@
       </div>
     </div>
   </div>
+<%= will_paginate @latest_weights, :previous_label => 'Anterior', :next_label => 'Siguiente' %>
 </div>

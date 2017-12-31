@@ -37,7 +37,10 @@ class AnimalsController < ApplicationController
       				  f.weight >= weights.weight
       		) <= 2
 	         GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
-       JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ").order("animal_id")
+       JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ")
+       .order("animal_id")
+       .paginate(:page => params[:page], :per_page => 50)
+       
     @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
     @animals_laureles = @laureles_last_weights = @laureles_daily_gain = @laureles_with_gain =@laureles_average_weight = @laureles_avg_daily_gain  =0
     @latest_weights.each{ |animal|
