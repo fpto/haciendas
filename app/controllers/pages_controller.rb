@@ -137,6 +137,7 @@ class PagesController < ApplicationController
     @sum_laureles_area_b = 0
 
     @recent_scores.each {|p|
+      p.area ||= 0
       if p.ranch == 'sauces' then
         if p.pt == 'bovino' then
           @sum_av_scores_b_s += p.average

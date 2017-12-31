@@ -13,8 +13,8 @@ class PlotsController < ApplicationController
       "plot_evaluations.id as plot_evaluation,
       plot_evaluations.plot_id as plot_id,
       plots.number as number,
-      plots.ranch,
-      plots.area,
+      plots.ranch as ranch,
+      plots.area as area,
       plots.plot_type as plot_type,
       plot_evaluations.water_score as water_score,
       plot_evaluations.pasture_score as pasture_score,
@@ -49,8 +49,15 @@ class PlotsController < ApplicationController
     @sauces_area = 0
     @laureles_area = 0
     # Only consider bovino plots
-    @plots.each{ |plot| if plot.ranch == 'sauces' and plot.plot_type == 'bovino' then @sauces_area += plot.area end }
-    @plots.each{ |plot| if plot.ranch == 'laureles' then @laureles_area += plot.area end }
+    @plots.each{ |plot|
+      plot.area ||= 0
+      if plot.ranch == 'sauces' and plot.plot_type == 'bovino' then
+        @sauces_area += plot.area
+      end
+      if plot.ranch == 'laureles' then
+        @laureles_area += plot.area
+      end
+      }
     @sauces_animals = 0
     @laureles_animals = 0
     @animals.each{ |animal| if animal.ranch == 'sauces' then @sauces_animals += 1 end}
