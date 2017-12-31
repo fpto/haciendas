@@ -5,14 +5,8 @@
 <p id="notice"><%= notice %></p>
 <div class="page-wrapper" style="min-height: 731px;">
   <div class = "row">
-      <div class ="col-lg-3 col-md-6">
-      <div class = "row">
-        <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-11"%>
-      </div>
-      <div class = "row">
-        <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-11"%>
-      </div>
-    </div>
+        <%= link_to '+ Potrero', new_plot_path, :class => "btn btn-primary col-lg-6"%>
+        <%= link_to '+ Evaluacion', new_plot_evaluation_path, :class => "btn btn-primary col-lg-6"%>
   </div>
   <!--Animals Table-->
   <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -55,5 +49,7 @@
       </div>
     </div>
   </div>
-<%= will_paginate @latest_weights, :previous_label => 'Anterior', :next_label => 'Siguiente' %>
+  <div class = "flickr_pagination">
+    <%= will_paginate @latest_weights, :previous_label => 'Anterior', :next_label => 'Siguiente' %>
+  </div>
 </div>
