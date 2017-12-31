@@ -126,15 +126,15 @@ class PagesController < ApplicationController
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
     # Plot  Calculations for Los Sauces
     #Bovinos & Ovinos
-    @sum_pasture_scores_b_s = @sum_pasture_scores_o_s = @sum_pasture_scores_b_l = 0
-    @sum_water_scores_b_s = @sum_water_scores_o_s = @sum_water_scores_b_l = 0
-    @sum_fences_scores_b_s = @sum_fences_scores_o_s = @sum_fences_scores_b_l = 0
+    @sum_pasture_scores_b_s = @sum_pasture_scores_o_s = @sum_pasture_scores_b_l = 0.0
+    @sum_water_scores_b_s = @sum_water_scores_o_s = @sum_water_scores_b_l = 0.0
+    @sum_fences_scores_b_s = @sum_fences_scores_o_s = @sum_fences_scores_b_l = 0.0
 
-    @sum_av_scores_b_s =  @count_scores_b_s = 0
-    @sum_av_scores_o_s =  @count_scores_o_s = 0
-    @sum_av_scores_b_l =  @count_scores_b_l = 0
-    @sum_sauces_area_b = @sum_sauces_area_o = 0
-    @sum_laureles_area_b = 0
+    @sum_av_scores_b_s =  @count_scores_b_s = 0.0
+    @sum_av_scores_o_s =  @count_scores_o_s = 0.0
+    @sum_av_scores_b_l =  @count_scores_b_l = 0.0
+    @sum_sauces_area_b = @sum_sauces_area_o = 0.0
+    @sum_laureles_area_b = 0.0
 
     @recent_scores.each {|p|
       p.area ||= 0
