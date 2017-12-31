@@ -18,6 +18,7 @@
             <tr>
               <th>#</th>
               <th>En <br />Hacienda</th>
+              <th>Especie</th>
               <th>Último <br />Peso</th>
               <th> Sin <br />pesar </th>
               <th>GDP</th>
@@ -30,6 +31,7 @@
               <tr>
                 <td><%= animal.animal_number %></td>
                 <td><%= animal.ranch %> </td>
+                <td><%= animal.species %> </td>
                 <td><%= animal.last_weight %></td>
                 <td><%= animal.days_since_last_weight %></td>
                 <td><%= animal.daily_gain.round(2) %></td>
