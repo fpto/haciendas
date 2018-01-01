@@ -24,7 +24,7 @@ class AnimalsController < ApplicationController
     dates.latest_date - dates.before_date as days_between_weights,
     date(NOW()) - dates.latest_date as days_since_last_weight,
     weights.weight - w2.weight as weight_change,
-    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
+    COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0) as daily_gain")
     .joins("JOIN weights ON weights.animal_id = animals.id
       JOIN (
         SELECT
@@ -169,10 +169,10 @@ class AnimalsController < ApplicationController
 
     # Use to set default sorting
     def sort_column
-      (params[:sort]) || "animal_number"
+      %w[anima_number  ranch species last_weight days_since_last_weight daily_gain].include?(params[:sort]) ? (params[:sort]) : "animal_number"
     end
 
     def sort_direction
-      %w[asc desc].include?(params[:direction])? (params[:direction]) : "asc"
+      %w[asc desc].include?(params[:direction]) ? (params[:direction]) : "asc"
     end
 end
