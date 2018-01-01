@@ -109,6 +109,7 @@ class PlotsController < ApplicationController
   def show
     @plot = Plot.find(params[:id])
     @plot_evaluations = @plot.plot_evaluations
+    @plot.boundaries ||= "{lat: 15.481249, lng: -86.411314}"
   end
 
   # GET /plots/new
