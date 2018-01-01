@@ -169,10 +169,10 @@ class AnimalsController < ApplicationController
 
     # Use to set default sorting
     def sort_column
-      Animal.column_names.include? (params[:sort]) ? (params[:sort]) : "animal_number"
+      (params[:sort]) || "animal_number"
     end
 
     def sort_direction
-      %w[asc desc].include? (params[:direction])? (params[:direction]) : "asc"
+      (params[:direction]) || "asc"
     end
 end
