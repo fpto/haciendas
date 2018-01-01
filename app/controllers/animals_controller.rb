@@ -39,6 +39,7 @@ class AnimalsController < ApplicationController
       		) <= 2
 	         GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
        JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ")
+       .where(animal_number: params[:search])
        .order(sort_column + " " + sort_direction)
        .paginate(:page => params[:page], :per_page => 50)
 
