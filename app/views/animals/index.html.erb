@@ -16,12 +16,12 @@
           <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>#</th>
-              <th>En <br />Hacienda</th>
-              <th>Especie</th>
-              <th>Último <br />Peso</th>
-              <th> Sin <br />pesar </th>
-              <th>GDP</th>
+              <th><%= sortable "animal_number",  "#"     %></th>
+              <th><%= sortable "ranch", "Hacienda"       %></th>
+              <th><%= sortable "species", "Especie"      %></th>
+              <th><%= sortable "last_weight", "Peso"     %></th>
+              <th><%= sortable  "days_since_last_weight" %> </th>
+              <th><%= sortable "daily_gain" ,"GDP"       %></th>
               <th></th>
             </tr>
           </thead>

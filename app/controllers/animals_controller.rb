@@ -6,6 +6,7 @@ class AnimalsController < ApplicationController
 
   before_action :set_animal, only: [:show, :edit, :update, :destroy]
 
+  helper_method :sort_column, :sort_direction
   # GET /animals
   # GET /animals.json
   def index
@@ -38,7 +39,7 @@ class AnimalsController < ApplicationController
       		) <= 2
 	         GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
        JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ")
-       .order("animal_id, ranch, species")
+       .order(sort_column + " " + sort_direction)
        .paginate(:page => params[:page], :per_page => 50)
 
     @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
@@ -164,5 +165,14 @@ class AnimalsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def animal_params
       params.require(:animal).permit(:animal_number, :species, :birthday, :ranch)
+    end
+
+    # Use to set default sorting
+    def sort_column
+      Animal.column_names.include? (params[:sort]) ? (params[:sort]) : "animal_number"
+    end
+
+    def sort_direction
+      %w[asc desc].include? (params[:direction])? (params[:direction]) : "asc"
     end
 end
