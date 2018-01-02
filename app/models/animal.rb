@@ -4,6 +4,8 @@ class Animal < ApplicationRecord
   def self.search(search)
     if search
       where(animal_number: search)
+      .or(Animal.where(species: search))
+      .or(Animal.where(ranch: search))
     else
       where("animal_number > 0")
     end

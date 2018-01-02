@@ -13,7 +13,7 @@
   <div class = "row">
         <%= form_tag animals_path, :method => 'get' do %>
         <div class="form-group input-group page-wrapper search-bar">
-            <%= text_field_tag :search, params[:search], :class=>"form-control", :placeholder => "Ingrese el número de animal" %>
+            <%= text_field_tag :search, params[:search], :class=>"form-control", :placeholder => "Ingrese el número de animal, hacienda o especie" %>
             <span class="input-group-btn">
               <%= submit_tag 'Buscar', :name => nil, :class=>"btn btn-default" %>
             </span>
