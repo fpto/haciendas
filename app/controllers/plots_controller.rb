@@ -9,41 +9,12 @@ class PlotsController < ApplicationController
   # GET /plots.json
   def index
     # @plots = Plot.all.order('CAST(number AS int)')
-    @plots = Plot.select(
-      "plot_evaluations.id as plot_evaluation,
-      plot_evaluations.plot_id as plot_id,
-      plots.number as number,
-      plots.ranch as ranch,
-      plots.area as area,
-      plots.plot_type as plot_type,
-      plot_evaluations.water_score as water_score,
-      plot_evaluations.pasture_score as pasture_score,
-      plot_evaluations.fences_score as fences_score,
-      ROUND(CAST((plot_evaluations.water_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
-      .joins("LEFT JOIN plot_evaluations ON plot_evaluations.plot_id = plots.id")
-      .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
+    @plots = Plot.latest_plot_scores
       .order("plots.ranch, plots.id")
 
       # We pull animal información in order to calculate ranch load
       # They require plots and animals to have evaluations and weights
-    @animals = Animal.select(
-        "	animals.animal_number as animal_number,
-      animals.id as id,
-      animals.species as species,
-      animals.ranch as ranch,
-    COUNT(weights.weight) as weighted,
-      MIN(weights.weight) as initial_weight,
-      MAX(weights.weight) as last_weight,
-      MAX(weights.weight) - MIN(weights.weight) AS weight_gain,
-      MIN(weights.date) as first_weight,
-      MAX(weights.date) as last_weighted,
-      date(NOW()) - MIN(weights.date) as days_in_ranch,
-      MAX(weights.date) - MIN(weights.date) as days_between_weights,
-      date(NOW()) - MAX(weights.date) as days_since_last_weight,
-      ROUND(CAST((MAX(weights.weight) - MIN(weights.weight))/ (NULLIF((MAX(weights.date) - MIN(weights.date)),0)) as decimal),2) AS daily_gained"
-    ).joins("LEFT JOIN weights ON animals.id = weights.animal_id")
-    .group("1,2")
-    .order("1 ASC")
+    @animals = Animal.days_in_ranch
 
     # TODO Make distinction of Ovino and Bovino plots
     @sauces_area = 0

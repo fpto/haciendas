@@ -1,32 +1,9 @@
 class PagesController < ApplicationController
   def home
     # This is to calculate the latest two weights of each animal
-    @latest_weights = Weight.select(
-      "dates.animal_id as animal_id,
-      animals.ranch as ranch,
-      animals.species as species,
-    weights.weight as last_weight,
-    dates.latest_date - dates.before_date as days_between_weights,
-    date(NOW()) - dates.latest_date as days_since_last_weight,
-    weights.weight - w2.weight as wg,
-    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
-    .joins("JOIN (
-     SELECT
-      animal_id,
-      MAX(weights.date) as latest_date,
-      MIN(weights.DATE) as before_date
-      FROM   weights
-      WHERE
-        (
-          SELECT 	COUNT(*)
-          FROM 	weights  f
-          WHERE f.animal_id = weights.animal_id AND
-              f.weight >= weights.weight
-        ) <= 2
-      GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
-      JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
-      JOIN animals ON animals.id = dates.animal_id").order("animal_id")
+    @latest_weights = Animal.latest_weights.order("animal_id")
     # General Average Daily Gain
+
     @sum_latest_daily_gains = 0
     @animals_with_gain = 0
     @latest_weights.each do |animal|
@@ -80,9 +57,7 @@ class PagesController < ApplicationController
 
     #Every animal should have a weight for data to be accurate
 
-    @days_in_ranch = Weight.select("weights.animal_id as animal_id, animals.species as species,
-      animals.ranch as ranch,  date(NOW()) - MIN(weights.date) as days_in_ranch  ")
-    .joins("JOIN animals ON animals.id = weights.animal_id").group("weights.animal_id, animals.species, animals.ranch")
+    @days_in_ranch = Animal.days_in_ranch
     # Calculates average date dif - Días desde ingreso
     @sum_days_in_ranch_b = @count_a_in_ranch_b = @avg_days_in_ranch_b = 0
     @sum_days_in_ranch_o = @count_a_in_ranch_o = @avg_days_in_ranch_o = 0
@@ -111,19 +86,7 @@ class PagesController < ApplicationController
     @data = Weight.totals_by_year_month
 
     # For the Plot Scores
-    @recent_scores = PlotEvaluation.select(
-      "plot_evaluations.id,
-      plot_evaluations.plot_id,
-      plots.number as number,
-      plots.plot_type as pt,
-      plots.ranch as ranch,
-      plots.area as area,
-      plot_evaluations.water_score as water_score,
-      plot_evaluations.pasture_score as pasture_score,
-      plot_evaluations.fences_score as fences_score,
-      ROUND(CAST((plot_evaluations.water_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
-      .joins("JOIN plots ON plot_evaluations.plot_id = plots.id")
-      .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
+    @recent_scores = Plot.latest_plot_scores
     # Plot  Calculations for Los Sauces
     #Bovinos & Ovinos
     @sum_pasture_scores_b_s = @sum_pasture_scores_o_s = @sum_pasture_scores_b_l = 0.0
@@ -139,7 +102,7 @@ class PagesController < ApplicationController
     @recent_scores.each {|p|
       p.area ||= 0
       if p.ranch == 'sauces' then
-        if p.pt == 'bovino' then
+        if p.plot_type == 'bovino' then
           @sum_av_scores_b_s += p.average
           @count_scores_b_s += 1
           @sum_pasture_scores_b_s += p.pasture_score
@@ -147,7 +110,7 @@ class PagesController < ApplicationController
           @sum_fences_scores_b_s += p.fences_score
           @sum_sauces_area_b += p.area
         end
-        if p.pt == 'ovino'  then
+        if p.plot_type == 'ovino'  then
           @sum_av_scores_o_s += p.average
           @count_scores_o_s += 1
           @sum_pasture_scores_o_s += p.pasture_score
@@ -158,7 +121,7 @@ class PagesController < ApplicationController
 
       end
       if p.ranch == 'laureles' then
-        if p.pt == 'bovino' then
+        if p.plot_type == 'bovino' then
           @sum_av_scores_b_l += p.average
           @count_scores_b_l += 1
           @sum_pasture_scores_b_l += p.pasture_score
@@ -199,7 +162,7 @@ class PagesController < ApplicationController
       if animal.ranch == 'laureles' and animal.species == 'bovino' then
         @animals_b_l += 1
       end
-
+      
       }
     @average_plot_load_b_s = if @animals_b_s > 0 then (@animals_b_s  / @sum_sauces_area_b).round(2) else "N/A" end
     @average_plot_load_o_s = if @animals_o_s > 0 then (@animals_o_s /  @sum_sauces_area_o).round(2) else "N/A" end
