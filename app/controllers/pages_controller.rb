@@ -21,6 +21,7 @@ class PagesController < ApplicationController
     @latest_average_daily_gain_o = @sum_latest_weights_o = @average_latest_weight_o = 0
 
     @wl250 = @w250 = @w500 = @w750 = @w1000 = @winv = 0
+    @owl25 = @ow25 = @ow50 = @ow75 = @ow100 = @owinv = 0
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
       if animal.species == 'bovino' then
@@ -42,6 +43,13 @@ class PagesController < ApplicationController
         @sum_latest_daily_gains_o += animal.daily_gain
         @sum_latest_weights_o += animal.last_weight
         @animals_o += 1
+        if animal.last_weight <= 25 then @wl250 +=1
+        elsif  animal.last_weight  > 25.01 and animal.last_weight < 50 then @ow25 += 1
+        elsif  animal.last_weight > 50.01 and animal.last_weight < 75 then @ow50 += 1
+        elsif animal.last_weight >  75.01 and animal.last_weight < 100 then  @ow75 += 1
+        elsif  animal.last_weight >= 100.01 then @ow100 += 1
+        else @owinv  += 1
+        end
         if animal.days_between_weights > 0
           @animals_with_gain_o += 1
         end
