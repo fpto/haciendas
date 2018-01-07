@@ -19,12 +19,21 @@ class PagesController < ApplicationController
     @latest_average_daily_gain_b = @sum_latest_weights_b = @average_latest_weight_b = 0
     @sum_latest_daily_gains_o =  @animals_with_gain_o =  @animals_o = 0
     @latest_average_daily_gain_o = @sum_latest_weights_o = @average_latest_weight_o = 0
+
+    @wl250 = @w250 = @w500 = @w750 = @w1000 = @winv = 0
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
       if animal.species == 'bovino' then
         @sum_latest_daily_gains_b += animal.daily_gain
         @sum_latest_weights_b += animal.last_weight
         @animals_b += 1
+          if animal.last_weight <= 250 then @wl250 +=1
+          elsif  animal.last_weight  > 250.01 and animal.last_weight < 500 then @w250 += 1
+          elsif  animal.last_weight > 500.01 and animal.last_weight < 750 then @w500 += 1
+          elsif animal.last_weight >  750.01 and animal.last_weight < 1000 then  @w750 += 1
+          elsif  animal.last_weight >= 1000.01 then @w1000 += 1
+          else @winv  += 1
+          end
         if animal.days_between_weights > 0
           @animals_with_gain_b += 1
         end
@@ -162,7 +171,7 @@ class PagesController < ApplicationController
       if animal.ranch == 'laureles' and animal.species == 'bovino' then
         @animals_b_l += 1
       end
-      
+
       }
     @average_plot_load_b_s = if @animals_b_s > 0 then (@animals_b_s  / @sum_sauces_area_b).round(2) else "N/A" end
     @average_plot_load_o_s = if @animals_o_s > 0 then (@animals_o_s /  @sum_sauces_area_o).round(2) else "N/A" end
