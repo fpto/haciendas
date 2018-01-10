@@ -81,10 +81,9 @@ class PlotsController < ApplicationController
     @plot = Plot.find(params[:id])
     @plot_evaluations = @plot.plot_evaluations
     if @plot.boundaries == "" then
-      case @plot.ranch
-      when "sauces"
+      if  @plot.ranch == "sauces"
         @plot.boundaries = "{lat: 15.479136, lng: -86.411074}"
-      when "laureles"
+      else
         @plot.boundaries = "{lat: 15.404493, lng: -86.428419}"
        end
      end
