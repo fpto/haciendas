@@ -44,17 +44,69 @@ class Animal < ApplicationRecord
     ")
   end
 
+  def self.average_weight
+    select(
+      "animals.species as species,
+       COUNT(distinct animals.id) as count,
+      AVG(weights.weight) as average_weight,
+      AVG(date(NOW()) - dates.latest_date) as days_since_last_weight")
+    .joins("
+      JOIN weights ON weights.animal_id = animals.id
+      JOIN (
+        SELECT
+      	animal_id,
+      	MAX(weights.date) as latest_date,
+      	MIN(weights.DATE) as before_date
+  	    FROM   weights
+  	    WHERE (SELECT 	COUNT(*)
+  			FROM 	weights  f
+  			WHERE f.animal_id = weights.animal_id AND
+  				  f.weight >= weights.weight
+  		        ) <= 2
+  	           GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
+      JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
+    ")
+    .group(
+      "animals.species"
+    )
+  end
+  def self.daily_gain
+    select(
+      "animals.species as species,
+      AVG(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as daily_gain")
+    .joins("
+      JOIN weights ON weights.animal_id = animals.id
+      JOIN (
+        SELECT
+        animal_id,
+        MAX(weights.date) as latest_date,
+        MIN(weights.DATE) as before_date
+        FROM   weights
+        WHERE (SELECT 	COUNT(*)
+        FROM 	weights  f
+        WHERE f.animal_id = weights.animal_id AND
+            f.weight >= weights.weight
+              ) <= 2
+               GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
+      JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
+    ")
+    .where("(dates.latest_date - dates.before_date)>0"
+    )
+    .group(
+      "animals.species"
+    )
+
+  end
+
   def self.days_in_ranch
     select(
-      "weights.animal_id as animal_id,
-      animals.animal_number as animal_number,
-      animals.species as species,
-      animals.ranch as ranch,
-      date(NOW()) - MIN(weights.date) as days_in_ranch"
+      "animals.species as species, AVG( w.days_in_ranch) as days_in_ranch"
     ).joins(
-      "JOIN weights ON animals.id = weights.animal_id"
+      "JOIN(
+	     SELECT animal_id, date(NOW()) - MIN(weights.date) as days_in_ranch FROM weights GROUP BY animal_id) as w
+       ON w.animal_id = animals.id"
     ).group(
-      "weights.animal_id, animals.animal_number, animals.species, animals.ranch"
+      "animals.species"
     )
   end
 

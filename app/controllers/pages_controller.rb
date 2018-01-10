@@ -1,33 +1,40 @@
 class PagesController < ApplicationController
   def home
     # This is to calculate the latest two weights of each animal
-    @latest_weights = Animal.latest_weights.order("animal_id")
-    # General Average Daily Gain
-
-    @sum_latest_daily_gains = 0
-    @animals_with_gain = 0
-    @latest_weights.each do |animal|
-      animal.daily_gain ||= 0
-      @sum_latest_daily_gains += animal.daily_gain
-      if animal.days_between_weights > 0
-        @animals_with_gain += 1
+    @average_weight = Animal.average_weight
+    @bovine_average_weight = @ovine_average_weight = 0
+    @bovine_count = @ovine_count = 0
+    @average_weight.each{ |animal|
+      case animal.species
+        when 'bovino'
+        @bovine_average_weight += animal.average_weight
+        @bovine_count += animal.count
+        when 'ovino'
+        @ovine_average_weight += animal.average_weight
+        @ovine_count += animal.count
       end
-    end
-    @latest_average_daily_gain = @sum_latest_daily_gains / @animals_with_gain
-    # Bovine and Ovine Average Daily Gain and Average Weight
-    @sum_latest_daily_gains_b =  @animals_with_gain_b =  @animals_b = 0
-    @latest_average_daily_gain_b = @sum_latest_weights_b = @average_latest_weight_b = 0
-    @sum_latest_daily_gains_o =  @animals_with_gain_o =  @animals_o = 0
-    @latest_average_daily_gain_o = @sum_latest_weights_o = @average_latest_weight_o = 0
+    }
+
+    @bovine_daily_gain = @ovine_daily_gain = 0
+
+    @daily_gain = Animal.daily_gain
+    @daily_gain.each{ |animal|
+      case animal.species
+        when 'bovino'
+        @bovine_daily_gain += animal.daily_gain
+        when 'ovino'
+        @ovine_daily_gain += animal.daily_gain
+      end
+    }
+
+    # General Average Daily Gain
+    @latest_weights = Animal.latest_weights.order("animal_id")
 
     @wl250 = @w250 = @w500 = @w750 = @w1000 = @winv = 0
     @owl25 = @ow25 = @ow50 = @ow75 = @ow100 = @owinv = 0
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
       if animal.species == 'bovino' then
-        @sum_latest_daily_gains_b += animal.daily_gain
-        @sum_latest_weights_b += animal.last_weight
-        @animals_b += 1
           if animal.last_weight <= 250 then @wl250 +=1
           elsif  animal.last_weight  > 250.01 and animal.last_weight < 500 then @w250 += 1
           elsif  animal.last_weight > 500.01 and animal.last_weight < 750 then @w500 += 1
@@ -35,14 +42,8 @@ class PagesController < ApplicationController
           elsif  animal.last_weight >= 1000.01 then @w1000 += 1
           else @winv  += 1
           end
-        if animal.days_between_weights > 0
-          @animals_with_gain_b += 1
-        end
       end
       if animal.species == 'ovino' then
-        @sum_latest_daily_gains_o += animal.daily_gain
-        @sum_latest_weights_o += animal.last_weight
-        @animals_o += 1
         if animal.last_weight <= 25 then @wl250 +=1
         elsif  animal.last_weight  > 25.01 and animal.last_weight < 50 then @ow25 += 1
         elsif  animal.last_weight > 50.01 and animal.last_weight < 75 then @ow50 += 1
@@ -50,51 +51,25 @@ class PagesController < ApplicationController
         elsif  animal.last_weight >= 100.01 then @ow100 += 1
         else @owinv  += 1
         end
-        if animal.days_between_weights > 0
-          @animals_with_gain_o += 1
-        end
       end
     end
-    # Bovine KPIs
-    if @animals_with_gain_b > 0 then
-      @latest_average_daily_gain_b = @sum_latest_daily_gains_b / @animals_with_gain_b
-    end
 
-    if @animals_b > 0 then
-      @average_latest_weight_b = @sum_latest_weights_b/@animals_b
-    end
-    # Ovine KPIs
-    if @animals_with_gain_o > 0 then
-      @latest_average_daily_gain_o = @sum_latest_daily_gains_o / @animals_with_gain_o
-    end
-
-    if @animals_o > 0 then
-      @average_latest_weight_o = @sum_latest_weights_o/@animals_o
-    end
 
     #Every animal should have a weight for data to be accurate
 
     @days_in_ranch = Animal.days_in_ranch
     # Calculates average date dif - Días desde ingreso
-    @sum_days_in_ranch_b = @count_a_in_ranch_b = @avg_days_in_ranch_b = 0
-    @sum_days_in_ranch_o = @count_a_in_ranch_o = @avg_days_in_ranch_o = 0
+   @avg_days_in_ranch_b = @avg_days_in_ranch_o = 0
 
     @days_in_ranch.each do |animal|
       if animal.species == 'bovino' then
-        @sum_days_in_ranch_b += animal.days_in_ranch
-        @count_a_in_ranch_b += 1
+        @avg_days_in_ranch_b += animal.days_in_ranch
       end
       if animal.species == 'ovino' then
-        @sum_days_in_ranch_o += animal.days_in_ranch
-        @count_a_in_ranch_o += 1
+        @avg_days_in_ranch_o += animal.days_in_ranch
       end
     end
-    if @count_a_in_ranch_b > 0 then
-      @avg_days_in_ranch_b = @sum_days_in_ranch_b / @count_a_in_ranch_b
-    end
-    if @count_a_in_ranch_o > 0 then
-      @avg_days_in_ranch_o = @sum_days_in_ranch_o / @count_a_in_ranch_o
-    end
+
 
     # I use in the home page now the latest daily gain, since it's more dynamic
 
@@ -106,65 +81,47 @@ class PagesController < ApplicationController
     @recent_scores = Plot.latest_plot_scores
     # Plot  Calculations for Los Sauces
     #Bovinos & Ovinos
-    @sum_pasture_scores_b_s = @sum_pasture_scores_o_s = @sum_pasture_scores_b_l = 0.0
-    @sum_water_scores_b_s = @sum_water_scores_o_s = @sum_water_scores_b_l = 0.0
-    @sum_fences_scores_b_s = @sum_fences_scores_o_s = @sum_fences_scores_b_l = 0.0
-
-    @sum_av_scores_b_s =  @count_scores_b_s = 0.0
-    @sum_av_scores_o_s =  @count_scores_o_s = 0.0
-    @sum_av_scores_b_l =  @count_scores_b_l = 0.0
     @sum_sauces_area_b = @sum_sauces_area_o = 0.0
-    @sum_laureles_area_b = 0.0
+    @sum_laureles_area_b = @sum_sauces_area_b = 0.0
+    @average_recent_plot_score_b_s  =  @average_pasture_plot_score_b_s = 0
+    @average_fences_plot_score_b_s  = @average_water_plot_score_b_s  = 0
+    @average_recent_plot_score_o_s  = @average_pasture_plot_score_o_s = 0
+    @average_fences_plot_score_o_s  = @average_water_plot_score_o_s   = 0
+    @sum_sauces_area_o              = 0
+    @average_recent_plot_score_b_l =@average_pasture_plot_score_b_l = 0
+@average_fences_plot_score_b_l =@average_water_plot_score_b_l  = 0
+@sum_laureles_area_b            = 0
 
-    @recent_scores.each {|p|
-      p.area ||= 0
+    @avg_plot_scores = Plot.avg_plot_scores
+    @avg_plot_scores.each {|p|
+      p.area_sum ||= 0
       if p.ranch == 'sauces' then
         if p.plot_type == 'bovino' then
-          @sum_av_scores_b_s += p.average
-          @count_scores_b_s += 1
-          @sum_pasture_scores_b_s += p.pasture_score
-          @sum_water_scores_b_s += p.water_score
-          @sum_fences_scores_b_s += p.fences_score
-          @sum_sauces_area_b += p.area
+          @average_recent_plot_score_b_s  += p.average
+          @average_pasture_plot_score_b_s += p.pasture_score
+          @average_fences_plot_score_b_s  += p.fences_score
+          @average_water_plot_score_b_s   += p.water_score
+          @sum_sauces_area_b              += p.area_sum
         end
         if p.plot_type == 'ovino'  then
-          @sum_av_scores_o_s += p.average
-          @count_scores_o_s += 1
-          @sum_pasture_scores_o_s += p.pasture_score
-          @sum_water_scores_o_s += p.water_score
-          @sum_fences_scores_o_s += p.fences_score
-          @sum_sauces_area_o += p.area
+          @average_recent_plot_score_o_s   += p.average
+          @average_pasture_plot_score_o_s  += p.pasture_score
+          @average_fences_plot_score_o_s   += p.fences_score
+          @average_water_plot_score_o_s    += p.water_score
+          @sum_sauces_area_o               += p.area_sum
         end
 
       end
       if p.ranch == 'laureles' then
         if p.plot_type == 'bovino' then
-          @sum_av_scores_b_l += p.average
-          @count_scores_b_l += 1
-          @sum_pasture_scores_b_l += p.pasture_score
-          @sum_water_scores_b_l += p.water_score
-          @sum_fences_scores_b_l += p.fences_score
-          @sum_laureles_area_b += p.area
+          @average_recent_plot_score_b_l   += p.average
+          @average_pasture_plot_score_b_l  += p.pasture_score
+          @average_fences_plot_score_b_l   += p.fences_score
+          @average_water_plot_score_b_l    += p.water_score
+          @sum_laureles_area_b             += p.area_sum
         end
       end
     }
-
-    @average_recent_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_av_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
-    @average_pasture_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_pasture_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
-    @average_fences_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_fences_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
-    @average_water_plot_score_b_s = if @count_scores_b_s > 0 then (@sum_water_scores_b_s / @count_scores_b_s).round(2) else "N/A" end
-
-
-
-    @average_recent_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_av_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
-    @average_pasture_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_pasture_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
-    @average_fences_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_fences_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
-    @average_water_plot_score_o_s = if @count_scores_o_s > 0 then (@sum_water_scores_o_s / @count_scores_o_s).round(2) else "N/A" end
-
-    @average_recent_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_av_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
-    @average_pasture_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_pasture_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
-    @average_fences_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_fences_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
-    @average_water_plot_score_b_l = if @count_scores_b_l > 0 then (@sum_water_scores_b_l / @count_scores_b_l).round(2) else "N/A" end
 
     @animals_b_s = @animals_o_s = @animals_b_l = 0
     @latest_weights.each{ |animal|
