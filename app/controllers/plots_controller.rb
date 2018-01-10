@@ -80,7 +80,14 @@ class PlotsController < ApplicationController
   def show
     @plot = Plot.find(params[:id])
     @plot_evaluations = @plot.plot_evaluations
-    @plot.boundaries ||= "{lat: 15.481249, lng: -86.411314}"
+    if @plot.boundaries == "" then
+      case @plot.ranch
+      when "sauces"
+        @plot.boundaries = "{lat: 15.479136, lng: -86.411074}"
+      when "laureles"
+        @plot.boundaries = "{lat: 15.404493, lng: -86.428419}"
+       end
+     end
   end
 
   # GET /plots/new
