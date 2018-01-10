@@ -109,5 +109,16 @@ class Animal < ApplicationRecord
       "animals.species"
     )
   end
+  def self.days_in_ranch_by_ranch
+    select(
+      "animals.ranch as ranch, animals.species as species, AVG( w.days_in_ranch) as days_in_ranch"
+    ).joins(
+      "JOIN(
+       SELECT animal_id, date(NOW()) - MIN(weights.date) as days_in_ranch FROM weights GROUP BY animal_id) as w
+       ON w.animal_id = animals.id"
+    ).group(
+      "animals.ranch, animals.species"
+    )
+  end
 
 end

@@ -14,7 +14,7 @@ class PlotsController < ApplicationController
 
       # We pull animal información in order to calculate ranch load
       # They require plots and animals to have evaluations and weights
-    @animals = Animal.days_in_ranch
+    @animals = Animal.days_in_ranch_by_ranch
 
     # TODO Make distinction of Ovino and Bovino plots
     @sauces_area = 0
