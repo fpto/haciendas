@@ -49,10 +49,8 @@
                 <td><%= animal.days_since_last_weight %></td>
                 <td><%= animal.daily_gain.round(2) %></td>
                 <td><%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), animal_path(animal.animal_id) %>
-                  <% if current_user && (current_user.editor? or  current_user.admin?)%>
+                  <% if current_user && (current_user.admin?)%>
                   <%= link_to image_tag("editing.png", border: 0,size: "15x15", title: "Editar"), edit_animal_path(animal.animal_id) %>
-                  <% end %>
-                  <% if current_user && current_user.admin? %>
                   <%= link_to image_tag("close.png", border: 0, size: "15x15", title: "Borrar"), animal_path(animal.animal_id), method: :delete, data: { confirm: 'Estás seguro?' } %>
                   <% end %>
                 </td>
