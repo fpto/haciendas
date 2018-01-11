@@ -1,7 +1,7 @@
 class PlotsController < ApplicationController
   before_action :require_user, only: [:new, :create, :edit, :destroy, :update]
-  before_action :require_editor, only: [:new, :create, :edit, :update]
-  before_action :require_admin, only: [:destroy]
+  before_action :require_editor, only: [:new, :create,  :update]
+  before_action :require_admin, only: [:edit, :destroy]
 
   before_action :set_plot, only: [:show, :edit, :update, :destroy]
 
