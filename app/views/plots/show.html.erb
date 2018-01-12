@@ -16,9 +16,13 @@
         <strong>Area:</strong>
         <%= @plot.area %>
       </p>
-      <%= link_to 'Editar', edit_plot_path(@plot) %> |
+      <% if current_user && (current_user.admin?)%>
+        <%= link_to 'Editar', edit_plot_path(@plot) %> |
+        <%= link_to 'Borrar', @plot, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %> |
+      <% end %>
       <%= link_to 'Atrás', plots_path %> |
-      <%= link_to 'Borrar', @plot, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %>
+      <%= link_to '+ Potrero', new_plot_path %> |
+      <%= link_to '+ Evaluación', new_plot_evaluation_path %>
     </div>
     <div class="col-lg-3 col-md-6">
       <p>

@@ -105,7 +105,7 @@ class PlotsController < ApplicationController
 
     respond_to do |format|
       if @plot.save
-        format.html { redirect_to @plot, notice: 'Plot was successfully created.' }
+        format.html { redirect_to @plot, notice: 'Potrero creado!' }
         format.json { render :show, status: :created, location: @plot }
       else
         format.html { render :new }

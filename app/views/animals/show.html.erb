@@ -15,10 +15,12 @@
       <%= @animal.birthday %>
       </p>-->
 
-
-      <%= link_to 'Editar', edit_animal_path(@animal) %> |
+      <% if current_user && (current_user.admin?)%>
+        <%= link_to 'Editar', edit_animal_path(@animal) %> |
+      <% end %>
       <%= link_to 'Atrás', animals_path %> |
-      <%= link_to 'Nuevo animal', new_animal_path%>
+      <%= link_to '+ Animal', new_animal_path%> |
+      <%= link_to '+ Peso', new_weight_path%>
     </div>
     <div class="col-sm-6">
       <h4>GD: <%= @daily_weight_gain %> lbs  </h4>
