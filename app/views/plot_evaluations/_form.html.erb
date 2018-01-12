@@ -18,27 +18,27 @@
   </div>
 
   <div class="field">
-    <%= form.label :date %>
+    <%= form.label :date, 'Fecha:' %>
     <%= form.date_select :date, id: :plot_evaluation_date %>
   </div>
 
   <div class="field">
-    <%= form.label :water_score %>
+    <%= form.label :water_score, 'Agua:' %>
     <%= form.number_field :water_score, id: :plot_evaluation_water_score %>
   </div>
 
   <div class="field">
-    <%= form.label :pasture_score %>
+    <%= form.label :pasture_score, 'Pasturas:' %>
     <%= form.number_field :pasture_score, id: :plot_evaluation_pasture_score %>
   </div>
 
   <div class="field">
-    <%= form.label :fences_score %>
+    <%= form.label :fences_score, 'Cercas:' %>
     <%= form.number_field :fences_score, id: :plot_evaluation_fences_score %>
   </div>
 
   <div class="field">
-    <%= form.label :comment %>
+    <%= form.label :comment, 'Comentarios:' %>
     <%= form.text_area :comment, id: :plot_evaluation_comment %>
   </div>
 

@@ -17,6 +17,7 @@
 
       <% if current_user && (current_user.admin?)%>
         <%= link_to 'Editar', edit_animal_path(@animal) %> |
+        <%= link_to 'Borrar', @animal, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %> |
       <% end %>
       <%= link_to 'Atrás', animals_path %> |
       <%= link_to '+ Animal', new_animal_path%> |

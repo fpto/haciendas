@@ -7,21 +7,23 @@
   </p>
 
   <p>
-    <strong>Date:</strong>
+    <strong>Fecha:</strong>
     <%= @weight.date %>
   </p>
 
   <p>
-    <strong>Weight:</strong>
+    <strong>Peso:</strong>
     <%= @weight.weight %>
   </p>
 
   <p>
-    <strong>Note:</strong>
+    <strong>Observaciones:</strong>
     <%= @weight.note %>
   </p>
-
-  <%= link_to 'Edit', edit_weight_path(@weight) %> |
-  <%= link_to 'Back', weights_path %> |
+<% if current_user && (current_user.admin?)%>
+  <%= link_to 'Editar', edit_weight_path(@weight) %> |
+  <%= link_to 'Borrar', @weight, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %> |
+<% end %>
+  <%= link_to 'Atrás', weights_path %> |
   <%= link_to 'Nuevo Peso', new_weight_path %>
 </div>
