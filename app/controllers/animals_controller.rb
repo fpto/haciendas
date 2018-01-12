@@ -143,7 +143,7 @@ class AnimalsController < ApplicationController
 
     # Use to set default sorting
     def sort_column
-      %w[anima_number  ranch species last_weight days_since_last_weight daily_gain].include?(params[:sort]) ? (params[:sort]) : "animal_number"
+      %w[animal_number  ranch species last_weight days_since_last_weight daily_gain].include?(params[:sort]) ? (params[:sort]) : "animal_number"
     end
 
     def sort_direction
