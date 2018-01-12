@@ -16,41 +16,6 @@ class AnimalsController < ApplicationController
        .order(sort_column + " " + sort_direction)
        .paginate(:page => params[:page], :per_page => 50)
 
-    @animals_sauces =  @sauces_last_weights =  @sauces_daily_gain = @sauces_with_gain = @sauces_average_weight =@sauces_avg_daily_gain = 0
-    @animals_laureles = @laureles_last_weights = @laureles_daily_gain = @laureles_with_gain =@laureles_average_weight = @laureles_avg_daily_gain  =0
-    @latest_weights.each{ |animal|
-      animal.daily_gain ||= 0
-      animal.days_between_weights ||= 0
-      case animal.ranch
-      when 'sauces'
-        @animals_sauces += 1
-        @sauces_last_weights += animal.last_weight
-        @sauces_daily_gain += animal.daily_gain
-        if animal.days_between_weights > 0 then
-          @sauces_with_gain += 1
-        end
-      when 'laureles'
-        @animals_laureles += 1
-        @laureles_last_weights += animal.last_weight
-        animal.daily_gain ||= 0
-        @laureles_daily_gain += animal.daily_gain
-        if animal.days_between_weights > 0 then
-          @laureles_with_gain += 1
-        end
-      end
-      }
-    if @animals_sauces > 0 then
-      @sauces_average_weight = @sauces_last_weights / @animals_sauces
-    end
-    if @animals_laureles > 0 then
-      @laureles_average_weight = @laureles_last_weights / @animals_laureles
-    end
-    if @sauces_with_gain > 0 then
-      @sauces_avg_daily_gain = @sauces_daily_gain / @sauces_with_gain
-    end
-    if @laureles_with_gain > 0 then
-      @laureles_avg_daily_gain = @laureles_daily_gain / @laureles_with_gain
-    end
   end
 
   # GET /animals/1
