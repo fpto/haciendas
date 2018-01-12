@@ -10,7 +10,7 @@ class PlotsController < ApplicationController
   def index
     # @plots = Plot.all.order('CAST(number AS int)')
     @plots = Plot.latest_plot_scores
-      .order("plots.ranch, plots.id")
+      .paginate(:page => params[:page], :per_page => 25)
 
       # We pull animal información in order to calculate ranch load
       # They require plots and animals to have evaluations and weights
