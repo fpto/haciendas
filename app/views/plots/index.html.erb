@@ -176,13 +176,13 @@
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Agua</th>
-                <th>Pasturas</th>
-                <th>Cercas</th>
-                <th>Pm.</th>
-                <th>Hda.</th>
-                <th>Tipo</th>
+                <th><%= sortable "number",  "#"     %></th>
+                <th><%= sortable "water_score",  "Agua"     %></th>
+                <th><%= sortable "pasture_score",  "Pasturas"     %></th>
+                <th><%= sortable "fences_score",  "Cercas"     %></th>
+                <th><%= sortable "average",  "Pm."     %></th>
+                <th><%= sortable "ranch",  "Hda."     %></th>
+                <th><%= sortable "plot_type",  "Tipo"     %></th>
                 <th colspan="3"> </th>
               </tr>
             </thead>

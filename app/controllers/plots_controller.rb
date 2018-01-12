@@ -5,6 +5,7 @@ class PlotsController < ApplicationController
 
   before_action :set_plot, only: [:show, :edit, :update, :destroy]
 
+  helper_method :sort_column, :sort_direction
   # GET /plots
   # GET /plots.json
   def index
