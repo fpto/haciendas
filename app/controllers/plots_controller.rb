@@ -10,6 +10,7 @@ class PlotsController < ApplicationController
   def index
     # @plots = Plot.all.order('CAST(number AS int)')
     @plots = Plot.latest_plot_scores
+      .order(sort_column + " " + sort_direction)
       .paginate(:page => params[:page], :per_page => 25)
 
       # We pull animal información in order to calculate ranch load
@@ -147,5 +148,13 @@ class PlotsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def plot_params
       params.require(:plot).permit(:number, :area, :ranch, :plot_type, :comment, :boundaries)
+    end
+    # Use to set default sorting
+    def sort_column
+      %w[number water_score pasture_score fences_score average ranch plot_type].include?(params[:sort]) ? (params[:sort]) : "ranch desc, plot_type asc, number"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? (params[:direction]) : "asc"
     end
 end

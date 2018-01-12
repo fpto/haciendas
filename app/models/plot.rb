@@ -7,7 +7,7 @@ class Plot < ApplicationRecord
     select(
       "plot_evaluations.id as plot_evaluation,
       plot_evaluations.plot_id as plot_id,
-      plots.number as number,
+      CAST(plots.number AS int) as number,
       plots.plot_type as plot_type,
       plots.ranch as ranch,
       plots.area as area,
