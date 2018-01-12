@@ -11,6 +11,7 @@ class PlotsController < ApplicationController
   def index
     # @plots = Plot.all.order('CAST(number AS int)')
     @plots = Plot.latest_plot_scores
+      .search(params[:search])
       .order(sort_column + " " + sort_direction)
       .paginate(:page => params[:page], :per_page => 25)
 

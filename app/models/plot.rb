@@ -3,6 +3,15 @@ class Plot < ApplicationRecord
   def number_with_type
     "#{id} - número: #{number}, tipo: #{plot_type}"
   end
+  def self.search(search)
+    if search
+      where(number: search)
+      .or(Plot.where(ranch: search))
+      .or(Plot.where(plot_type: search))
+    else
+      where("plot_id > 0")
+    end
+  end
   def self.latest_plot_scores
     select(
       "plot_evaluations.id as plot_evaluation,
