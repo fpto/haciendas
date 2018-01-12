@@ -1,5 +1,8 @@
 class Animal < ApplicationRecord
   has_many :weights, dependent: :destroy
+  def number_with_ranch
+    " #{ranch} - #{species} - #{animal_number}"
+  end
 
   def self.search(search)
     if search

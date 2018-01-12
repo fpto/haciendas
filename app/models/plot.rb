@@ -1,7 +1,7 @@
 class Plot < ApplicationRecord
   has_many :plot_evaluations, dependent: :destroy
   def number_with_type
-    "#{id} - número: #{number}, tipo: #{plot_type}"
+    "#{ranch} - #{plot_type} - #{number}"
   end
   def self.search(search)
     if search

@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <%= form.label :animal_id, "Animal" %>
-    <%= form.collection_select(:animal_id, Animal.all, :id, :animal_number)  %>
+    <%= form.collection_select(:animal_id, Animal.all.order("ranch desc, species asc, animal_number asc"), :id, :number_with_ranch)  %>
   </div>
 
   <div class="form-group">
