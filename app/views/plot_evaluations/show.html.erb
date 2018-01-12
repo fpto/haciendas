@@ -33,7 +33,7 @@
     <%= link_to 'Editar', edit_plot_evaluation_path(@plot_evaluation) %> |
     <%= link_to 'Borrar', @plot_evaluation, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %> |
   <% end %>
-  <%= link_to 'Atrás', plot_evaluations_path %> |
+  <%= link_to 'Atrás', plots_path %> |
   <%= link_to '+ Potrero', new_plot_path %> |
   <%= link_to '+ Evaluación', new_plot_evaluation_path %>
 </div>
