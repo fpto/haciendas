@@ -1,0 +1,13 @@
+<% content_for(:page_header) do %>
+  <%= "Error" %>
+<% end %>
+<% content_for :panel_heading do %>Permisos Insuficientes<% end %>
+<h3>Lo sentimos </h3>
+<p>
+  No tiene los permisos adecuados para realizar  esa tarea.
+  Contacte al administrador del sistema para asistencia.
+</p>
+<p>
+<%= link_to 'Regresar', :back %>
+
+</p>
