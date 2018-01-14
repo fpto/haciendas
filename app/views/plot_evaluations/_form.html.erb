@@ -19,7 +19,7 @@
 
   <div class="field">
     <%= form.label :date, 'Fecha:' %>
-    <%= form.date_select :date, id: :plot_evaluation_date %>
+    <%= form.date_select :date, :use_month_numbers => true, :date_separator => " / ",  order: [:day, :month, :year], id: :plot_evaluation_date %>
   </div>
 
   <div class="field">
