@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ranch: MyString
+  species: MyString
+  number: MyString
+  name: MyString
+  description: MyText
+
+two:
+  ranch: MyString
+  species: MyString
+  number: MyString
+  name: MyString
+  description: MyText

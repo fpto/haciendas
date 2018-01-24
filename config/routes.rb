@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :lots
   resources :plot_evaluations
   resources :plots
   resources :weights

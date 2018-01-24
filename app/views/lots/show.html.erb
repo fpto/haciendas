@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ranch:</strong>
+  <%= @lot.ranch %>
+</p>
+
+<p>
+  <strong>Species:</strong>
+  <%= @lot.species %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @lot.number %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @lot.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @lot.description %>
+</p>
+
+<%= link_to 'Edit', edit_lot_path(@lot) %> |
+<%= link_to 'Back', lots_path %>
