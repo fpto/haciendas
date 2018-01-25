@@ -130,7 +130,8 @@ class Animal < ApplicationRecord
   end
   def self.daily_gain_general
     select(
-      "AVG(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as daily_gain")
+      "stddev(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as stddev,
+      AVG(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as daily_gain")
     .joins("
       JOIN weights ON weights.animal_id = animals.id
       JOIN (

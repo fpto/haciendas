@@ -1,10 +1,7 @@
 <p id="notice"><%= notice %></p>
-<div class = "container">
   <div class = "row">
     <div class = "col-sm-6">
-      <p>
-        <h1><%= @lot.name %></h1>
-      </p>
+      <h1><%= @lot.name %></h1>
       <p>
         <strong>Hacienda:</strong>
         <%= @lot.ranch %>
@@ -35,8 +32,7 @@
       </p>
     </div>
   </div>
-</div>
-<div class="container">
+<div class="page-wrapper">
   <div class = "col-sm-6">
     <h4>Animales</h2>
     <table class="table table-striped table-bordered table-hover">
@@ -50,6 +46,28 @@
 
       <tbody>
         <% @latest_weights.each do |a| %>
+          <tr>
+            <td><%= a.animal_number %></td>
+            <td><%= a.last_weight %></td>
+            <td><%= a.daily_gain.round(2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class = "col-sm-6">
+    <h4>Bajo GDP</h2>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><%= sortable "animal_number",  "#"     %></th>
+          <th><%= sortable "last_weight", "Peso"     %></th>
+          <th><%= sortable "daily_gain" ,"GDP"       %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @low_gdp.each do |a| %>
           <tr>
             <td><%= a.animal_number %></td>
             <td><%= a.last_weight %></td>
