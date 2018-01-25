@@ -77,8 +77,8 @@ class Animal < ApplicationRecord
   end
   def self.average_weight_general
     select(
-      "animals.species as species,
-       COUNT(distinct animals.id) as count,
+      "COUNT(distinct animals.id) as count,
+      stddev(weights.weight) as stddev,
       AVG(weights.weight) as average_weight,
       AVG(date(NOW()) - dates.latest_date) as days_since_last_weight")
     .joins("
@@ -97,9 +97,6 @@ class Animal < ApplicationRecord
                GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
       JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
     ")
-    .group(
-      "animals.species"
-    )
   end
   def self.daily_gain
     select(

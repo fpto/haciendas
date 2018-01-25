@@ -17,17 +17,19 @@ class LotsController < ApplicationController
        .where(lot_id:  @lot.id)
        .order(sort_column + " " + sort_direction)
     @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id)
-    @lot_gdp = @lot_avg_weight= @lot_count = @lot_stddev = 0
+    @lot_gdp = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
     @avg_gdp.each{ |animal|
       @lot_gdp += animal.daily_gain
-      @lot_stddev += animal.stddev
+      @lot_gdp_stddev += animal.stddev
     }
     @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id)
     @avg_weight.each{ |animal|
       @lot_avg_weight += animal.average_weight
       @lot_count += animal.count
+      @lot_w_stddev += animal.stddev
     }
-    @lot_low_gdp_bar = @lot_gdp - @lot_stddev
+    @lot_low_gdp_bar = @lot_gdp - @lot_gdp_stddev
+    @lot_w_cv = (@lot_w_stddev  / @lot_avg_weight ) * 100
     @low_gdp = Animal.latest_weights
        .where(lot_id:  @lot.id )
        .where( 'COALESCE((weights.weight - w2.weight) /
