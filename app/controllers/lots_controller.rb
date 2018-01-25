@@ -1,6 +1,7 @@
 class LotsController < ApplicationController
   before_action :set_lot, only: [:show, :edit, :update, :destroy]
 
+  helper_method :sort_column, :sort_direction
   # GET /lots
   # GET /lots.json
   def index
@@ -10,6 +11,22 @@ class LotsController < ApplicationController
   # GET /lots/1
   # GET /lots/1.json
   def show
+    @lot = Lot.find(params[:id])
+    @animals = @lot.animals
+    @latest_weights = Animal.latest_weights
+       .where(lot_id:  @lot.id)
+       .order(sort_column + " " + sort_direction)
+    @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id)
+    @lot_gdp = @lot_avg_weight= @lot_count = 0
+    @avg_gdp.each{ |animal|
+      @lot_gdp += animal.daily_gain
+    }
+    @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id)
+    @avg_weight.each{ |animal|
+      @lot_avg_weight += animal.average_weight
+      @lot_count += animal.count
+
+    }
   end
 
   # GET /lots/new
@@ -70,5 +87,14 @@ class LotsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def lot_params
       params.require(:lot).permit(:ranch, :species, :number, :name, :description)
+    end
+
+    # Use to set default sorting
+    def sort_column
+      %w[animal_number  ranch species last_weight days_since_last_weight daily_gain].include?(params[:sort]) ? (params[:sort]) : "animal_number"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? (params[:direction]) : "asc"
     end
 end

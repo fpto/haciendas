@@ -1,29 +1,62 @@
 <p id="notice"><%= notice %></p>
+<div class = "container">
+  <div class = "row">
+    <div class = "col-sm-6">
+      <p>
+        <h1><%= @lot.name %></h1>
+      </p>
+      <p>
+        <strong>Hacienda:</strong>
+        <%= @lot.ranch %>
+        <strong>Especie:</strong>
+        <%= @lot.species %>
+        <strong>#:</strong>
+        <%= @lot.number %>
+      </p>
+      <p>
+        <%= @lot.description %>
+      </p>
 
-<p>
-  <strong>Ranch:</strong>
-  <%= @lot.ranch %>
-</p>
+      <%= link_to 'Editar', edit_lot_path(@lot) %> |
+      <%= link_to 'Atrás', lots_path %>
+    </div>
+    <div class = "col-sm-6">
+      <p>
+        <strong>Animales:</strong>
+        <%= @lot_count.round %>
+      </p>
+      <p>
+        <strong>Peso:</strong>
+        <%= @lot_avg_weight.round(2) %>
+      </p>
+      <p>
+        <strong>GDP:</strong>
+        <%= @lot_gdp.round(2) %>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class = "col-sm-6">
+    <h4>Animales</h2>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><%= sortable "animal_number",  "#"     %></th>
+          <th><%= sortable "last_weight", "Peso"     %></th>
+          <th><%= sortable "daily_gain" ,"GDP"       %></th>
+        </tr>
+      </thead>
 
-<p>
-  <strong>Species:</strong>
-  <%= @lot.species %>
-</p>
-
-<p>
-  <strong>Number:</strong>
-  <%= @lot.number %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @lot.name %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @lot.description %>
-</p>
-
-<%= link_to 'Edit', edit_lot_path(@lot) %> |
-<%= link_to 'Back', lots_path %>
+      <tbody>
+        <% @latest_weights.each do |a| %>
+          <tr>
+            <td><%= a.animal_number %></td>
+            <td><%= a.last_weight %></td>
+            <td><%= a.daily_gain.round(2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
