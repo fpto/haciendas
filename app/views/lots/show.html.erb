@@ -13,8 +13,10 @@
       <p>
         <%= @lot.description %>
       </p>
-
-      <%= link_to 'Editar', edit_lot_path(@lot) %> |
+      <% if current_user && (current_user.admin?)%>
+        <%= link_to 'Editar', edit_lot_path(@lot) %> |
+        <%= link_to 'Borrar', @lot, method: :delete, data: { confirm: 'Está seguro?' } %> |
+      <% end %>
       <%= link_to 'Atrás', lots_path %>
     </div>
     <div class = "col-sm-6">

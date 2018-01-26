@@ -1,4 +1,8 @@
 class LotsController < ApplicationController
+  before_action :require_user, only: [:new, :create, :edit, :destroy, :update]
+  before_action :require_editor, only: [:new, :create,  :update]
+  before_action :require_admin, only: [:edit, :destroy]
+  
   before_action :set_lot, only: [:show, :edit, :update, :destroy]
 
   helper_method :sort_column, :sort_direction

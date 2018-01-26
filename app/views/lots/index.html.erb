@@ -32,8 +32,10 @@
                 <td><%= lot.name %></td>
                 <td>
                   <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, lot_path(lot.lot_id) %>
+                  <% if current_user && (current_user.admin?)%>
                   <%= link_to '<i class="fa fa-edit fa-fw"></i>'.html_safe, edit_lot_path(lot.lot_id) %>
                   <%= link_to '<i class="fa fa-trash-o fa-fw"></i>'.html_safe, lot_path(lot.lot_id), method: :delete, data: { confirm: 'Está seguro?' } %>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
