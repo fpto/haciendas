@@ -13,12 +13,12 @@
 
   <div class="field">
     <%= form.label :ranch, 'Hacienda' %>
-    <%= form.text_field :ranch, id: :lot_ranch %>
+    <%= form.select :ranch, ['sauces', 'laureles'] %>
   </div>
 
   <div class="field">
     <%= form.label :species, 'Especie' %>
-    <%= form.text_field :species, id: :lot_species %>
+    <%= form.select :species, ['bovino', 'ovino'] %>
   </div>
 
   <div class="field">
