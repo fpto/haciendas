@@ -1,6 +1,8 @@
 class Lot < ApplicationRecord
   has_many :animals
-
+  def number_with_ranch
+    " #{ranch} - #{species} - #{number}"
+  end
   def self.lot_stats
     select("
       lots.ranch as ranch,

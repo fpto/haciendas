@@ -24,6 +24,10 @@
     <%= form.label :ranch, 'Hacienda' %>
     <%= form.select :ranch, ['sauces', 'laureles'] %>
   </div>
+  <div class="form-group">
+    <%= form.label :lot_id, 'Lote' %>
+    <%= form.collection_select(:lot_id, Lot.all.order("ranch desc, species asc, number asc"), :id, :number_with_ranch)  %>
+  </div>
 
 <!--  <div class="form-group">
     <%= form.label :birthday, 'Nacimiento' %>
