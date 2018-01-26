@@ -5,7 +5,8 @@ class LotsController < ApplicationController
   # GET /lots
   # GET /lots.json
   def index
-    @lots = Lot.all
+    #@lots = Lot.all
+    @lots = Lot.lot_stats
   end
 
   # GET /lots/1
@@ -16,14 +17,20 @@ class LotsController < ApplicationController
     @latest_weights = Animal.latest_weights
        .where(lot_id:  @lot.id)
        .order(sort_column + " " + sort_direction)
+
     @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id)
     @lot_gdp = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
     @avg_gdp.each{ |animal|
+      animal.daily_gain ||= 0
+      animal.stddev ||= 0
       @lot_gdp += animal.daily_gain
       @lot_gdp_stddev += animal.stddev
     }
     @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id)
     @avg_weight.each{ |animal|
+      animal.average_weight ||= 0
+      animal.count ||= 0
+      animal.stddev ||= 0
       @lot_avg_weight += animal.average_weight
       @lot_count += animal.count
       @lot_w_stddev += animal.stddev
