@@ -30,10 +30,10 @@
           <thead>
             <tr>
               <th><%= sortable "animal_number",  "#"     %></th>
-              <th><%= sortable "ranch", "Hacienda"       %></th>
+              <th><%= sortable "ranch", "Hda."       %></th>
               <th><%= sortable "species", "Especie"      %></th>
+              <th><%= sortable "lot_number", "L"      %></th>
               <th><%= sortable "last_weight", "Peso"     %></th>
-              <th><%= sortable  "days_since_last_weight", "Pesado" %> </th>
               <th><%= sortable "daily_gain" ,"GDP"       %></th>
               <th></th>
             </tr>
@@ -43,10 +43,10 @@
             <% @latest_weights.each do |animal| %>
               <tr>
                 <td><%= animal.animal_number %></td>
-                <td><%= animal.ranch %> </td>
-                <td><%= animal.species %> </td>
-                <td><%= animal.last_weight %></td>
-                <td><%= animal.days_since_last_weight %></td>
+                <td><small><%= animal.ranch %></small></td>
+                <td><%= animal.species %></td>
+                <td><%= animal.lot_number %></td>
+                <td><%= animal.last_weight %> <small>(<%= animal.days_since_last_weight %>d)</small></td>
                 <td><% unless animal.daily_gain.nil? %><%= animal.daily_gain.round(2) %><% end %></td>
                 <td><%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), animal_path(animal.animal_id) %>
                   <% if current_user && (current_user.admin?)%>

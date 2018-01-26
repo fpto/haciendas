@@ -23,6 +23,7 @@ class Animal < ApplicationRecord
     animals.ranch as ranch,
     animals.species as species,
     animals.lot_id as lot_id,
+    lots.number as lot_number,
     dates.latest_date as latest_date,
     weights.weight as last_weight,
     dates.before_date as before_date,
@@ -46,6 +47,7 @@ class Animal < ApplicationRecord
   		        ) <= 2
   	           GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
       JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date
+      LEFT JOIN lots ON lots.id = animals.lot_id
     ")
   end
 
