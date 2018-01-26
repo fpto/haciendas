@@ -23,6 +23,7 @@ class AnimalsController < ApplicationController
   def show
     @animal = Animal.find(params[:id])
     @weights = @animal.weights
+    @lot = @animal.lot
       @max_weight =  @weights.maximum(:weight)
       @min_weight =  @weights.minimum(:weight)
       # Dealing when no weights

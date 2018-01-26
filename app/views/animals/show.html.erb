@@ -8,6 +8,10 @@
       <p>
         <strong>Especie:</strong>
         <%= @animal.species %>
+        <% unless @lot.nil? %>
+        <strong>Lote:</strong>
+        #<%= @lot.number %>-<%= @lot.name %>
+        <% end %>
       </p>
 
       <!--  <p>
