@@ -19,7 +19,7 @@
               <th>Tipo</th>
               <th>#</th>
               <th>Nombre</th>
-              <th>Animales</th>
+              <th>Anim</th>
               <th>Peso</th>
               <th>GDP</th>
               <th colspan="3"></th>
@@ -29,12 +29,12 @@
           <tbody>
             <% @lots.each do |lot| %>
               <tr>
-                <td><%= lot.ranch %></td>
-                <td><%= lot.species %></td>
+                <td><small><%= lot.ranch %></small></td>
+                <td><small><%= lot.species %></small></td>
                 <td><%= lot.number %></td>
                 <td><%= lot.name %></td>
                 <td><%= lot.count %></td>
-                <td><%= lot.average_weight.round(2) %> (<%= lot.days_since_last_weight.round %>d)</td>
+                <td><%= lot.average_weight.round(2) %> <small>(<%= lot.days_since_last_weight.round %>d)</small></td>
                 <td><% unless lot.daily_gain.nil? %> <%= lot.daily_gain.round(2) %><% end %></td>
                 <td>
                   <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, lot_path(lot.lot_id) %>
