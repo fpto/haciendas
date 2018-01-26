@@ -47,7 +47,7 @@
                 <td><%= animal.species %> </td>
                 <td><%= animal.last_weight %></td>
                 <td><%= animal.days_since_last_weight %></td>
-                <td><%= animal.daily_gain.round(2) %></td>
+                <td><% unless animal.daily_gain.nil? %><%= animal.daily_gain.round(2) %><% end %></td>
                 <td><%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), animal_path(animal.animal_id) %>
                   <% if current_user && (current_user.admin?)%>
                   <%= link_to image_tag("editing.png", border: 0,size: "15x15", title: "Editar"), edit_animal_path(animal.animal_id) %>

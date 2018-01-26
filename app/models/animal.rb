@@ -30,7 +30,7 @@ class Animal < ApplicationRecord
     dates.latest_date - dates.before_date as days_between_weights,
     date(NOW()) - dates.latest_date as days_since_last_weight,
     weights.weight - w2.weight as weight_change,
-    COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0) as daily_gain")
+    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
     .joins("
       JOIN weights ON weights.animal_id = animals.id
       JOIN (

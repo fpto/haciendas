@@ -55,7 +55,7 @@
           <tr>
             <td><%= a.animal_number %></td>
             <td><%= a.last_weight %></td>
-            <td><%= a.daily_gain.round(2) %></td>
+            <td><% unless a.daily_gain.nil? %><%= a.daily_gain.round(2) %><% end %></td>
           </tr>
         <% end %>
       </tbody>
