@@ -10,11 +10,11 @@ class Lot < ApplicationRecord
       animals.lot_id as lot_id,
       lots.number as number,
       lots.name as name,
-      COUNT(weights.animal_id) as count,
+      COUNT(distinct weights.animal_id) as count,
       AVG(weights.weight) as average_weight,
       AVG(date(NOW()) - dates.latest_date) as days_since_last_weight,
       AVG(weights.weight - w2.weight) as weight_change,
-      AVG(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as daily_gain")
+      AVG((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0)) as daily_gain")
       .joins("
         LEFT JOIN animals ON lots.id = animals.lot_id
         LEFT JOIN weights ON weights.animal_id = animals.id
