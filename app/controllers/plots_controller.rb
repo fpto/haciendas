@@ -26,8 +26,8 @@ class PlotsController < ApplicationController
         @plot.boundaries = "{lat: 15.479136, lng: -86.411074}"
       else
         @plot.boundaries = "{lat: 15.404493, lng: -86.428419}"
-       end
-     end
+      end
+    end
   end
 
   # GET /plots/new
