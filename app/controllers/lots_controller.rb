@@ -2,7 +2,7 @@ class LotsController < ApplicationController
   before_action :require_user, only: [:new, :create, :edit, :destroy, :update]
   before_action :require_editor, only: [:new, :create,  :update]
   before_action :require_admin, only: [:edit, :destroy]
-  
+
   before_action :set_lot, only: [:show, :edit, :update, :destroy]
 
   helper_method :sort_column, :sort_direction
@@ -43,8 +43,8 @@ class LotsController < ApplicationController
     @lot_w_cv = (@lot_w_stddev  / @lot_avg_weight ) * 100
     @low_gdp = Animal.latest_weights
        .where(lot_id:  @lot.id )
-       .where( 'COALESCE((weights.weight - w2.weight) /
-       NULLIF((dates.latest_date - dates.before_date),0),0) <= ?', @lot_low_gdp_bar)
+       .where( '(weights.weight - w2.weight) /
+       NULLIF((dates.latest_date - dates.before_date),0) <= ?', @lot_low_gdp_bar)
        .order(sort_column + " " + sort_direction)
   end
 
