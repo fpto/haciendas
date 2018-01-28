@@ -22,7 +22,7 @@
       <% end %>
       <%= link_to 'Atrás', plots_path %> |
       <%= link_to '+ Potrero', new_plot_path %> |
-      <%= link_to '+ Evaluación', new_plot_evaluation_path %>
+      <%= link_to '+ Evaluación', new_plot_evaluation_path({ :plot_id => @plot.id}) %>
     </div>
     <div class="col-lg-3 col-md-6">
       <p>
