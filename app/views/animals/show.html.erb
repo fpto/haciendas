@@ -25,7 +25,7 @@
       <% end %>
       <%= link_to 'Atrás', animals_path %> |
       <%= link_to '+ Animal', new_animal_path%> |
-      <%= link_to '+ Peso', new_weight_path%>
+      <%= link_to '+ Peso', new_weight_path({ :animal_id => @animal.id})%>
     </div>
     <div class="col-sm-6">
       <h4>GD: <%= @daily_weight_gain %> lbs  </h4>
