@@ -47,6 +47,7 @@
           <th><%= sortable "animal_number",  "#"     %></th>
           <th><%= sortable "last_weight", "Peso"     %></th>
           <th><%= sortable "daily_gain" ,"GDP"       %></th>
+          <th></th>
         </tr>
       </thead>
 
@@ -55,7 +56,16 @@
           <tr>
             <td><%= a.animal_number %></td>
             <td><%= a.last_weight %></td>
-            <td><% unless a.daily_gain.nil? %><%= a.daily_gain.round(2) %><% end %></td>
+            <td>
+              <% unless a.daily_gain.nil? %><%= a.daily_gain.round(2) %><% end %>
+            </td>
+            <td>
+              <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, animal_path(a.animal_id) %>
+              <% if current_user && (current_user.admin?)%>
+              <%= link_to '<i class="fa fa-edit fa-fw"></i>'.html_safe, edit_animal_path(a.animal_id) %>
+              <%= link_to '<i class="fa fa-trash-o fa-fw"></i>'.html_safe, animal_path(a.animal_id), method: :delete, data: { confirm: 'Estás seguro?' } %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

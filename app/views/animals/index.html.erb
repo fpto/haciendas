@@ -48,10 +48,10 @@
                 <td><%= animal.lot_number %></td>
                 <td><%= animal.last_weight %> <small>(<%= animal.days_since_last_weight %>d)</small></td>
                 <td><% unless animal.daily_gain.nil? %><%= animal.daily_gain.round(2) %><% end %></td>
-                <td><%= link_to image_tag("info.png", border: 0, size: "15x15", title: "Más información"), animal_path(animal.animal_id) %>
+                <td><%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, animal_path(animal.animal_id) %>
                   <% if current_user && (current_user.admin?)%>
-                  <%= link_to image_tag("editing.png", border: 0,size: "15x15", title: "Editar"), edit_animal_path(animal.animal_id) %>
-                  <%= link_to image_tag("close.png", border: 0, size: "15x15", title: "Borrar"), animal_path(animal.animal_id), method: :delete, data: { confirm: 'Estás seguro?' } %>
+                  <%= link_to '<i class="fa fa-edit fa-fw"></i>'.html_safe, edit_animal_path(animal.animal_id) %>
+                  <%= link_to '<i class="fa fa-trash-o fa-fw"></i>'.html_safe, animal_path(animal.animal_id), method: :delete, data: { confirm: 'Estás seguro?' } %>
                   <% end %>
                 </td>
               </tr>
