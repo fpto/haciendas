@@ -19,10 +19,10 @@ class LotsController < ApplicationController
     @lot = Lot.find(params[:id])
     @animals = @lot.animals
     @latest_weights = Animal.latest_weights
-       .where(lot_id:  @lot.id)
+       .where(lot_id:  @lot.id).where(:status => "engorde")
        .order(sort_column + " " + sort_direction)
 
-    @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id)
+    @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id).where(:status => "engorde")
     @lot_gdp = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
     @avg_gdp.each{ |animal|
       animal.daily_gain ||= 0
@@ -30,7 +30,7 @@ class LotsController < ApplicationController
       @lot_gdp += animal.daily_gain
       @lot_gdp_stddev += animal.stddev
     }
-    @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id)
+    @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id).where(:status => "engorde")
     @avg_weight.each{ |animal|
       animal.average_weight ||= 0
       animal.count ||= 0
@@ -45,6 +45,7 @@ class LotsController < ApplicationController
        .where(lot_id:  @lot.id )
        .where( '(weights.weight - w2.weight) /
        NULLIF((dates.latest_date - dates.before_date),0) <= ?', @lot_low_gdp_bar)
+       .where(:status => "engorde")
        .order(sort_column + " " + sort_direction)
   end
 

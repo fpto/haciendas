@@ -15,6 +15,7 @@ class AnimalsController < ApplicationController
        .search(params[:search])
        .order(sort_column + " " + sort_direction)
        .paginate(:page => params[:page], :per_page => 50)
+       .where(:status => "engorde")
 
   end
 

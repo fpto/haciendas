@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   def home
     # This is to calculate the latest two weights of each animal
-    @average_weight = Animal.average_weight
+    @average_weight = Animal.average_weight.where(:status => "engorde")
     @bovine_average_weight = @ovine_average_weight = 0
     @bovine_count = @ovine_count = 0
     @average_weight.each{ |animal|
@@ -17,7 +17,7 @@ class PagesController < ApplicationController
 
     @bovine_daily_gain = @ovine_daily_gain = 0
 
-    @daily_gain = Animal.daily_gain
+    @daily_gain = Animal.daily_gain.where(:status => "engorde")
     @daily_gain.each{ |animal|
       case animal.species
         when 'bovino'
@@ -28,7 +28,7 @@ class PagesController < ApplicationController
     }
 
     # General Average Daily Gain
-    @latest_weights = Animal.latest_weights.order("animal_id")
+    @latest_weights = Animal.latest_weights.order("animal_id").where(:status => "engorde")
 
     @wl250 = @w250 = @w500 = @w750 = @w1000 = @winv = 0
     @owl25 = @ow25 = @ow50 = @ow75 = @ow100 = @owinv = 0
@@ -57,7 +57,7 @@ class PagesController < ApplicationController
 
     #Every animal should have a weight for data to be accurate
 
-    @days_in_ranch = Animal.days_in_ranch
+    @days_in_ranch = Animal.days_in_ranch.where(:status => "engorde")
     # Calculates average date dif - Días desde ingreso
    @avg_days_in_ranch_b = @avg_days_in_ranch_o = 0
 
