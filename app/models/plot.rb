@@ -23,7 +23,8 @@ class Plot < ApplicationRecord
       plot_evaluations.water_score as water_score,
       plot_evaluations.pasture_score as pasture_score,
       plot_evaluations.fences_score as fences_score,
-      ROUND(CAST((plot_evaluations.water_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average ")
+      ROUND(CAST((plot_evaluations.water_score + plot_evaluations.pasture_score + plot_evaluations.fences_score) AS decimal )/3,2) as average,
+      date(NOW()) - plot_evaluations.date as days_since_last_evaluation ")
       .joins("JOIN plot_evaluations ON plot_evaluations.plot_id = plots.id")
       .where("(plot_evaluations.plot_id, plot_evaluations.id) IN (SELECT plot_id as pi, max(id) as re FROM plot_evaluations GROUP by plot_id)")
   end
