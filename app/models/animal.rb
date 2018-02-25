@@ -174,5 +174,8 @@ class Animal < ApplicationRecord
       "animals.ranch, animals.species"
     )
   end
+  def self.sold
+    where(:status => "engorde")
+  end
 
 end

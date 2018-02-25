@@ -15,8 +15,7 @@ class AnimalsController < ApplicationController
        .search(params[:search])
        .order(sort_column + " " + sort_direction)
        .paginate(:page => params[:page], :per_page => 50)
-       .where(:status => "engorde")
-
+       .sold
   end
 
   # GET /animals/1
@@ -79,6 +78,12 @@ class AnimalsController < ApplicationController
     end
   end
 
+  def sell
+    Animal.where(id: params[:animal_id]).update_all(:status => "vendido")
+
+    redirect_to animals_url
+  end
+
   # DELETE /animals/1
   # DELETE /animals/1.json
   def destroy
@@ -89,6 +94,7 @@ class AnimalsController < ApplicationController
     end
   end
 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_animal
@@ -97,7 +103,7 @@ class AnimalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def animal_params
-      params.require(:animal).permit(:animal_number, :species, :birthday, :ranch, :lot_id, :status)
+      params.require(:animal).permit(:id, :animal_number, :species, :birthday, :ranch, :lot_id, :status)
     end
 
     # Use to set default sorting
