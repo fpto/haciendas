@@ -11,33 +11,64 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= form.label :animal_number, 'Número de animal' %>
-    <%= form.number_field :animal_number, id: :animal_animal_number %>
-  </div>
+  <div class = "page-wrapper">
+    <div class = "row">
+      <div class = "col-sm-6">
 
-  <div class="form-group">
-    <%= form.label :species, 'Especie' %>
-    <%= form.select :species, ['bovino', 'ovino'] %>
-  </div>
-  <div class="form-group">
-    <%= form.label :ranch, 'Hacienda' %>
-    <%= form.select :ranch, ['sauces', 'laureles'] %>
-  </div>
-  <div class="form-group">
-    <%= form.label :lot_id, 'Lote' %>
-    <%= form.collection_select(:lot_id, Lot.all.order("ranch desc, species asc, number asc"), :id, :number_with_ranch)  %>
-  </div>
-  <div class="form-group">
-    <%= form.label :status, 'Estado' %>
-    <%= form.select :status, ['engorde', 'vendido', 'muerto', 'perdido'] %>
-  </div>
-<!--  <div class="form-group">
-    <%= form.label :birthday, 'Nacimiento' %>
-    <%= form.date_select :birthday, id: :animal_birthday %>
-  </div>-->
+        <div class="form-group">
+          <%= form.label :animal_number, 'Número de animal' %>
+          <%= form.number_field :animal_number, id: :animal_animal_number %>
+        </div>
 
-  <div class="form-group">
-    <%= form.submit %>
+        <div class="form-group">
+          <%= form.label :species, 'Especie' %>
+          <%= form.select :species, ['bovino', 'ovino'] %>
+        </div>
+        <div class="form-group">
+          <%= form.label :ranch, 'Hacienda' %>
+          <%= form.select :ranch, ['sauces', 'laureles'] %>
+        </div>
+        <div class="form-group">
+          <%= form.label :lot_id, 'Lote' %>
+          <%= form.collection_select(:lot_id, Lot.all.order("ranch desc, species asc, number asc"), :id, :number_with_ranch)  %>
+        </div>
+        <div class="form-group">
+          <%= form.label :status, 'Estado' %>
+          <%= form.select :status, ['engorde', 'vendido', 'muerto', 'perdido'] %>
+        </div>
+        <div class="form-group">
+          <%= form.label :breed, 'Raza' %>
+          <%= form.text_area :breed, id: :animal_breed %>
+        </div>
+      </div>
+    <!--  <div class="form-group">
+        <%= form.label :birthday, 'Nacimiento' %>
+        <%= form.date_select :birthday, id: :animal_birthday %>
+      </div>-->
+      <div class = "col-sm-6">
+
+        <div class="form-group">
+          <%= form.label :color, 'Color' %>
+          <%= form.text_area :color, id: :animal_color %>
+        </div>
+        <div class="form-group">
+          <%= form.label :color, 'Fierros' %>
+          <%= form.text_area :mark, id: :animal_mark %>
+        </div>
+        <div class="form-group">
+          <%= form.label :provider, 'Proveedor' %>
+          <%= form.text_area :provider, id: :animal_provider %>
+        </div>
+        <div class="form-group">
+          <%= form.label :purchase_price, 'Precio de compra (libra)' %>
+          <%= form.text_area :purchase_price, id: :animal_purchase_price %>
+        </div>
+
+
+        <div class="form-group">
+          <%= form.submit %>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

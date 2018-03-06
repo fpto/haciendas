@@ -103,7 +103,7 @@ class AnimalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def animal_params
-      params.require(:animal).permit(:id, :animal_number, :species, :birthday, :ranch, :lot_id, :status)
+      params.require(:animal).permit(:id, :animal_number, :species, :birthday, :ranch, :lot_id, :status, :breed, :provider, :mark, :color, :purchase_price)
     end
 
     # Use to set default sorting
