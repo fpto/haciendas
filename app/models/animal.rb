@@ -178,7 +178,7 @@ class Animal < ApplicationRecord
     where(:status => "engorde")
   end
   def self.animal_number
-    select( "ranch, species, COUNT(distinct id)")
+    select( "ranch, species, COUNT(distinct id) as count")
     .group("ranch, species")
   end
 end

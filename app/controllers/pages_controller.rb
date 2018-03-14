@@ -128,19 +128,19 @@ class PagesController < ApplicationController
     @animal_number.each{ |animal|
       if animal.ranch == 'sauces' then
         if  animal.species == 'bovino' then
-          @animals_b_s += 1
+          @animals_b_s += animal.count
         end
         if animal.species == 'ovino' then
-          @animals_o_s += 1
+          @animals_o_s += animal.count
         end
       end
       if animal.ranch == 'laureles' and animal.species == 'bovino' then
-        @animals_b_l += 1
+        @animals_b_l += animal.count
       end
 
       }
     @average_plot_load_b_s = if @animals_b_s > 0 then (@animals_b_s  / @sum_sauces_area_b).round(2) else 0 end
     @average_plot_load_o_s = if @animals_o_s > 0 then (@animals_o_s /  @sum_sauces_area_o).round(2) else 0 end
-    @average_plot_load_b_l = if @animals_b_l > 0 then (@animals_b_s  / @sum_laureles_area_b).round(2) else 0 end
+    @average_plot_load_b_l = if @animals_b_l > 0 then (@animals_b_l  / @sum_laureles_area_b).round(2) else 0 end
   end
 end
