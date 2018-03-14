@@ -123,8 +123,9 @@ class PagesController < ApplicationController
       end
     }
 
-    @animals_b_s = @animals_o_s = @animals_b_l = 0
-    @latest_weights.each{ |animal|
+    @animal_number = @animals_b_s = @animals_o_s = @animals_b_l = 0
+    @animal_number = Animal.animal_number.growing
+    @animal_number.each{ |animal|
       if animal.ranch == 'sauces' then
         if  animal.species == 'bovino' then
           @animals_b_s += 1

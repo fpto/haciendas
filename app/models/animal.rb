@@ -174,8 +174,11 @@ class Animal < ApplicationRecord
       "animals.ranch, animals.species"
     )
   end
-  def self.sold
+  def self.growing
     where(:status => "engorde")
   end
-
+  def self.animal_number
+    select( "ranch, species, COUNT(distinct id)")
+    .group("ranch, species")
+  end
 end
