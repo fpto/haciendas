@@ -2,8 +2,8 @@
 <div class="container">
 
   <p>
-    <strong>Animal:</strong>
-    <%= @weight.animal_id %>
+    <strong># Animal:</strong>
+    <td><%= link_to @animal.animal_number, animal_path(@weight.animal_id) %> <small>(ID: <%= @weight.animal_id %>)</small>
   </p>
 
   <p>
