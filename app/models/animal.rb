@@ -82,6 +82,8 @@ class Animal < ApplicationRecord
       "COUNT(distinct animals.id) as count,
       stddev(weights.weight) as stddev,
       AVG(weights.weight) as average_weight,
+      SUM(weights.weight) as weight_sum,
+      AVG(animals.purchase_price) as purchase_price,
       AVG(date(NOW()) - dates.latest_date) as days_since_last_weight")
     .joins("
       JOIN weights ON weights.animal_id = animals.id
