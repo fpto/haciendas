@@ -32,5 +32,6 @@ class Lot < ApplicationRecord
         	GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
         JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ")
       .group("lots.ranch, lots.species, animals.lot_id, lots.number, lots.name")
+      .order("lots.ranch, lots.species, lots.number")
   end
 end
