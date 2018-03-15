@@ -28,7 +28,7 @@
         <strong>PP:</strong>
         <%= @lot_avg_weight.round(2) %>
         <strong>Tot:</strong>
-        <%= @lot_weight_sum.round(2) %>
+        <%= number_with_delimiter(@lot_weight_sum.round(2), :delimiter => ',') %>
         lbs
       </p>
       <p>

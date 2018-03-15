@@ -183,4 +183,17 @@ class Animal < ApplicationRecord
     select( "ranch, species, COUNT(distinct id) as count")
     .group("ranch, species")
   end
+  def self.initial_weight_sum
+    select(
+	    "animals.ranch as hda,
+      animals.lot_id as lot_id,
+      animals.species as species,
+      SUM(weights.weight) as weight_sum")
+    .joins(
+      "JOIN (SELECT animal_id, min(date) as ld FROM weights GROUP BY weights.animal_id ) as ld ON ld.animal_id = animals.id
+       JOIN weights ON weights.animal_id = animals.id AND ld.ld = weights.date"
+    ).group(
+      "animals.ranch, animals.lot_id, animals.species"
+    )
+  end
 end
