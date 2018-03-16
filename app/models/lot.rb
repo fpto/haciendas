@@ -34,4 +34,7 @@ class Lot < ApplicationRecord
       .group("lots.ranch, lots.species, animals.lot_id, lots.number, lots.name")
       .order("lots.ranch, lots.species, lots.number")
   end
+  def self.growing
+    where("animals.status = 'engorde'")
+  end
 end

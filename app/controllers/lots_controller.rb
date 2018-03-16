@@ -10,7 +10,7 @@ class LotsController < ApplicationController
   # GET /lots.json
   def index
     #@lots = Lot.all
-    @lots = Lot.lot_stats
+    @lots = Lot.lot_stats.growing
   end
 
   # GET /lots/1
