@@ -17,13 +17,13 @@ class SalesController < ApplicationController
   def show
     @sale = Sale.find(params[:id])
     @latest_weights = Animal.first_last_weights
-       .where(sale_id:  @sale.id).growing
+       .where(sale_id:  @sale.id)
        .order(sort_column + " " + sort_direction)
 
-     @avg_gdp = Animal.avg_daily_gain_general.where(sale_id:  @sale.id).growing
+     @avg_gdp = Animal.avg_daily_gain_general.where(sale_id:  @sale.id)
      @sale_gdp = @sale_weight_sum = @sale_avg_weight= @sale_count = @sale_w_stddev= 0
      @avg_purchase_price = @initial_weight_sum =  @initial_weight_sum = 0
-     @initial_weight_info = Animal.initial_weight_sum.where(sale_id:  @sale.id).growing
+     @initial_weight_info = Animal.initial_weight_sum.where(sale_id:  @sale.id)
      @initial_weight_info.each{|sale|
        sale.weight_sum ||= 0
        @initial_weight_sum += sale.weight_sum
@@ -34,7 +34,7 @@ class SalesController < ApplicationController
        @sale_gdp += animal.daily_gain
      }
 
-     @avg_weight = Animal.average_weight_general.where(sale_id:  @sale.id).growing
+     @avg_weight = Animal.average_weight_general.where(sale_id:  @sale.id)
      @avg_weight.each{ |animal|
        animal.average_weight ||= 0
        animal.count ||= 0
