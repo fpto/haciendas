@@ -5,7 +5,7 @@ class SalesController < ApplicationController
   # GET /sales
   # GET /sales.json
   def index
-    @sales = Sale.all
+    @sales = Sale.sale_stats
   end
 
   # GET /sales/1

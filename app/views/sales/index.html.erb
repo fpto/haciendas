@@ -1,31 +1,52 @@
+<% content_for(:page_header) do %>
+  <%= "Venta de Animales" %>
+<% end %>
+<% content_for :panel_heading do %>Ventas<% end %>
 <p id="notice"><%= notice %></p>
 
-<h1>Sales</h1>
+<div class = "row new_buttons">
+  <div class = "page-wrapper">
+    <%= link_to '<i class="fa fa-plus-circle fa-fw"></i> Venta'.html_safe, new_sale_path, :class => "btn btn-primary col-xs-6" %>
+  </div>
+</div>
+<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+  <div class = "row">
+    <div clas="col-sm-12">
+      <div class ="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Comprador</th>
+              <th>Animales</th>
+              <th>PP</th>
+              <th>Total</th>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
 
-<table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Buyer</th>
-      <th>Comment</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @sales.each do |sale| %>
-      <tr>
-        <td><%= sale.date %></td>
-        <td><%= sale.buyer %></td>
-        <td><%= sale.comment %></td>
-        <td><%= link_to 'Show', sale %></td>
-        <td><%= link_to 'Edit', edit_sale_path(sale) %></td>
-        <td><%= link_to 'Destroy', sale, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Sale', new_sale_path %>
+          <tbody>
+            <% @sales.each do |sale| %>
+              <tr>
+                <td><small><%= sale.sale_id %></small></td>
+                <td><small><%= sale.date %></small></td>
+                <td><%= sale.buyer %></td>
+                <td><%= sale.animal_count %></td>
+                <td><%= sale.avg_weight %></td>
+                <td>L. <%= number_with_delimiter(sale.sale_total.round(2), :delimiter => ',') %></td>
+                <td>
+                  <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, sale_path(sale.sale_id) %>
+                  <% if current_user && (current_user.admin?)%>
+                  <%= link_to '<i class="fa fa-edit fa-fw"></i>'.html_safe, edit_sale_path(sale.sale_id) %>
+                  <%= link_to '<i class="fa fa-trash-o fa-fw"></i>'.html_safe, sale_path(sale.sale_id), method: :delete, data: { confirm: 'Está seguro?' } %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
