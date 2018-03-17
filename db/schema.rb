@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305214725) do
+ActiveRecord::Schema.define(version: 20180317012624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,9 @@ ActiveRecord::Schema.define(version: 20180305214725) do
     t.string "mark"
     t.string "color"
     t.float "purchase_price"
+    t.bigint "sale_id"
     t.index ["lot_id"], name: "index_animals_on_lot_id"
+    t.index ["sale_id"], name: "index_animals_on_sale_id"
   end
 
   create_table "lots", force: :cascade do |t|
@@ -65,6 +67,14 @@ ActiveRecord::Schema.define(version: 20180305214725) do
     t.text "boundaries"
   end
 
+  create_table "sales", force: :cascade do |t|
+    t.date "date"
+    t.string "buyer"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -86,5 +96,6 @@ ActiveRecord::Schema.define(version: 20180305214725) do
   end
 
   add_foreign_key "animals", "lots"
+  add_foreign_key "animals", "sales"
   add_foreign_key "plot_evaluations", "plots"
 end

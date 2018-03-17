@@ -32,9 +32,14 @@
           <%= form.label :lot_id, 'Lote' %>
           <%= form.collection_select(:lot_id, Lot.all.order("ranch desc, species asc, number asc"), :id, :number_with_ranch)  %>
         </div>
+
         <div class="form-group">
           <%= form.label :status, 'Estado' %>
           <%= form.select :status, ['engorde', 'vendido', 'muerto', 'perdido'] %>
+        </div>
+        <div class="form-group">
+          <%= form.label :lot_id, 'Venta:' %>
+          <%= form.collection_select(:sale_id, Sale.all.order("date desc"), :id, :date_with_buyer, :include_blank => true)  %>
         </div>
         <div class="form-group">
           <%= form.label :breed, 'Raza' %>

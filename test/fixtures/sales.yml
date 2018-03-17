@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2018-03-16
+  buyer: MyString
+  comment: MyText
+
+two:
+  date: 2018-03-16
+  buyer: MyString
+  comment: MyText
