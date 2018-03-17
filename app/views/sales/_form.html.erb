@@ -11,18 +11,18 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :date %>
-    <%= form.date_select :date, id: :sale_date %>
+  <div class="form-group">
+    <%= form.label :date, "Fecha" %>
+    <%= form.date_select :date, :use_month_numbers => true, :date_separator => " / ",  order: [:day, :month, :year], id: :sale_date %>
   </div>
 
-  <div class="field">
-    <%= form.label :buyer %>
+  <div class="form-group">
+    <%= form.label :buyer, "Comprador" %>
     <%= form.text_field :buyer, id: :sale_buyer %>
   </div>
 
-  <div class="field">
-    <%= form.label :comment %>
+  <div class="form-group">
+    <%= form.label :comment, "Comentarios" %>
     <%= form.text_area :comment, id: :sale_comment %>
   </div>
 
