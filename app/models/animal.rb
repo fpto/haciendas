@@ -1,7 +1,7 @@
 class Animal < ApplicationRecord
   has_many :weights, dependent: :destroy
   belongs_to :lot
-  belongs_to :sale
+  belongs_to :sale, optional: true
   def number_with_ranch
     " #{ranch} - #{species} - #{animal_number}"
   end

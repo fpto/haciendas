@@ -38,7 +38,7 @@
           <%= form.select :status, ['engorde', 'vendido', 'muerto', 'perdido'] %>
         </div>
         <div class="form-group">
-          <%= form.label :lot_id, 'Venta:' %>
+          <%= form.label :sale_id, 'Venta:' %>
           <%= form.collection_select(:sale_id, Sale.all.order("date desc"), :id, :date_with_buyer, :include_blank => true)  %>
         </div>
         <div class="form-group">
@@ -65,10 +65,13 @@
           <%= form.text_area :provider, id: :animal_provider %>
         </div>
         <div class="form-group">
-          <%= form.label :purchase_price, 'Precio de compra (libra)' %>
+          <%= form.label :purchase_price, 'Precio de Compra / lb' %>
           <%= form.text_area :purchase_price, id: :animal_purchase_price %>
         </div>
-
+        <div class="form-group">
+          <%= form.label :sale_price, 'Precio de Venta / lb' %>
+          <%= form.text_area :sale_price, id: :animal_sale_price %>
+        </div>
 
         <div class="form-group">
           <%= form.submit %>
