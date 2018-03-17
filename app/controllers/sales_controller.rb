@@ -1,4 +1,8 @@
 class SalesController < ApplicationController
+  before_action :require_user, only: [:index, :show, :new,  :create, :edit, :destroy, :update]
+  before_action :require_editor, only: [:index, :show,:new, :show, :create,  :update]
+  before_action :require_admin, only: [:edit, :destroy]
+
   before_action :set_sale, only: [:show, :edit, :update, :destroy]
 
   helper_method :sort_column, :sort_direction
