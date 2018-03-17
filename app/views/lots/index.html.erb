@@ -18,7 +18,6 @@
               <th>Hda.</th>
               <th>Tipo</th>
               <th>#</th>
-              <th>Nombre</th>
               <th>Anim</th>
               <th>Peso</th>
               <th>GDP</th>
@@ -32,7 +31,6 @@
                 <td><small><%= lot.ranch %></small></td>
                 <td><small><%= lot.species %></small></td>
                 <td><%= lot.number %></td>
-                <td><%= lot.name %></td>
                 <td><%= lot.count %></td>
                 <td><%= lot.average_weight.round(2) %> <small>(<%= lot.days_since_last_weight.round %>d)</small></td>
                 <td><% unless lot.daily_gain.nil? %> <%= lot.daily_gain.round(2) %><% end %></td>
