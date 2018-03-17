@@ -27,7 +27,9 @@
 <div class = "col-sm-6">
   <p>
     <strong>Animales:</strong>
-    <%= @sale_count.round %>
+    <%= @sale_count %>
+    <strong>En hda:</strong>
+    <%= @avg_days_in_ranch.round %>d
   </p>
   <p>
     <strong>PP:</strong>
@@ -68,12 +70,12 @@
         <% @latest_weights.each do |a| %>
           <tr>
             <td><%= a.animal_number %></td>
-            <td><%= a.first_weight %><small> (<%= a.days_in_ranch %>d)</small></td>
+            <td><%= a.first_weight %><small> (<%= a.days_between_weights %>d)</small></td>
             <td><%= a.last_weight %> <small> (<%= (@sale.date - a.last_weighted).to_i %>d)</small></td>
             <td>
               <% unless a.daily_gain.nil? %><%= a.daily_gain.round(2) %><% end %>
             </td>
-            <td>L. <%= number_with_delimiter(a.sale_total, :delimiter => ',') %></td>
+            <td>L. <% unless a.sale_total.nil? %><%= number_with_delimiter(a.sale_total.round(2), :delimiter => ',') %><% end %></td>
             <td>
               <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, animal_path(a.animal_id) %>
               <% if current_user && (current_user.admin?)%>

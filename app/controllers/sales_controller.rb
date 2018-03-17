@@ -22,7 +22,7 @@ class SalesController < ApplicationController
 
      @avg_gdp = Animal.avg_daily_gain_general.where(sale_id:  @sale.id)
      @sale_gdp = @sale_weight_sum = @sale_avg_weight= @sale_count = @sale_w_stddev= 0
-     @avg_purchase_price = @initial_weight_sum =  @initial_weight_sum = 0
+     @avg_purchase_price = @initial_weight_sum =  @initial_weight_sum = @avg_days_in_ranch = 0
      @initial_weight_info = Animal.initial_weight_sum.where(sale_id:  @sale.id)
      @initial_weight_info.each{|sale|
        sale.weight_sum ||= 0
@@ -31,7 +31,9 @@ class SalesController < ApplicationController
 
      @avg_gdp.each{ |animal|
        animal.daily_gain ||= 0
+       avg_days_in_ranch ||= 0
        @sale_gdp += animal.daily_gain
+       @avg_days_in_ranch += animal.avg_days_in_ranch
      }
 
      @avg_weight = Animal.average_weight_general.where(sale_id:  @sale.id)

@@ -158,9 +158,11 @@ class Animal < ApplicationRecord
   end
 def self.avg_daily_gain_general
   select(
-    "AVG((latest_weight.weight - first_weight.weight) /  NULLIF((dates.latest_date - dates.first_date),0)) as daily_gain"
+    "AVG((latest_weight.weight - first_weight.weight) /  NULLIF((dates.latest_date - dates.first_date),0)) as daily_gain,
+    AVG(dates.days_in_ranch) as avg_days_in_ranch
+    "
   ).joins(
-    "JOIN (SELECT animal_id, min(date) as first_date, max(date) as latest_date FROM weights GROUP BY weights.animal_id ) as dates ON dates.animal_id = animals.id
+    "JOIN (SELECT animal_id, min(date) as first_date, max(date) as latest_date, (max(date)-min(date)) as days_in_ranch FROM weights GROUP BY weights.animal_id ) as dates ON dates.animal_id = animals.id
     JOIN weights latest_weight ON latest_weight.animal_id = animals.id AND dates.latest_date = latest_weight.date
     JOIN weights first_weight ON first_weight.animal_id = animals.id AND dates.first_date = first_weight.date"
   )
