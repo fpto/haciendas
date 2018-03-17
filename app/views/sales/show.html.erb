@@ -1,19 +1,87 @@
 <p id="notice"><%= notice %></p>
+<div class = "row">
+  <div class = "col-sm-6">
+    <p>
+      <strong>Fecha:</strong>
+      <%= @sale.date %>
+    </p>
 
-<p>
-  <strong>Date:</strong>
-  <%= @sale.date %>
-</p>
+    <p>
+      <strong>Comprador:</strong>
+      <%= @sale.buyer %>
+    </p>
 
-<p>
-  <strong>Buyer:</strong>
-  <%= @sale.buyer %>
-</p>
+    <p>
+      <strong>Commentarios:</strong>
+      <%= @sale.comment %>
+    </p>
+    <% if current_user && (current_user.admin?)%>
+      <%= link_to 'Edit', edit_sale_path(@sale) %> |
+    <% end %>
+    <%= link_to 'Back', sales_path %>
+  </div>
+<div class = "col-sm-6">
+  <p>
+    <strong>Animales:</strong>
+    <%= @sale_count.round %>
+  </p>
+  <p>
+    <strong>PP:</strong>
+    <%= @sale_avg_weight.round(2) %>
+    <strong>Tot:</strong>
+    <%= number_with_delimiter(@sale_weight_sum.round(2), :delimiter => ',') %>
+    lbs
+  </p>
+  <p>
+    <strong>GDP:</strong>
+    <%= @sale_gdp.round(2) %>
+    <strong>Costo:</strong>
+    L. <%= number_with_delimiter(@sale_cost.round(2), :delimiter => ',')  %>
+  </p>
+  <p>
+    <strong>Total:</strong>
+    L. <%= number_with_delimiter(@sale_total.round(2), :delimiter => ',')  %>
+  </p>
+</div>
+</div>
+<div class="page-wrapper">
+  <div class = "col-sm-12">
+    <h4>Animales</h2>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><%= sortable "animal_number",  "#"     %></th>
+          <th><%= sortable "first_weight", "Primer Peso"     %></th>
+          <th><%= sortable "last_weight", "Ultimo Peso"     %></th>
+          <th><%= sortable "daily_gain" ,"GDP"       %></th>
+          <th><%= sortable "sale_total" ,"Precio"       %></th>
+          <th></th>
+        </tr>
+      </thead>
 
-<p>
-  <strong>Comment:</strong>
-  <%= @sale.comment %>
-</p>
+      <tbody>
+        <% @latest_weights.each do |a| %>
+          <tr>
+            <td><%= a.animal_number %></td>
+            <td><%= a.first_weight %><small> (<%= a.days_in_ranch %>d)</small></td>
+            <td><%= a.last_weight %> <small> (<%= (@sale.date - a.last_weighted).to_i %>d)</small></td>
+            <td>
+              <% unless a.daily_gain.nil? %><%= a.daily_gain.round(2) %><% end %>
+            </td>
+            <td>L. <%= number_with_delimiter(a.sale_total, :delimiter => ',') %></td>
+            <td>
+              <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, animal_path(a.animal_id) %>
+              <% if current_user && (current_user.admin?)%>
+              <%= link_to '<i class="fa fa-edit fa-fw"></i>'.html_safe, edit_animal_path(a.animal_id) %>
+              <%= link_to '<i class="fa fa-trash-o fa-fw"></i>'.html_safe, animal_path(a.animal_id), method: :delete, data: { confirm: 'Estás seguro?' } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-<%= link_to 'Edit', edit_sale_path(@sale) %> |
-<%= link_to 'Back', sales_path %>
+    </table>
+  </div>
+</div>

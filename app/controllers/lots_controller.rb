@@ -23,7 +23,7 @@ class LotsController < ApplicationController
        .order(sort_column + " " + sort_direction)
 
 
-    @avg_gdp = Animal.daily_gain_general.where(lot_id:  @lot.id).growing
+    @avg_gdp = Animal.recent_daily_gain_general.where(lot_id:  @lot.id).growing
     @lot_gdp = @lot_weight_sum = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
     @avg_purchase_price = @initial_weight_sum = @lot_cost =   @initial_weight_sum = 0
     @initial_weight_info = Animal.initial_weight_sum.where(lot_id:  @lot.id).growing

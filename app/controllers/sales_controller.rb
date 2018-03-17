@@ -1,6 +1,7 @@
 class SalesController < ApplicationController
   before_action :set_sale, only: [:show, :edit, :update, :destroy]
 
+  helper_method :sort_column, :sort_direction
   # GET /sales
   # GET /sales.json
   def index
@@ -10,6 +11,46 @@ class SalesController < ApplicationController
   # GET /sales/1
   # GET /sales/1.json
   def show
+    @sale = Sale.find(params[:id])
+    @latest_weights = Animal.first_last_weights
+       .where(sale_id:  @sale.id).growing
+       .order(sort_column + " " + sort_direction)
+
+     @avg_gdp = Animal.avg_daily_gain_general.where(sale_id:  @sale.id).growing
+     @sale_gdp = @sale_weight_sum = @sale_avg_weight= @sale_count = @sale_w_stddev= 0
+     @avg_purchase_price = @initial_weight_sum =  @initial_weight_sum = 0
+     @initial_weight_info = Animal.initial_weight_sum.where(sale_id:  @sale.id).growing
+     @initial_weight_info.each{|sale|
+       sale.weight_sum ||= 0
+       @initial_weight_sum += sale.weight_sum
+       }
+
+     @avg_gdp.each{ |animal|
+       animal.daily_gain ||= 0
+       @sale_gdp += animal.daily_gain
+     }
+
+     @avg_weight = Animal.average_weight_general.where(sale_id:  @sale.id).growing
+     @avg_weight.each{ |animal|
+       animal.average_weight ||= 0
+       animal.count ||= 0
+       animal.stddev ||= 0
+       animal.weight_sum ||= 0
+       animal.purchase_price ||= 0
+       animal.sale_price ||= 0
+       @sale_avg_weight += animal.average_weight
+       @sale_count += animal.count
+       @sale_w_stddev += animal.stddev
+       @sale_weight_sum += animal.weight_sum
+     }
+     @sale_total = @sale_cost = 0
+  @latest_weights.each{|animal|
+    @sale_cost +=  animal.purchase_total
+    @sale_total += animal.sale_total
+  }
+
+     @sale_w_cv = (@sale_w_stddev  / @sale_avg_weight ) * 100
+
   end
 
   # GET /sales/new
@@ -70,5 +111,13 @@ class SalesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def sale_params
       params.require(:sale).permit(:date, :buyer, :comment)
+    end
+    # Use to set default sorting
+    def sort_column
+      %w[animal_number  ranch species last_weight days_since_last_weight daily_gain].include?(params[:sort]) ? (params[:sort]) : "animal_number"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? (params[:direction]) : "asc"
     end
 end

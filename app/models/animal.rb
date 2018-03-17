@@ -85,6 +85,7 @@ class Animal < ApplicationRecord
       AVG(weights.weight) as average_weight,
       SUM(weights.weight) as weight_sum,
       AVG(animals.purchase_price) as purchase_price,
+      AVG(animals.sale_price) as sale_price,
       AVG(date(NOW()) - dates.latest_date) as days_since_last_weight")
     .joins("
       JOIN weights ON weights.animal_id = animals.id
@@ -130,7 +131,8 @@ class Animal < ApplicationRecord
     )
 
   end
-  def self.daily_gain_general
+  #TODO Try to remove the coalesce to improve accuracy
+  def self.recent_daily_gain_general
     select(
       "stddev(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as stddev,
       AVG(COALESCE((weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0),0)) as daily_gain")
@@ -154,7 +156,15 @@ class Animal < ApplicationRecord
     )
 
   end
-
+def self.avg_daily_gain_general
+  select(
+    "AVG((latest_weight.weight - first_weight.weight) /  NULLIF((dates.latest_date - dates.first_date),0)) as daily_gain"
+  ).joins(
+    "JOIN (SELECT animal_id, min(date) as first_date, max(date) as latest_date FROM weights GROUP BY weights.animal_id ) as dates ON dates.animal_id = animals.id
+    JOIN weights latest_weight ON latest_weight.animal_id = animals.id AND dates.latest_date = latest_weight.date
+    JOIN weights first_weight ON first_weight.animal_id = animals.id AND dates.first_date = first_weight.date"
+  )
+end
   def self.days_in_ranch
     select(
       "animals.species as species, AVG( w.days_in_ranch) as days_in_ranch"
@@ -177,6 +187,29 @@ class Animal < ApplicationRecord
       "animals.ranch, animals.species"
     )
   end
+  def self.first_last_weights
+    select(
+    "animals.id as animal_id,
+    animals.animal_number as animal_number,
+    dates.first_date as first_weighted,
+      first_weight.weight as first_weight,
+      animals.purchase_price * first_weight.weight as purchase_total,
+      dates.latest_date as last_weighted,
+      latest_weight.weight as last_weight,
+      animals.sale_price * latest_weight.weight as sale_total,
+      dates.latest_date - dates.first_date as days_between_weights,
+      date(NOW()) - dates.latest_date as days_since_last_weight,
+      date(NOW()) - dates.first_date as days_in_ranch,
+      latest_weight.weight - first_weight.weight as weight_change,
+    (latest_weight.weight - first_weight.weight) /  NULLIF((dates.latest_date - dates.first_date),0) as daily_gain"
+    )
+    .joins("JOIN (SELECT animal_id, min(date) as first_date, max(date) as latest_date FROM weights GROUP BY weights.animal_id ) as dates ON dates.animal_id = animals.id
+    JOIN weights latest_weight ON latest_weight.animal_id = animals.id AND dates.latest_date = latest_weight.date
+    JOIN weights first_weight ON first_weight.animal_id = animals.id AND dates.first_date = first_weight.date")
+
+  end
+
+
   def self.growing
     where(:status => "engorde")
   end
