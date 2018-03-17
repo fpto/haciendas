@@ -49,6 +49,8 @@ class SalesController < ApplicationController
      }
      @sale_total = @sale_cost = 0
   @latest_weights.each{|animal|
+    animal.purchase_total ||= 0
+    animal.sale_total ||= 0
     @sale_cost +=  animal.purchase_total
     @sale_total += animal.sale_total
   }

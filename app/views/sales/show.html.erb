@@ -33,19 +33,19 @@
     <strong>PP:</strong>
     <%= @sale_avg_weight.round(2) %>
     <strong>Tot:</strong>
-    <%= number_with_delimiter(@sale_weight_sum.round(2), :delimiter => ',') %> lbs
+    <% unless @sale_weight_sum.nil? %><%= number_with_delimiter(@sale_weight_sum.round(2), :delimiter => ',') %><% end %> lbs
     <strong>GDP:</strong>
     <%= @sale_gdp.round(2) %>
   </p>
 
   <p>
     <strong>Total:</strong>
-    L. <%= number_with_delimiter(@sale_total.round(2), :delimiter => ',')  %>
-    <small></small>(-L. <%= number_with_delimiter(@sale_cost.round(2), :delimiter => ',')  %>)</small>
+    L. <% unless @sale_total.nil? %><%= number_with_delimiter(@sale_total.round(2), :delimiter => ',')  %><% end %>
+    <small>(-L. <% unless @sale_cost.nil? %><%= number_with_delimiter(@sale_cost.round(2), :delimiter => ',')  %><% end %>)</small>
   </p>
   <p>
     <strong>Ganancia:</strong>
-    L. <%= number_with_delimiter((@sale_total-@sale_cost).round(2), :delimiter => ',')  %>
+    L. <% unless @sale_cost.nil? or @sale_total.nil?%><%= number_with_delimiter((@sale_total-@sale_cost).round(2), :delimiter => ',')  %><% end %>
   </p>
 </div>
 </div>

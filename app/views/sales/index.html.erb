@@ -34,7 +34,7 @@
                 <td><%= sale.buyer %></td>
                 <td><%= sale.animal_count %></td>
                 <td><%= sale.avg_weight %></td>
-                <td>L. <%= number_with_delimiter(sale.sale_total.round(2), :delimiter => ',') %></td>
+                <td>L. <% unless sale.sale_total.nil? %><%= number_with_delimiter(sale.sale_total.round(2), :delimiter => ',') %><% end %></td>
                 <td>
                   <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, sale_path(sale.sale_id) %>
                   <% if current_user && (current_user.admin?)%>
