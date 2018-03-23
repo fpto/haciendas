@@ -1,0 +1,6 @@
+<% content_for(:page_header) do %>
+  <%= "Editor de Animales" %>
+<% end %>
+<% content_for :panel_heading do %>Editar<% end %>
+<p id="notice"><%= notice %></p>
+<%= render 'multiple_form', animal: @animal %>

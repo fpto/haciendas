@@ -1,0 +1,70 @@
+<%= form_tag update_multiple_animals_path, method: :put do %>
+<ul>
+  <% @animals.each do |animal| %>
+      <%= hidden_field_tag "animal_ids[]", animal.id %>
+      <li><%= animal.species %> #<%= animal.animal_number %></li>
+      <ul class="errors">
+        <% animal.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+</ul>
+    <%= fields_for  :animal do |form| %>
+    <div class = "page-wrapper">
+      <div class = "row">
+        <div class = "col-sm-6">
+
+          <div class="form-group">
+            <%= form.label :species, 'Especie' %>
+            <%= form.select :species, ['bovino', 'ovino'], :include_blank => true %>
+          </div>
+          <div class="form-group">
+            <%= form.label :ranch, 'Hacienda' %>
+            <%= form.select :ranch, ['sauces', 'laureles'], :include_blank => true %>
+          </div>
+          <div class="form-group">
+            <%= form.label :lot_id, 'Lote' %>
+            <%= form.collection_select(:lot_id, Lot.all.order("ranch desc, species asc, number asc"), :id, :number_with_ranch, :include_blank => true)  %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :status, 'Estado' %>
+            <%= form.select :status, ['engorde', 'vendido', 'muerto', 'perdido'], :include_blank => true %>
+          </div>
+          <div class="form-group">
+            <%= form.label :sale_id, 'Venta:' %>
+            <%= form.collection_select(:sale_id, Sale.all.order("date desc"), :id, :date_with_buyer, :include_blank => true)  %>
+          </div>
+        </div>
+      <!--  <div class="form-group">
+          <%= form.label :birthday, 'Nacimiento' %>
+          <%= form.date_select :birthday, id: :animal_birthday %>
+        </div>-->
+        <div class = "col-sm-6">
+
+          <div class="form-group">
+            <%= form.label :color, 'Fierros' %>
+            <%= form.text_area :mark, id: :animal_mark %>
+          </div>
+          <div class="form-group">
+            <%= form.label :provider, 'Proveedor' %>
+            <%= form.text_area :provider, id: :animal_provider %>
+          </div>
+          <div class="form-group">
+            <%= form.label :purchase_price, 'Precio de Compra / lb' %>
+            <%= form.text_area :purchase_price, id: :animal_purchase_price %>
+          </div>
+          <div class="form-group">
+            <%= form.label :sale_price, 'Precio de Venta / lb' %>
+            <%= form.text_area :sale_price, id: :animal_sale_price %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+  <div class="form-group">
+    <%= submit_tag "Actualizar" %>
+  </div>
+<% end %>

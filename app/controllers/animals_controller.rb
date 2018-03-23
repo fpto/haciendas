@@ -77,11 +77,24 @@ class AnimalsController < ApplicationController
       end
     end
   end
-
-  def sell
-    Animal.where(id: params[:animal_id]).update_all(:status => "vendido")
-
-    redirect_to animals_url
+  def edit_multiple
+    if params[:animal_ids].nil?
+      redirect_to animals_url, notice: 'No ha seleccionado ningun animal!'
+    else
+      @animals = Animal.find(params[:animal_ids])
+    end
+  end
+  def update_multiple
+    @animals = Animal.find(params[:animal_ids])
+    @animals.reject! do |animal|
+      animal.update_attributes(params[:animal].permit(:id, :species, :ranch, :lot_id, :status, :sale_id, :provider, :sale_price, :purchase_price).reject {|k,v| v.blank? })
+    end
+    if @animals.empty?
+      redirect_to animals_url
+    else
+      @animal = Animal.new(params[:animal])
+      render "edit_multiple"
+    end
   end
 
   # DELETE /animals/1

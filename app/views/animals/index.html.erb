@@ -2,7 +2,6 @@
   <%= "Lista de Animales" %>
 <% end %>
 <% content_for :panel_heading do %>Animales<% end %>
-<p id="notice"><%= notice %></p>
 <div class="page-wrapper" style="min-height: 731px;">
   <div class = "row">
     <div class = "page-wrapper new_buttons">
@@ -26,7 +25,7 @@
     <div class = "row">
       <div clas="col-sm-12">
         <div class ="table-responsive">
-          <%= form_tag(sell_animals_path, method: :put)  do %>
+          <%= form_tag edit_multiple_animals_path, method: :get  do %>
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
@@ -44,7 +43,7 @@
 
                     <% @latest_weights.each do |animal| %>
                       <tr>
-                        <td><%= check_box_tag 'animal_id[]', animal.animal_id %> <%= animal.animal_number %></td>
+                        <td><%= check_box_tag 'animal_ids[]', animal.animal_id %> <%= animal.animal_number %></td>
                         <td><small><%= animal.ranch %></small></td>
                         <td><%= animal.species %></td>
                         <td><%= animal.lot_number %></td>
@@ -62,7 +61,7 @@
 
                 </tbody>
               </table>
-            <%= submit_tag 'Marcar como vendido', data: { confirm: 'Estás seguro?'} %>
+            <%= submit_tag 'Editar animales' %>
           <% end %>
         </div>
       </div>

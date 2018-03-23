@@ -2,6 +2,8 @@ class Animal < ApplicationRecord
   has_many :weights, dependent: :destroy
   belongs_to :lot
   belongs_to :sale, optional: true
+  validates :sale_price, numericality: { message: "%{value} no es un número", allow_blank: true }
+  validates :purchase_price, numericality: { message: "%{value} no es un número", allow_blank: true }
   def number_with_ranch
     " #{ranch} - #{species} - #{animal_number}"
   end

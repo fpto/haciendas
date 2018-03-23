@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   resources :plots
   resources :weights
   resources :animals
-  put 'sell_animal', to: 'animals#sell', as: :sell_animals
+  get 'edit_multiple_animals', to: 'animals#edit_multiple', as: :edit_multiple_animals
+  put 'update_multiple_animals', to: 'animals#update_multiple', as: :update_multiple_animals
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: 'pages#home'
