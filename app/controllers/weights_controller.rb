@@ -67,7 +67,10 @@ class WeightsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  def import
+    Weight.import(params[:file])
+    redirect_to root_url, notice: "Pesos importados."
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_weight

@@ -70,10 +70,19 @@
   <div class = "flickr_pagination">
     <%= will_paginate @latest_weights, :previous_label => 'Anterior', :next_label => 'Siguiente' %>
   </div>
-  <h2>Importar Animales</h2>
-
-<%= form_tag import_animals_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Importar" %>
-<% end %>
+  <h4>Importar Animales y Pesos</h4>
+  <div class ="page-wrapper">
+    <div class="col-xs-6">
+      <%= form_tag import_animals_path, multipart: true do %>
+        <%= file_field_tag :file %>
+        <%= submit_tag "Importar Animales" %>
+      <% end %>
+    </div>
+    <div class="col-xs-6">
+      <%= form_tag import_weights_path, multipart: true do %>
+        <%= file_field_tag :file %>
+        <%= submit_tag "Importar Pesos" %>
+      <% end %>
+    </div>
+  </div>
 </div>

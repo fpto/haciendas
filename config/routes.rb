@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'edit_multiple_animals', to: 'animals#edit_multiple', as: :edit_multiple_animals
   put 'update_multiple_animals', to: 'animals#update_multiple', as: :update_multiple_animals
   post 'import_animals', to: 'animals#import', as: :import_animals
+  post 'import_weights', to: 'weights#import', as: :import_weights
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: 'pages#home'
