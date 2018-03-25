@@ -14,6 +14,12 @@ class PlotsController < ApplicationController
                  .search(params[:search])
                  .order(sort_column + " " + sort_direction)
                  .paginate(:page => params[:page], :per_page => 25)
+   @all_plots = Plot.latest_plot_scores
+   respond_to do |format|
+     format.html
+     format.csv { send_data @all_plots.to_csv } #Currently just passing plot columns with no joins
+     format.xls # skipping template { send_data @products.to_csv(col_sep: "\t") }
+   end
   end
 
   # GET /plots/1

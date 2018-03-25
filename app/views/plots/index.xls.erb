@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="potreros">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Hda.</Data></Cell>
+        <Cell><Data ss:Type="String">Tipo</Data></Cell>
+        <Cell><Data ss:Type="String">#</Data></Cell>
+        <Cell><Data ss:Type="String">Agua</Data></Cell>
+        <Cell><Data ss:Type="String">Pasturas</Data></Cell>
+        <Cell><Data ss:Type="String">Cercas</Data></Cell>
+        <Cell><Data ss:Type="String">Pm</Data></Cell>
+        <Cell><Data ss:Type="String">Area</Data></Cell>
+      </Row>
+    <% @all_plots.each do |plot| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= plot.ranch %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= plot.plot_type %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.number %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.water_score %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.pasture_score %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.fences_score %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.average %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plot.area %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
