@@ -34,7 +34,10 @@ class Animal < ApplicationRecord
     dates.latest_date - dates.before_date as days_between_weights,
     date(NOW()) - dates.latest_date as days_since_last_weight,
     weights.weight - w2.weight as weight_change,
-    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain")
+    (weights.weight - w2.weight) /  NULLIF((dates.latest_date - dates.before_date),0) as daily_gain,
+    animals.status as status,
+    animals.purchase_price as purchase_price,
+    animals.provider as provider")
     .joins("
       JOIN weights ON weights.animal_id = animals.id
       JOIN (
@@ -234,4 +237,12 @@ end
       "animals.ranch, animals.lot_id, animals.species"
     )
   end
+  def self.to_csv(options = {})
+  CSV.generate(options) do |csv|
+    csv << column_names
+    all.each do |animal|
+      csv << animal.attributes.values_at(*column_names)
+    end
+  end
+end
 end

@@ -35,7 +35,7 @@
                     <th><%= sortable "lot_number", "L"      %></th>
                     <th><%= sortable "last_weight", "Peso"     %></th>
                     <th><%= sortable "daily_gain" ,"GDP"       %></th>
-                    <th></th>
+                    <th><%= link_to '<i class="fa fa-download fa-fw"></i>'.html_safe, animals_path(format: "xls") %></th>
                   </tr>
                 </thead>
 

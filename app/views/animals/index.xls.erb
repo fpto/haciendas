@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="animales">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">hda</Data></Cell>
+        <Cell><Data ss:Type="String">especie</Data></Cell>
+        <Cell><Data ss:Type="String">id</Data></Cell>
+        <Cell><Data ss:Type="String">numero</Data></Cell>
+        <Cell><Data ss:Type="String">id_lote</Data></Cell>
+        <Cell><Data ss:Type="String">numero_lote</Data></Cell>
+        <Cell><Data ss:Type="String">ultimo_peso</Data></Cell>
+        <Cell><Data ss:Type="String">ultimo_gdp</Data></Cell>
+        <Cell><Data ss:Type="String">estado</Data></Cell>
+        <Cell><Data ss:Type="String">proveedor</Data></Cell>
+        <Cell><Data ss:Type="String">costo_libra</Data></Cell>
+      </Row>
+    <% @all_animals.each do |animal| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= animal.ranch %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= animal.species %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.animal_id %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.animal_number %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.lot_id %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.lot_number %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.last_weight %></Data></Cell>
+        <Cell><Data ss:Type="Number"><% unless animal.daily_gain.nil? %><%= animal.daily_gain.round(2) %><% end %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= animal.status %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= animal.provider %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= animal.purchase_price %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
