@@ -102,6 +102,10 @@ class AnimalsController < ApplicationController
       render "edit_multiple"
     end
   end
+  def import
+    Animal.import(params[:file])
+    redirect_to root_url, notice: "Animales importados."
+  end
 
   # DELETE /animals/1
   # DELETE /animals/1.json

@@ -70,4 +70,10 @@
   <div class = "flickr_pagination">
     <%= will_paginate @latest_weights, :previous_label => 'Anterior', :next_label => 'Siguiente' %>
   </div>
+  <h2>Importar Animales</h2>
+
+<%= form_tag import_animals_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Importar" %>
+<% end %>
 </div>
