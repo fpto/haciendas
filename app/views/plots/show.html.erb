@@ -116,15 +116,16 @@
        // MVCArray of LatLngs.
        var vertices = this.getPath();
        var area  = (google.maps.geometry.spherical.computeArea(vertices) / 6961).toFixed(2);
+       var perimeter  = (google.maps.geometry.spherical.computeLength(vertices)).toFixed(2);
 
-       var contentString = '<b>Bermuda Triangle polygon</b><br>' +
-           'Clicked location: <br>' + event.latLng.lat() + ',' + event.latLng.lng() + ' Area: ' + area + ' Mzs.' +
+       var contentString = '<b>Potrero</b><br>' +
+           'Ubicación: <br>' + event.latLng.lat() + ',' + event.latLng.lng() + ' Area: ' + area + ' mzs.' + ' Perimetro: ' + perimeter + ' mts.' +
            '<br>';
 
        // Iterate over the vertices.
        for (var i =0; i < vertices.getLength(); i++) {
          var xy = vertices.getAt(i);
-         contentString += '<br>' + 'Coordinate ' + i + ':<br>' + xy.lat() + ',' +
+         contentString += '<br>' + 'Coordenada ' + i + ':<br>' + xy.lat() + ',' +
              xy.lng();
        }
 
