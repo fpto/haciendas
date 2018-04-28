@@ -21,7 +21,7 @@
     <%= @weight.note %>
   </p>
 <% if current_user && (current_user.admin?)%>
-  <%= link_to 'Editar', edit_weight_path(@weight) %> |
+  <%= link_to 'Editar', edit_weight_path({ :weight_id => @weight.id, :animal_id => @weight.animal_id}) %> |
   <%= link_to 'Borrar', @weight, method: :delete, data: { confirm: 'Estás seguro?', :title => "Borrar"} %> |
 <% end %>
   <%= link_to 'Atrás', animals_path %> |
