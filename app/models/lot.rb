@@ -27,8 +27,8 @@ class Lot < ApplicationRecord
         	WHERE (SELECT 	COUNT(*)
         			FROM 	weights  f
         			WHERE f.animal_id = weights.animal_id AND
-        				  f.weight >= weights.weight
-        		) <= 2
+        				  f.date > weights.date
+        		) < 2
         	GROUP BY animal_id) as dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
         JOIN weights w2 ON  w2.animal_id = dates.animal_id AND w2.date = dates.before_date ")
       .group("lots.ranch, lots.species, animals.lot_id, lots.number, lots.name")
