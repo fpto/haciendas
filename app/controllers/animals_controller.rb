@@ -61,7 +61,7 @@ class AnimalsController < ApplicationController
 
     respond_to do |format|
       if @animal.save
-        format.html { redirect_to @animal, notice: 'Animal was successfully created.' }
+        format.html { redirect_to @animal, notice: 'Animal fue creado satisfactoriamente.' }
         format.json { render :show, status: :created, location: @animal }
       else
         format.html { render :new }
@@ -75,7 +75,7 @@ class AnimalsController < ApplicationController
   def update
     respond_to do |format|
       if @animal.update(animal_params)
-        format.html { redirect_to @animal, notice: 'Animal was successfully updated.' }
+        format.html { redirect_to @animal, notice: 'Animal fue actualizado satisfactoriamente.' }
         format.json { render :show, status: :ok, location: @animal }
       else
         format.html { render :edit }

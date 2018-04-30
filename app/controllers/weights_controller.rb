@@ -35,7 +35,7 @@ class WeightsController < ApplicationController
 
     respond_to do |format|
       if @weight.save
-        format.html { redirect_to @weight, notice: 'Weight was successfully created.' }
+        format.html { redirect_to @weight, notice: 'Peso fue creado satisfactoriamente.' }
         format.json { render :show, status: :created, location: @weight }
       else
         format.html { render :new }
@@ -49,7 +49,7 @@ class WeightsController < ApplicationController
   def update
     respond_to do |format|
       if @weight.update(weight_params)
-        format.html { redirect_to @weight, notice: 'Weight was successfully updated.' }
+        format.html { redirect_to animal_path(@weight.animal_id), notice: 'Peso fue actualizado satisfactoriamente.' }
         format.json { render :show, status: :ok, location: @weight }
       else
         format.html { render :edit }
@@ -63,7 +63,7 @@ class WeightsController < ApplicationController
   def destroy
     @weight.destroy
     respond_to do |format|
-      format.html { redirect_to weights_url, notice: 'Weight was successfully destroyed.' }
+      format.html { redirect_to weights_url, notice: 'Peso fue borrado satisfactoriamente.' }
       format.json { head :no_content }
     end
   end
