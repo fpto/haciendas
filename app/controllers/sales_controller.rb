@@ -32,6 +32,7 @@ class SalesController < ApplicationController
      @avg_gdp.each{ |animal|
        animal.daily_gain ||= 0
        avg_days_in_ranch ||= 0
+       animal.avg_days_in_ranch ||= 0
        @sale_gdp += animal.daily_gain
        @avg_days_in_ranch += animal.avg_days_in_ranch
      }
