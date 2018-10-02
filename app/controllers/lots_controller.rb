@@ -16,15 +16,17 @@ class LotsController < ApplicationController
   # GET /lots/1
   # GET /lots/1.json
   def show
+    #TODO Replace the number of queries by using big queries
     @lot = Lot.find(params[:id])
     @animals = @lot.animals
     @latest_weights = Animal.latest_weights
        .where(lot_id:  @lot.id).growing
        .order(sort_column + " " + sort_direction)
 
-
+    #Here we get the recent GDP then the all time GDP
     @avg_gdp = Animal.recent_daily_gain_general.where(lot_id:  @lot.id).growing
-    @lot_gdp = @lot_weight_sum = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
+    @avg_gdp_alltime = Animal.avg_daily_gain_general.where(lot_id:  @lot.id).growing
+    @lot_gdp = @lot_gdp_alltime = @lot_weight_sum = @lot_avg_weight= @lot_count = @lot_gdp_stddev = @lot_w_stddev= 0
     @avg_purchase_price = @initial_weight_sum = @lot_cost =   @initial_weight_sum = 0
     @initial_weight_info = Animal.initial_weight_sum.where(lot_id:  @lot.id).growing
     @initial_weight_info.each{|lot|
@@ -37,6 +39,10 @@ class LotsController < ApplicationController
       animal.stddev ||= 0
       @lot_gdp += animal.daily_gain
       @lot_gdp_stddev += animal.stddev
+    }
+    @avg_gdp_alltime.each{ |animal|
+      animal.daily_gain ||= 0
+      @lot_gdp_alltime += animal.daily_gain
     }
 
     @avg_weight = Animal.average_weight_general.where(lot_id:  @lot.id).growing
@@ -53,6 +59,8 @@ class LotsController < ApplicationController
       @avg_purchase_price += animal.purchase_price
     }
     @lot_cost = @initial_weight_sum * @avg_purchase_price
+    
+    # This is to filter the low GDP animals
     @lot_low_gdp_bar = @lot_gdp - @lot_gdp_stddev
     @lot_w_cv = (@lot_w_stddev  / @lot_avg_weight ) * 100
     @low_gdp = Animal.latest_weights
