@@ -12,6 +12,11 @@ class Sale < ApplicationRecord
       SUM(latest_weight.weight) as sum_weight,
       AVG(latest_weight.weight) as avg_weight,
       SUM(animals.sale_price * latest_weight.weight) as sale_total,
+      SUM(animals.purchase_price * first_weight.weight) as sale_cost,
+      SUM(animals.sale_price * latest_weight.weight) - SUM(animals.purchase_price * first_weight.weight) as profit,
+      (SUM(animals.sale_price * latest_weight.weight) - SUM(animals.purchase_price * first_weight.weight))/SUM(animals.purchase_price * first_weight.weight) as roi,
+      (SUM(animals.sale_price * latest_weight.weight) - SUM(animals.purchase_price * first_weight.weight))/SUM(animals.purchase_price * first_weight.weight)*(365/AVG(dates.latest_date-dates.first_date)) as roia,
+      AVG(dates.latest_date-dates.first_date) as days_in_ranch,
       SUM(latest_weight.weight - first_weight.weight) as weight_change,
       AVG((latest_weight.weight - first_weight.weight) /  NULLIF((dates.latest_date - dates.first_date),0)) as daily_gain"
   ).joins(

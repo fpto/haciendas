@@ -22,6 +22,10 @@
               <th>Animales</th>
               <th>PP</th>
               <th>Total</th>
+              <th>Ganancia</th>
+              <th>Días</th>
+              <th>ROI</th>
+              <th>ROIa</th>
               <th colspan="3"></th>
             </tr>
           </thead>
@@ -35,6 +39,10 @@
                 <td><%= sale.animal_count %></td>
                 <td><% unless sale.avg_weight.nil? %><%= sale.avg_weight.round(2) %><% end %></td>
                 <td>L. <% unless sale.sale_total.nil? %><%= number_with_delimiter(sale.sale_total.round(2), :delimiter => ',') %><% end %></td>
+                <td>L. <% unless sale.profit.nil? %><%= number_with_delimiter(sale.profit.round(2), :delimiter => ',') %><% end %></td>
+                <td><% unless sale.days_in_ranch.nil? %><%= sale.days_in_ranch.round() %><% end %> </td>
+                <td><% unless sale.roi.nil? %><%= sale.roi.round(2) %><% end %> </td>
+                <td><% unless sale.roia.nil? %><%= sale.roia.round(2) %><% end %> </td>
                 <td>
                   <%= link_to '<i class="fa fa-info-circle fa-fw"></i>'.html_safe, sale_path(sale.sale_id) %>
                   <% if current_user && (current_user.admin?)%>

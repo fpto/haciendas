@@ -47,7 +47,12 @@
   </p>
   <p>
     <strong>Ganancia:</strong>
-    L. <% unless @sale_cost.nil? or @sale_total.nil?%><%= number_with_delimiter((@sale_total-@sale_cost).round(2), :delimiter => ',')  %><% end %>
+    <% unless @sale_cost.nil? or @sale_total.nil?%>
+      L.    <%= number_with_delimiter((@sale_total-@sale_cost).round(2), :delimiter => ',')  %>
+      ROI:  <%= ((@sale_total-@sale_cost)/@sale_cost).round(2)  %>
+      ROIa: <%= ((@sale_total-@sale_cost)/@sale_cost*(365/@avg_days_in_ranch)).round(2)  %>
+    <% end %>
+
   </p>
 </div>
 </div>
