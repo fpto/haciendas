@@ -34,6 +34,7 @@ class PagesController < ApplicationController
     @owl25 = @ow25 = @ow50 = @ow75 = @ow100 = @owinv = 0
     @latest_weights.each do |animal|
       animal.daily_gain ||= 0
+      # animal.last_weight ||= 0
       if animal.species == 'bovino' then
           if animal.last_weight <= 250 then @wl250 +=1
           elsif  animal.last_weight  > 250.01 and animal.last_weight < 500 then @w250 += 1
