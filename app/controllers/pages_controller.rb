@@ -9,9 +9,6 @@ class PagesController < ApplicationController
         when 'bovino'
         @bovine_average_weight += animal.average_weight
         @bovine_count += animal.count
-        when 'ovino'
-        @ovine_average_weight += animal.average_weight
-        @ovine_count += animal.count
       end
     }
 
@@ -22,8 +19,6 @@ class PagesController < ApplicationController
       case animal.species
         when 'bovino'
         @bovine_daily_gain += animal.daily_gain
-        when 'ovino'
-        @ovine_daily_gain += animal.daily_gain
       end
     }
 
@@ -44,15 +39,6 @@ class PagesController < ApplicationController
           else @winv  += 1
           end
       end
-      if animal.species == 'ovino' then
-        if animal.last_weight <= 25 then @wl250 +=1
-        elsif  animal.last_weight  > 25.01 and animal.last_weight < 50 then @ow25 += 1
-        elsif  animal.last_weight > 50.01 and animal.last_weight < 75 then @ow50 += 1
-        elsif animal.last_weight >  75.01 and animal.last_weight < 100 then  @ow75 += 1
-        elsif  animal.last_weight >= 100.01 then @ow100 += 1
-        else @owinv  += 1
-        end
-      end
     end
 
 
@@ -65,9 +51,6 @@ class PagesController < ApplicationController
     @days_in_ranch.each do |animal|
       if animal.species == 'bovino' then
         @avg_days_in_ranch_b += animal.days_in_ranch
-      end
-      if animal.species == 'ovino' then
-        @avg_days_in_ranch_o += animal.days_in_ranch
       end
     end
 
