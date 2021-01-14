@@ -22,24 +22,6 @@ class PagesController < ApplicationController
       end
     }
 
-    # General Average Daily Gain
-    @latest_weights = Animal.latest_weights.order("animal_id").where(:status => "engorde")
-
-    @wl250 = @w250 = @w500 = @w750 = @w1000 = @winv = 0
-    @owl25 = @ow25 = @ow50 = @ow75 = @ow100 = @owinv = 0
-    @latest_weights.each do |animal|
-      animal.daily_gain ||= 0
-      # animal.last_weight ||= 0
-      if animal.species == 'bovino' then
-          if animal.last_weight <= 250 then @wl250 +=1
-          elsif  animal.last_weight  > 250.01 and animal.last_weight < 500 then @w250 += 1
-          elsif  animal.last_weight > 500.01 and animal.last_weight < 750 then @w500 += 1
-          elsif animal.last_weight >  750.01 and animal.last_weight < 1000 then  @w750 += 1
-          elsif  animal.last_weight >= 1000.01 then @w1000 += 1
-          else @winv  += 1
-          end
-      end
-    end
 
 
     #Every animal should have a weight for data to be accurate
@@ -126,5 +108,5 @@ class PagesController < ApplicationController
     @average_plot_load_b_s = if @animals_b_s > 0 then (@animals_b_s  / @sum_sauces_area_b).round(2) else 0 end
     @average_plot_load_o_s = if @animals_o_s > 0 then (@animals_o_s /  @sum_sauces_area_o).round(2) else 0 end
     @average_plot_load_b_l = if @animals_b_l > 0 then (@animals_b_l  / @sum_laureles_area_b).round(2) else 0 end
-  end
+    end
 end
