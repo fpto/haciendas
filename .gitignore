@@ -18,3 +18,5 @@
 
 .byebug_history
 .DS_Store
+
+/config/master.key
