@@ -7,6 +7,9 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Trying to compile assets
+config.assets.initialize_on_precompile = false
+
 module Ranch
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
