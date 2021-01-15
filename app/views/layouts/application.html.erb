@@ -12,9 +12,21 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= favicon_link_tag asset_path('favicon.png'), :rel => 'icon', :type =>  'image/png' %>
 
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../dist/modules/fontawesome/css/all.min.css">
+
+    <!-- Plugins -->
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../dist/css/style.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+
   </head>
 
   <body>
+    <!-- Sidebar outter -->
+
     <div id="wrapper" class="">
       <%= render 'layouts/navbar' %>
     </div>
@@ -34,7 +46,6 @@
         </div>
       </div>
     </div>
-    </body>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= content_for?(:extra_scripts) ? yield(:extra_scripts) : nil %>
   </body>

@@ -19,3 +19,9 @@
 //= require gmaps/google
 //= require bootstrap_sb_admin_base_v2
 //= require jquery.turbolinks
+
+// Dependency of statisla
+
+//= require stisla
+//= require scripts
+//= require custom

@@ -2,6 +2,308 @@
 # yarn lockfile v1
 
 
-jquery@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+"@fortawesome/fontawesome-free@^5.7.2":
+  version "5.15.2"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.2.tgz#218cd7276ab4f9ab57cc3d2efa2697e6a579f25d"
+
+bootstrap-colorpicker@^3.0.3:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-colorpicker/-/bootstrap-colorpicker-3.2.0.tgz#42b053b865a866b2674527813cd59f90137b9704"
+  dependencies:
+    bootstrap ">=4.0"
+    jquery ">=2.1.0"
+    popper.js ">=1.10"
+
+bootstrap-daterangepicker@^3.0.3:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-daterangepicker/-/bootstrap-daterangepicker-3.1.0.tgz#632e6fb2de4b6360c5c0a9d5f6adb9aace051fe8"
+  dependencies:
+    jquery ">=1.10"
+    moment "^2.9.0"
+
+bootstrap-social@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/bootstrap-social/-/bootstrap-social-5.1.1.tgz#7530c678adf56cf8fad3fa82c29d4d3e5d027501"
+  dependencies:
+    bootstrap "~3"
+    font-awesome "~4.7"
+
+bootstrap-tagsinput@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/bootstrap-tagsinput/-/bootstrap-tagsinput-0.7.1.tgz#ffe3b06bbe2a106945ef2814568005a94f211937"
+
+bootstrap-timepicker@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/bootstrap-timepicker/-/bootstrap-timepicker-0.5.2.tgz#10ed9f2a2f0b8ccaefcde0fcf6a0738b919a3835"
+
+bootstrap@>=4.0, bootstrap@^4.2.1:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.5.3.tgz#c6a72b355aaf323920be800246a6e4ef30997fe6"
+
+bootstrap@~3:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.1.tgz#c3a347d419e289ad11f4033e3c4132b87c081d72"
+
+chart.js@^2.7.3:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.4.tgz#0827f9563faffb2dc5c06562f8eb10337d5b9684"
+  dependencies:
+    chartjs-color "^2.1.0"
+    moment "^2.10.2"
+
+chartjs-color-string@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz#1df096621c0e70720a64f4135ea171d051402f71"
+  dependencies:
+    color-name "^1.0.0"
+
+chartjs-color@^2.1.0:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.4.1.tgz#6118bba202fe1ea79dd7f7c0f9da93467296c3b0"
+  dependencies:
+    chartjs-color-string "^0.6.0"
+    color-convert "^1.9.3"
+
+chocolat@^0.4.21:
+  version "0.4.21"
+  resolved "https://registry.yarnpkg.com/chocolat/-/chocolat-0.4.21.tgz#16f5a2e0fa60aa7f07234b4e36696d4e7a52a4a1"
+  dependencies:
+    jquery "^3.0"
+
+cleave.js@^1.4.7:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.6.0.tgz#0e4e011943bdd70c67c9dcf4ff800ce710529171"
+
+clipboard@^2.0.0:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.6.tgz#52921296eec0fdf77ead1749421b21c968647376"
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
+
+codemirror@^5.43.0:
+  version "5.59.1"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.59.1.tgz#cd6465555a87f8a2243eb41ffb460c777e15212c"
+
+color-convert@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
+  dependencies:
+    color-name "1.1.3"
+
+color-name@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
+
+color-name@^1.0.0:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
+
+datatables.net-bs4@^1.10.15:
+  version "1.10.23"
+  resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.10.23.tgz#bdd5d0dcb1bd68a7afe649a4424ba20647523b52"
+  dependencies:
+    datatables.net "1.10.23"
+    jquery ">=1.7"
+
+datatables.net-responsive-bs4@^2.2.3:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive-bs4/-/datatables.net-responsive-bs4-2.2.7.tgz#93ad53d9ee7613324b25d014647d4ef685836fd6"
+  dependencies:
+    datatables.net-bs4 "^1.10.15"
+    datatables.net-responsive "2.2.7"
+    jquery ">=1.7"
+
+datatables.net-responsive@2.2.7:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive/-/datatables.net-responsive-2.2.7.tgz#12e93deab8e8aebf4a2bc45b266c00d2662a5ced"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-select-bs4@^1.2.7:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/datatables.net-select-bs4/-/datatables.net-select-bs4-1.3.1.tgz#1c39c7fd5bfb66b5c8402611c2c64fc47e3cfca4"
+  dependencies:
+    datatables.net-bs4 "^1.10.15"
+    datatables.net-select "1.3.1"
+    jquery ">=1.7"
+
+datatables.net-select@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.3.1.tgz#ec2c3ad7df2bc9c13c09587d0bfd0ceba52a8bff"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net@1.10.23, datatables.net@^1.10.15:
+  version "1.10.23"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.23.tgz#59f7d7b12845183b1b379530d1385077e113ec01"
+  dependencies:
+    jquery ">=1.7"
+
+datatables@^1.10.18:
+  version "1.10.18"
+  resolved "https://registry.yarnpkg.com/datatables/-/datatables-1.10.18.tgz#fee16e82aa70b17c5faf1a6954ac68f404f33a70"
+  dependencies:
+    jquery ">=1.7"
+
+delegate@^3.1.2:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/delegate/-/delegate-3.2.0.tgz#b66b71c3158522e8ab5744f720d8ca0c2af59166"
+
+dropzone@^5.5.1:
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.7.2.tgz#91bee1572dda515d40901da304bc79dddf309b4c"
+
+es6-object-assign@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
+
+flag-icon-css@^3.2.1:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.5.0.tgz#430747d5cb91e60babf85494de99173c16dc7cf2"
+
+font-awesome@~4.7:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
+
+fullcalendar@^3.10.0:
+  version "3.10.2"
+  resolved "https://registry.yarnpkg.com/fullcalendar/-/fullcalendar-3.10.2.tgz#9b1ba84bb02803621b761d1bba91a4f18affafb7"
+
+gmaps@^0.4.24:
+  version "0.4.25"
+  resolved "https://registry.yarnpkg.com/gmaps/-/gmaps-0.4.25.tgz#ea98fa83668fb07b879b47d989b5ee1504d33455"
+
+good-listener@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/good-listener/-/good-listener-1.2.2.tgz#d53b30cdf9313dffb7dc9a0d477096aa6d145c50"
+  dependencies:
+    delegate "^3.1.2"
+
+ionicons201@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ionicons201/-/ionicons201-1.0.0.tgz#5ce2aa950e907957c7306ca113115a24129d5260"
+
+izitoast@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/izitoast/-/izitoast-1.4.0.tgz#1aa4e3408b7159fba743506af66d8be54fd929fb"
+
+"jquery-pwstrength@https://github.com/matoilic/jquery.pwstrength":
+  version "0.0.0"
+  resolved "https://github.com/matoilic/jquery.pwstrength#d6f07a13eba1479f481d0beceb612f439db406ae"
+
+jquery-sparkline@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/jquery-sparkline/-/jquery-sparkline-2.4.0.tgz#1be8b7b704dd3857152708aefb1d4a4b3a69fb33"
+
+jquery-ui-dist@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
+
+jquery.nicescroll@^3.7.6:
+  version "3.7.6"
+  resolved "https://registry.yarnpkg.com/jquery.nicescroll/-/jquery.nicescroll-3.7.6.tgz#afeff3e80658dabe4f78d2d2e84250060fea0852"
+  dependencies:
+    jquery ">=1.8.3"
+
+jquery@>=1.10, jquery@>=1.7, jquery@>=1.8.3, jquery@>=2.1.0, jquery@^3.0, jquery@^3.1.1, jquery@^3.3.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
+
+jquery@~1.11.3:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-1.11.3.tgz#dd8b74278b27102d29df63eae28308a8cfa1b583"
+
+"jquery_upload_preview@https://github.com/opoloo/jquery_upload_preview":
+  version "0.0.0"
+  resolved "https://github.com/opoloo/jquery_upload_preview#cc17f1d52beb6c718a16e9a3afdff63ec175c398"
+
+"jqvmap@https://github.com/10bestdesign/jqvmap":
+  version "1.5.1"
+  resolved "https://github.com/10bestdesign/jqvmap#a72d26248c87b6db8ea1d962475a506bdd989134"
+  dependencies:
+    jquery "~1.11.3"
+
+moment@^2.10.2, moment@^2.24.0, moment@^2.9.0:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+
+nicescroll@^3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/nicescroll/-/nicescroll-3.7.4.tgz#8cfd3b58fb95e7c5cb279e2208fc10ea90e35a18"
+  dependencies:
+    jquery ">=1.8.3"
+
+owl.carousel@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/owl.carousel/-/owl.carousel-2.3.4.tgz#6c53dc8d24304b790e4f27a1dc4a655e973ccdc9"
+  dependencies:
+    jquery ">=1.8.3"
+
+perfect-scrollbar@^1.4.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-1.5.0.tgz#821d224ed8ff61990c23f26db63048cdc75b6b83"
+
+popper.js@>=1.10, popper.js@^1.0.2, popper.js@^1.14.7:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+
+prismjs@^1.15.0:
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.23.0.tgz#d3b3967f7d72440690497652a9d40ff046067f33"
+  optionalDependencies:
+    clipboard "^2.0.0"
+
+promise-polyfill@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.1.0.tgz#dfa96943ea9c121fca4de9b5868cb39d3472e057"
+
+select2@^4.0.6-rc.1:
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/select2/-/select2-4.0.13.tgz#0dbe377df3f96167c4c1626033e924372d8ef44d"
+
+select@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
+
+selectric@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/selectric/-/selectric-1.13.0.tgz#7ce8a750078bb6d1c44347216cae5610e2440985"
+  dependencies:
+    jquery "^3.1.1"
+
+simpleweather@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/simpleweather/-/simpleweather-3.1.0.tgz#d2a11d22cc2a33abd2d1f7f9227ba80b9c92d944"
+
+sticky-kit@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/sticky-kit/-/sticky-kit-1.1.3.tgz#dab5ace49b462cf6d4969b1d58e639fc01377570"
+
+summernote@^0.8.11:
+  version "0.8.18"
+  resolved "https://registry.yarnpkg.com/summernote/-/summernote-0.8.18.tgz#be5c368b1c92de8a05039a9976157bdea7aae386"
+
+sweetalert@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/sweetalert/-/sweetalert-2.1.2.tgz#010baaa80d0dbdc86f96bfcaa96b490728594b79"
+  dependencies:
+    es6-object-assign "^1.1.0"
+    promise-polyfill "^6.0.2"
+
+tiny-emitter@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+
+tooltip.js@^1.3.1:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/tooltip.js/-/tooltip.js-1.3.3.tgz#2ad0d77bb6776a76e117eac0afcd3c7d3a237121"
+  dependencies:
+    popper.js "^1.0.2"
+
+weathericons@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/weathericons/-/weathericons-2.1.0.tgz#7453a1a35e200245e389fb5077d527eff30b73b4"

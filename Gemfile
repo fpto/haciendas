@@ -47,6 +47,10 @@ gem 'gmaps4rails'
 # Installed SB Admin
 gem 'bootstrap_sb_admin_base_v2'
 
+# Installs 'stisla-rails'
+gem 'stisla-rails'
+
+
 # Gem for pagination
 gem 'will_paginate', '~> 3.1.1'
 

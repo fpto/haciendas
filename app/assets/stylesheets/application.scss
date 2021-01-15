@@ -18,6 +18,11 @@
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
+/* Dependencies of statisla */
+
+@import "style";
+@import "components";
+
 /*Simple Navigation Styles*/
 #navigation{
   display: flex;
