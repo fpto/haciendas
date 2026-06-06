@@ -1,0 +1,129 @@
+// Esquema portado desde la app Rails original (db/schema.rb).
+// Las tablas y columnas conservan los nombres snake_case originales para que
+// las consultas SQL crudas (estadísticas de peso, ROI, scores) sigan funcionando.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Animal {
+  id            Int       @id @default(autoincrement())
+  animalNumber  Int?      @map("animal_number")
+  species       String?
+  birthday      DateTime? @db.Date
+  ranch         String?
+  lotId         Int?      @map("lot_id")
+  status        String?
+  breed         String?
+  provider      String?
+  mark          String?
+  color         String?
+  purchasePrice Float?    @map("purchase_price")
+  saleId        Int?      @map("sale_id")
+  salePrice     Float?    @map("sale_price")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  lot     Lot?     @relation(fields: [lotId], references: [id])
+  sale    Sale?    @relation(fields: [saleId], references: [id])
+  weights Weight[]
+
+  @@index([lotId])
+  @@index([saleId])
+  @@map("animals")
+}
+
+model Lot {
+  id          Int      @id @default(autoincrement())
+  ranch       String?
+  species     String?
+  number      String?
+  name        String?
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  animals Animal[]
+
+  @@map("lots")
+}
+
+model PlotEvaluation {
+  id           Int       @id @default(autoincrement())
+  plotId       Int?      @map("plot_id")
+  date         DateTime? @db.Date
+  waterScore   Int?      @map("water_score")
+  pastureScore Int?      @map("pasture_score")
+  fencesScore  Int?      @map("fences_score")
+  comment      String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  plot Plot? @relation(fields: [plotId], references: [id])
+
+  @@index([plotId])
+  @@map("plot_evaluations")
+}
+
+model Plot {
+  id         Int      @id @default(autoincrement())
+  number     String?
+  area       Float?
+  ranch      String?
+  plotType   String?  @map("plot_type")
+  comment    String?
+  boundaries String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  evaluations PlotEvaluation[]
+
+  @@map("plots")
+}
+
+model Sale {
+  id        Int       @id @default(autoincrement())
+  date      DateTime? @db.Date
+  buyer     String?
+  comment   String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  animals Animal[]
+
+  @@map("sales")
+}
+
+model Weight {
+  id        Int       @id @default(autoincrement())
+  animalId  Int?      @map("animal_id")
+  date      DateTime? @db.Date
+  weight    Float?
+  note      String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  animal Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@index([animalId])
+  @@map("weights")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  firstName      String?  @map("first_name")
+  lastName       String?  @map("last_name")
+  email          String?  @unique
+  passwordDigest String?  @map("password_digest")
+  role           String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("users")
+}
