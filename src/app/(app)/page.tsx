@@ -49,6 +49,10 @@ export default async function DashboardPage() {
     }),
   ]);
 
+  // En modo "Por Lote" la pantalla de animales individuales se oculta, así que
+  // las métricas de bovinos enlazan a los lotes en su lugar.
+  const bovineHref = weightMode === "lot" ? "/lots" : "/animals";
+
   // Marcadores del mapa: potreros con geometría + número de cabezas en cada uno.
   const plotMarkers: PlotMarker[] = plots
     .map((p) => {
@@ -89,7 +93,7 @@ export default async function DashboardPage() {
             label="Cabezas"
             value={fmtNumber(stats.bovineCount)}
             icon={<CowIcon width={22} height={22} />}
-            href="/animals"
+            href={bovineHref}
             accent="brand"
           />
           <StatCard
@@ -97,7 +101,7 @@ export default async function DashboardPage() {
             value={fmtNumber(convertFromKg(stats.bovineAverageWeight, unit), 1)}
             unit={weightLabel(unit)}
             icon={<ScaleIcon width={22} height={22} />}
-            href="/animals"
+            href={bovineHref}
             accent="blue"
           />
           <StatCard
@@ -105,7 +109,7 @@ export default async function DashboardPage() {
             value={fmtNumber(stats.bovineDaysInRanch)}
             unit="días"
             icon={<CalendarIcon width={22} height={22} />}
-            href="/animals"
+            href={bovineHref}
             accent="amber"
           />
           <StatCard
@@ -113,7 +117,7 @@ export default async function DashboardPage() {
             value={fmtNumber(convertFromKg(stats.bovineDailyGain, unit), 2)}
             unit={gainLabel(unit)}
             icon={<TrendUpIcon width={22} height={22} />}
-            href="/animals"
+            href={bovineHref}
             accent="violet"
           />
         </div>
