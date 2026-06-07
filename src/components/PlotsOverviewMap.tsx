@@ -65,11 +65,12 @@ export function PlotsOverviewMap({ plots }: { plots: PlotMarker[] }) {
         bounds.extend(pBounds);
 
         // Círculo con el número de animales en el centro del potrero.
-        const hasAnimals = p.animalCount > 0;
-        const bg = hasAnimals ? "#16a34a" : "#94a3b8";
+        // Solo se muestra cuando el potrero tiene animales; los potreros
+        // con cero animales no llevan círculo.
+        if (p.animalCount <= 0) continue;
         const icon = L.divIcon({
           className: "plot-count-marker",
-          html: `<div style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;background:${bg};color:#fff;font-weight:700;font-size:13px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);">${p.animalCount}</div>`,
+          html: `<div style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;background:#16a34a;color:#fff;font-weight:700;font-size:13px;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);">${p.animalCount}</div>`,
           iconSize: [36, 36],
           iconAnchor: [18, 18],
         });
@@ -90,7 +91,7 @@ export function PlotsOverviewMap({ plots }: { plots: PlotMarker[] }) {
   return (
     <div
       ref={containerRef}
-      className="h-80 w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 sm:h-96"
+      className="h-[30rem] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 sm:h-[36rem]"
     />
   );
 }
