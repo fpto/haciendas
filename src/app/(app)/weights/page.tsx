@@ -6,15 +6,18 @@ import { fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function WeightsPage() {
-  const [activeHacienda, mode, unit] = await Promise.all([
+  const [activeHacienda, mode, unit, user] = await Promise.all([
     getActiveHacienda(),
     getActiveWeightMode(),
     getWeightUnit(),
+    getCurrentUser(),
   ]);
+  const canEdit = isEditor(user?.role);
   const suffix = activeHacienda ? ` · ${activeHacienda}` : "";
 
   // Hacienda en modo "por lote": los pesos se registran a nivel de lote
@@ -32,7 +35,7 @@ export default async function WeightsPage() {
         <PageHeader
           title="Pesos"
           subtitle={`Pesados de lote más recientes${suffix}`}
-          action={{ href: "/lot_weighings/new", label: "Registrar pesado" }}
+          action={canEdit ? { href: "/lot_weighings/new", label: "Registrar pesado" } : undefined}
         />
 
         {weighings.length === 0 ? (
@@ -40,7 +43,7 @@ export default async function WeightsPage() {
             icon={<ScaleIcon width={26} height={26} />}
             title="Sin pesados"
             description="Registra el peso promedio de tus lotes para dar seguimiento a la GDP."
-            action={{ href: "/lot_weighings/new", label: "Registrar pesado" }}
+            action={canEdit ? { href: "/lot_weighings/new", label: "Registrar pesado" } : undefined}
           />
         ) : (
           <TableWrap>
@@ -102,7 +105,7 @@ export default async function WeightsPage() {
       <PageHeader
         title="Pesos"
         subtitle={`Últimos registros de peso${suffix}`}
-        action={{ href: "/weights/new", label: "Registrar peso" }}
+        action={canEdit ? { href: "/weights/new", label: "Registrar peso" } : undefined}
       />
 
       {weights.length === 0 ? (
@@ -110,7 +113,7 @@ export default async function WeightsPage() {
           icon={<ScaleIcon width={26} height={26} />}
           title="Sin pesos"
           description="Registra el peso de tus animales para dar seguimiento a la GDP."
-          action={{ href: "/weights/new", label: "Registrar peso" }}
+          action={canEdit ? { href: "/weights/new", label: "Registrar peso" } : undefined}
         />
       ) : (
         <TableWrap>

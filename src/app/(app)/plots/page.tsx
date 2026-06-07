@@ -5,6 +5,7 @@ import { EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { PlotIcon, ChevronRightIcon, PlusIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +18,16 @@ function scoreColor(avg: number | null): "green" | "amber" | "red" | "slate" {
 
 export default async function PlotsPage() {
   const activeHacienda = await getActiveHacienda();
-  const [plots, scores] = await Promise.all([
+  const [plots, scores, user] = await Promise.all([
     prisma.plot.findMany({
       where: activeHacienda ? { ranch: activeHacienda } : undefined,
       orderBy: [{ ranch: "asc" }, { number: "asc" }],
       include: { _count: { select: { evaluations: true } } },
     }),
     getLatestPlotScores(),
+    getCurrentUser(),
   ]);
+  const canEdit = isEditor(user?.role);
   const scoreByPlot = new Map(scores.map((s) => [s.plot_id, s]));
 
   return (
@@ -39,22 +42,24 @@ export default async function PlotsPage() {
             {activeHacienda ? ` · ${activeHacienda}` : ""}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href="/plots/import"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-[0.98]"
-          >
-            <PlotIcon width={18} height={18} />
-            Importar KMZ
-          </Link>
-          <Link
-            href="/plots/new"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 active:scale-[0.98]"
-          >
-            <PlusIcon width={18} height={18} />
-            Nuevo potrero
-          </Link>
-        </div>
+        {canEdit && (
+          <div className="flex items-center gap-2">
+            <Link
+              href="/plots/import"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-[0.98]"
+            >
+              <PlotIcon width={18} height={18} />
+              Importar KMZ
+            </Link>
+            <Link
+              href="/plots/new"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 active:scale-[0.98]"
+            >
+              <PlusIcon width={18} height={18} />
+              Nuevo potrero
+            </Link>
+          </div>
+        )}
       </div>
 
       {plots.length === 0 ? (
@@ -62,7 +67,7 @@ export default async function PlotsPage() {
           icon={<PlotIcon width={26} height={26} />}
           title="Sin potreros"
           description="Registra tus potreros para evaluar agua, pasto y cercas."
-          action={{ href: "/plots/new", label: "Nuevo potrero" }}
+          action={canEdit ? { href: "/plots/new", label: "Nuevo potrero" } : undefined}
         />
       ) : (
         <>

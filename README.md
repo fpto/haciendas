@@ -73,7 +73,7 @@ de forma nativa en **Vercel**, con una interfaz **moderna y mobile-first**.
 ```
 prisma/schema.prisma      Esquema (tablas/columnas snake_case heredadas de Rails)
 src/lib/queries.ts        Consultas SQL crudas: GDP, ROI, stats de lotes y potreros
-src/lib/auth.ts           Sesiones, roles (admin/editor) y verificación bcrypt
+src/lib/auth.ts           Sesiones, roles (admin/lector) y verificación bcrypt
 src/actions/              Server Actions (CRUD) por entidad
 src/components/           UI mobile-first (AppShell, tarjetas, tablas, formularios)
 src/app/(app)/            Páginas protegidas (tablero + entidades)
@@ -99,11 +99,25 @@ navegación. Internamente los pesos se almacenan siempre en kilogramos; la
 conversión se aplica solo a la visualización y la captura. Los importes en
 dinero ($/kg, totales) no cambian con la unidad.
 
-## 🔐 Roles
+## 🔐 Roles y usuarios
 
-- **admin**: acceso total (incluye editar y eliminar).
-- **editor**: puede crear y actualizar registros.
-- **viewer** (cualquier usuario autenticado): solo lectura.
+La aplicación maneja **dos tipos de usuario**:
+
+- **Administrador** (`admin`): acceso total. Puede ver, crear, editar y eliminar
+  registros, y además **gestionar usuarios** (crear, editar y eliminar cuentas).
+- **Lector** (`viewer`): solo lectura. Ve toda la información de la aplicación
+  pero no puede crear, editar ni eliminar nada; los botones de acción se ocultan
+  automáticamente.
+
+Los administradores gestionan las cuentas desde **Usuarios** en el menú lateral
+(`/usuarios`), donde pueden dar de alta lectores u otros administradores y
+restablecer contraseñas. Por seguridad, siempre debe existir al menos un
+administrador (no es posible eliminar ni degradar el último) y nadie puede
+eliminar su propia cuenta.
+
+> Nota: el rol histórico `editor` (crear/editar sin eliminar) heredado de la app
+> original sigue siendo válido a nivel de permisos, pero la gestión de usuarios
+> solo ofrece **Administrador** y **Lector**.
 
 Las estadísticas de bovinos consideran únicamente animales con estatus
 `engorde`, calculadas a partir de sus dos pesos más recientes.

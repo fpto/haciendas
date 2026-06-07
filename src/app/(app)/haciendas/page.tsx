@@ -3,17 +3,20 @@ import { prisma } from "@/lib/db";
 import { PageHeader, EmptyState, Card, Badge } from "@/components/ui";
 import { LeafIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function HaciendasPage() {
-  const [haciendas, animalsByRanch, lotsByRanch, plotsByRanch] =
+  const [haciendas, animalsByRanch, lotsByRanch, plotsByRanch, user] =
     await Promise.all([
       prisma.hacienda.findMany({ orderBy: { name: "asc" } }),
       prisma.animal.groupBy({ by: ["ranch"], _count: { _all: true } }),
       prisma.lot.groupBy({ by: ["ranch"], _count: { _all: true } }),
       prisma.plot.groupBy({ by: ["ranch"], _count: { _all: true } }),
+      getCurrentUser(),
     ]);
+  const canEdit = isEditor(user?.role);
 
   const countFor = (
     rows: { ranch: string | null; _count: { _all: number } }[],
@@ -25,7 +28,7 @@ export default async function HaciendasPage() {
       <PageHeader
         title="Haciendas"
         subtitle={`${fmtNumber(haciendas.length)} haciendas registradas`}
-        action={{ href: "/haciendas/new", label: "Nueva hacienda" }}
+        action={canEdit ? { href: "/haciendas/new", label: "Nueva hacienda" } : undefined}
       />
 
       {haciendas.length === 0 ? (
@@ -33,7 +36,7 @@ export default async function HaciendasPage() {
           icon={<LeafIcon width={26} height={26} />}
           title="Sin haciendas"
           description="Registra tu primera hacienda para poder seleccionarla en animales, lotes y potreros."
-          action={{ href: "/haciendas/new", label: "Nueva hacienda" }}
+          action={canEdit ? { href: "/haciendas/new", label: "Nueva hacienda" } : undefined}
         />
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

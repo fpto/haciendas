@@ -26,6 +26,24 @@ export type SessionUser = {
   role: string;
 };
 
+// Roles soportados por la aplicación:
+//   - admin:  acceso total (ver, crear, editar y eliminar + gestión de usuarios).
+//   - viewer: solo lectura (el "lector"); ve toda la información pero no modifica.
+// El rol histórico "editor" (crear/editar pero no eliminar) sigue siendo válido
+// por compatibilidad, pero la interfaz de usuarios solo ofrece admin y viewer.
+export const ROLES = ["admin", "viewer"] as const;
+export type Role = (typeof ROLES)[number];
+
+export const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrador",
+  editor: "Editor",
+  viewer: "Lector",
+};
+
+export function roleLabel(role: string | null | undefined): string {
+  return ROLE_LABELS[role ?? "viewer"] ?? "Lector";
+}
+
 export function isEditor(role: string | null | undefined): boolean {
   return role === "editor" || role === "admin";
 }

@@ -5,12 +5,13 @@ import { LotsIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function LotsPage() {
   const activeHacienda = await getActiveHacienda();
-  const [lots, unit] = await Promise.all([
+  const [lots, unit, user] = await Promise.all([
     prisma.lot.findMany({
       where: activeHacienda ? { ranch: activeHacienda } : undefined,
       orderBy: [{ ranch: "asc" }, { species: "asc" }, { number: "asc" }],
@@ -22,7 +23,9 @@ export default async function LotsPage() {
       },
     }),
     getWeightUnit(),
+    getCurrentUser(),
   ]);
+  const canEdit = isEditor(user?.role);
 
   return (
     <div>
@@ -31,7 +34,7 @@ export default async function LotsPage() {
         subtitle={`${fmtNumber(lots.length)} lotes registrados${
           activeHacienda ? ` · ${activeHacienda}` : ""
         }`}
-        action={{ href: "/lots/new", label: "Nuevo lote" }}
+        action={canEdit ? { href: "/lots/new", label: "Nuevo lote" } : undefined}
       />
 
       {lots.length === 0 ? (
@@ -39,7 +42,7 @@ export default async function LotsPage() {
           icon={<LotsIcon width={26} height={26} />}
           title="Sin lotes"
           description="Crea tu primer lote para agrupar y dar seguimiento a tus animales."
-          action={{ href: "/lots/new", label: "Nuevo lote" }}
+          action={canEdit ? { href: "/lots/new", label: "Nuevo lote" } : undefined}
         />
       ) : (
         <>

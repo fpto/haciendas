@@ -6,6 +6,7 @@ import { MoneyIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ function roiColor(roi: number | null): "green" | "red" | "slate" {
 
 export default async function SalesPage() {
   const activeHacienda = await getActiveHacienda();
-  const [sales, stats] = await Promise.all([
+  const [sales, stats, user] = await Promise.all([
     prisma.sale.findMany({
       where: activeHacienda
         ? { animals: { some: { ranch: activeHacienda } } }
@@ -25,7 +26,9 @@ export default async function SalesPage() {
       include: { _count: { select: { animals: true } } },
     }),
     getSaleStats(activeHacienda ?? undefined),
+    getCurrentUser(),
   ]);
+  const canEdit = isEditor(user?.role);
   const unit = await getWeightUnit();
   const statBySale = new Map(stats.map((s) => [s.sale_id, s]));
 
@@ -36,7 +39,7 @@ export default async function SalesPage() {
         subtitle={`${fmtNumber(sales.length)} ventas registradas${
           activeHacienda ? ` · ${activeHacienda}` : ""
         }`}
-        action={{ href: "/sales/new", label: "Nueva venta" }}
+        action={canEdit ? { href: "/sales/new", label: "Nueva venta" } : undefined}
       />
 
       {sales.length === 0 ? (
@@ -44,7 +47,7 @@ export default async function SalesPage() {
           icon={<MoneyIcon width={26} height={26} />}
           title="Sin ventas"
           description="Registra una venta y asígnale animales para calcular utilidad y ROI."
-          action={{ href: "/sales/new", label: "Nueva venta" }}
+          action={canEdit ? { href: "/sales/new", label: "Nueva venta" } : undefined}
         />
       ) : (
         <>
