@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { getLotStats } from "@/lib/queries";
 import { PageHeader, EmptyState, TableWrap, Th, Td, Card } from "@/components/ui";
 import { LotsIcon, ChevronRightIcon } from "@/components/icons";
-import { fmtNumber } from "@/lib/utils";
-import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
+import { fmtNumber, fmtDate } from "@/lib/utils";
+import { getWeightUnit, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
 export default async function LotsPage() {
-  const [lots, stats, unit] = await Promise.all([
+  const [lots, unit] = await Promise.all([
     prisma.lot.findMany({
       orderBy: [{ ranch: "asc" }, { species: "asc" }, { number: "asc" }],
-      include: { _count: { select: { animals: true } } },
+      include: {
+        _count: { select: { animals: true } },
+        plot: { select: { id: true, number: true } },
+        // Último pesado del lote: define el peso promedio y el número de animales.
+        weighings: { orderBy: [{ date: "desc" }, { id: "desc" }], take: 1 },
+      },
     }),
-    getLotStats(),
     getWeightUnit(),
   ]);
-
-  const statByLot = new Map(stats.map((s) => [s.lot_id, s]));
 
   return (
     <div>
@@ -40,7 +41,7 @@ export default async function LotsPage() {
           {/* Tarjetas móvil */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
             {lots.map((lot) => {
-              const s = statByLot.get(lot.id);
+              const latest = lot.weighings[0] ?? null;
               return (
                 <Link key={lot.id} href={`/lots/${lot.id}`}>
                   <Card className="p-4">
@@ -49,11 +50,15 @@ export default async function LotsPage() {
                         {lot.name || `Lote ${lot.number}`}
                       </p>
                       <span className="text-xs text-slate-400">
-                        {lot._count.animals} animales
+                        {latest?.animalCount ?? lot._count.animals} animales
                       </span>
                     </div>
                     <p className="text-xs text-slate-500">
-                      {[lot.ranch, lot.species, lot.number]
+                      {[
+                        lot.ranch,
+                        lot.species,
+                        lot.plot?.number ? `Potrero ${lot.plot.number}` : null,
+                      ]
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
@@ -61,14 +66,12 @@ export default async function LotsPage() {
                       <div className="rounded-lg bg-slate-50 py-1.5">
                         <p className="text-xs text-slate-400">Peso prom.</p>
                         <p className="font-semibold">
-                          {fmtWeight(s?.average_weight ?? null, unit)}
+                          {fmtWeight(latest?.averageWeight ?? null, unit)}
                         </p>
                       </div>
                       <div className="rounded-lg bg-slate-50 py-1.5">
-                        <p className="text-xs text-slate-400">GDP</p>
-                        <p className="font-semibold">
-                          {fmtNumber(convertFromKg(s?.daily_gain ?? null, unit), 2)}
-                        </p>
+                        <p className="text-xs text-slate-400">Último pesado</p>
+                        <p className="font-semibold">{fmtDate(latest?.date)}</p>
                       </div>
                     </div>
                   </Card>
@@ -84,38 +87,34 @@ export default async function LotsPage() {
                 <tr>
                   <Th>Lote</Th>
                   <Th>Hacienda</Th>
+                  <Th>Potrero</Th>
                   <Th>Especie</Th>
                   <Th className="text-right">Animales</Th>
                   <Th className="text-right">Peso promedio</Th>
-                  <Th className="text-right">Cambio</Th>
-                  <Th className="text-right">GDP</Th>
-                  <Th className="text-right">Días sin pesar</Th>
+                  <Th className="text-right">Último pesado</Th>
                   <Th></Th>
                 </tr>
               </thead>
               <tbody>
                 {lots.map((lot) => {
-                  const s = statByLot.get(lot.id);
+                  const latest = lot.weighings[0] ?? null;
                   return (
                     <tr key={lot.id} className="hover:bg-slate-50">
                       <Td className="font-semibold text-slate-900">
                         {lot.name || lot.number || `#${lot.id}`}
                       </Td>
                       <Td>{lot.ranch ?? "—"}</Td>
+                      <Td>
+                        {lot.plot?.number ? `Potrero ${lot.plot.number}` : "—"}
+                      </Td>
                       <Td className="capitalize">{lot.species ?? "—"}</Td>
-                      <Td className="text-right">{lot._count.animals}</Td>
                       <Td className="text-right">
-                        {fmtWeight(s?.average_weight ?? null, unit)}
+                        {latest?.animalCount ?? lot._count.animals}
                       </Td>
                       <Td className="text-right">
-                        {fmtWeight(s?.weight_change ?? null, unit)}
+                        {fmtWeight(latest?.averageWeight ?? null, unit)}
                       </Td>
-                      <Td className="text-right">
-                        {fmtNumber(convertFromKg(s?.daily_gain ?? null, unit), 2)}
-                      </Td>
-                      <Td className="text-right">
-                        {fmtNumber(s?.days_since_last_weight ?? null)}
-                      </Td>
+                      <Td className="text-right">{fmtDate(latest?.date)}</Td>
                       <Td>
                         <Link
                           href={`/lots/${lot.id}`}

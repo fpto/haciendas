@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
-import { str } from "@/actions/helpers";
+import { str, int } from "@/actions/helpers";
 
 function lotData(formData: FormData) {
   return {
@@ -13,6 +13,7 @@ function lotData(formData: FormData) {
     number: str(formData.get("number")),
     name: str(formData.get("name")),
     description: str(formData.get("description")),
+    plotId: int(formData.get("plot_id")),
   };
 }
 

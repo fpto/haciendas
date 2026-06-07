@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Lot } from "@prisma/client";
+import type { Lot, Plot } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
 import { RanchSelect } from "@/components/RanchSelect";
@@ -10,11 +10,13 @@ export function LotForm({
   action,
   lot,
   haciendas,
+  plots,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   lot?: Lot | null;
   haciendas: { id: number; name: string }[];
+  plots: Pick<Plot, "id" | "number" | "ranch" | "plotType">[];
   submitLabel: string;
 }) {
   return (
@@ -35,6 +37,17 @@ export function LotForm({
               {SPECIES.map((s) => (
                 <option key={s} value={s}>
                   {s}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Potrero" hint="Ubicación del lote">
+            <Select name="plot_id" defaultValue={lot?.plotId ?? ""}>
+              <option value="">— Sin potrero —</option>
+              {plots.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {[p.ranch, p.plotType, p.number].filter(Boolean).join(" · ") ||
+                    `#${p.id}`}
                 </option>
               ))}
             </Select>

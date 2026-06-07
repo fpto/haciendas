@@ -39,10 +39,25 @@ CREATE TABLE "lots" (
     "number" TEXT,
     "name" TEXT,
     "description" TEXT,
+    "plot_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "lots_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "lot_weighings" (
+    "id" SERIAL NOT NULL,
+    "lot_id" INTEGER,
+    "date" DATE,
+    "average_weight" DOUBLE PRECISION,
+    "animal_count" INTEGER,
+    "note" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "lot_weighings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -121,6 +136,12 @@ CREATE INDEX "animals_lot_id_idx" ON "animals"("lot_id");
 CREATE INDEX "animals_sale_id_idx" ON "animals"("sale_id");
 
 -- CreateIndex
+CREATE INDEX "lots_plot_id_idx" ON "lots"("plot_id");
+
+-- CreateIndex
+CREATE INDEX "lot_weighings_lot_id_idx" ON "lot_weighings"("lot_id");
+
+-- CreateIndex
 CREATE INDEX "plot_evaluations_plot_id_idx" ON "plot_evaluations"("plot_id");
 
 -- CreateIndex
@@ -134,6 +155,12 @@ ALTER TABLE "animals" ADD CONSTRAINT "animals_lot_id_fkey" FOREIGN KEY ("lot_id"
 
 -- AddForeignKey
 ALTER TABLE "animals" ADD CONSTRAINT "animals_sale_id_fkey" FOREIGN KEY ("sale_id") REFERENCES "sales"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lots" ADD CONSTRAINT "lots_plot_id_fkey" FOREIGN KEY ("plot_id") REFERENCES "plots"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lot_weighings" ADD CONSTRAINT "lot_weighings_lot_id_fkey" FOREIGN KEY ("lot_id") REFERENCES "lots"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "plot_evaluations" ADD CONSTRAINT "plot_evaluations_plot_id_fkey" FOREIGN KEY ("plot_id") REFERENCES "plots"("id") ON DELETE SET NULL ON UPDATE CASCADE;
