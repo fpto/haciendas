@@ -7,6 +7,7 @@ import { Card, DescList, Badge, TableWrap, Th, Td, EmptyState } from "@/componen
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, PlusIcon, ScaleIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney } from "@/lib/utils";
+import { getWeightUnit, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function AnimalShowPage({
   ]);
   if (!animal) notFound();
 
+  const unit = await getWeightUnit();
   const weights = animal.weights;
   const dates = weights.map((w) => w.date).filter(Boolean) as Date[];
   const first = dates.length ? new Date(Math.min(...dates.map((d) => d.getTime()))) : null;
@@ -164,7 +166,7 @@ export default async function AnimalShowPage({
                   <tr key={w.id} className="hover:bg-slate-50">
                     <Td>{fmtDate(w.date)}</Td>
                     <Td className="text-right font-semibold">
-                      {fmtNumber(w.weight, 1)} kg
+                      {fmtWeight(w.weight, unit)}
                     </Td>
                     <Td className="max-w-xs truncate text-slate-500">
                       {w.note ?? "—"}

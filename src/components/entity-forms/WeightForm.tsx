@@ -3,21 +3,30 @@ import type { Weight, Animal } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
 import { toDateInput } from "@/lib/utils";
+import type { WeightUnit } from "@/lib/units";
+import { convertFromKg } from "@/lib/units";
 
 export function WeightForm({
   action,
   weight,
   animals,
   defaultAnimalId,
+  unit,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   weight?: Weight | null;
   animals: Pick<Animal, "id" | "animalNumber" | "ranch" | "species">[];
   defaultAnimalId?: number;
+  unit: WeightUnit;
   submitLabel: string;
 }) {
   const selectedAnimal = weight?.animalId ?? defaultAnimalId ?? "";
+  // El peso almacenado está en kg; se muestra para edición en la unidad elegida.
+  const displayWeight =
+    weight?.weight != null
+      ? Math.round((convertFromKg(weight.weight, unit) ?? 0) * 10) / 10
+      : "";
   return (
     <form action={action}>
       <Card className="space-y-5 p-5 sm:p-6">
@@ -42,12 +51,12 @@ export function WeightForm({
               required
             />
           </Field>
-          <Field label="Peso" hint="kilogramos">
+          <Field label="Peso" hint={unit === "lb" ? "libras" : "kilogramos"}>
             <Input
               type="number"
               step="0.1"
               name="weight"
-              defaultValue={weight?.weight ?? ""}
+              defaultValue={displayWeight}
               required
             />
           </Field>

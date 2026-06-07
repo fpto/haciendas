@@ -1,5 +1,6 @@
 import { getDashboardStats } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
+import { getWeightUnit, convertFromKg, weightLabel, gainLabel } from "@/lib/units";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber } from "@/lib/utils";
 import {
@@ -15,9 +16,10 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [stats, user] = await Promise.all([
+  const [stats, user, unit] = await Promise.all([
     getDashboardStats(),
     getCurrentUser(),
+    getWeightUnit(),
   ]);
 
   return (
@@ -45,8 +47,8 @@ export default async function DashboardPage() {
           />
           <StatCard
             label="Peso promedio"
-            value={fmtNumber(stats.bovineAverageWeight, 1)}
-            unit="kg"
+            value={fmtNumber(convertFromKg(stats.bovineAverageWeight, unit), 1)}
+            unit={weightLabel(unit)}
             icon={<ScaleIcon width={22} height={22} />}
             href="/animals"
             accent="blue"
@@ -61,8 +63,8 @@ export default async function DashboardPage() {
           />
           <StatCard
             label="GDP promedio"
-            value={fmtNumber(stats.bovineDailyGain, 2)}
-            unit="kg/día"
+            value={fmtNumber(convertFromKg(stats.bovineDailyGain, unit), 2)}
+            unit={gainLabel(unit)}
             icon={<TrendUpIcon width={22} height={22} />}
             href="/animals"
             accent="violet"
@@ -108,7 +110,7 @@ export default async function DashboardPage() {
           <span className="font-semibold text-slate-700">engorde</span> y se
           calculan a partir de sus dos pesos más recientes. La{" "}
           <span className="font-semibold text-slate-700">GDP</span> es la
-          ganancia diaria de peso (kg/día).
+          ganancia diaria de peso ({gainLabel(unit)}).
         </p>
       </Card>
     </div>

@@ -4,6 +4,7 @@ import { getSaleStats } from "@/lib/queries";
 import { PageHeader, EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { MoneyIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
+import { getWeightUnit, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function SalesPage() {
     }),
     getSaleStats(),
   ]);
+  const unit = await getWeightUnit();
   const statBySale = new Map(stats.map((s) => [s.sale_id, s]));
 
   return (
@@ -103,7 +105,7 @@ export default async function SalesPage() {
                       </Td>
                       <Td className="text-right">{sale._count.animals}</Td>
                       <Td className="text-right">
-                        {fmtNumber(s?.sum_weight ?? null, 0)} kg
+                        {fmtWeight(s?.sum_weight ?? null, unit, 0)}
                       </Td>
                       <Td className="text-right">
                         {fmtMoney(s?.sale_total ?? null)}

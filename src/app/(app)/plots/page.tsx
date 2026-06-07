@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getLatestPlotScores } from "@/lib/queries";
-import { PageHeader, EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
-import { PlotIcon, ChevronRightIcon } from "@/components/icons";
+import { EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
+import { PlotIcon, ChevronRightIcon, PlusIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -26,11 +26,32 @@ export default async function PlotsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Potreros"
-        subtitle={`${fmtNumber(plots.length)} potreros registrados`}
-        action={{ href: "/plots/new", label: "Nuevo potrero" }}
-      />
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Potreros
+          </h1>
+          <p className="mt-0.5 text-sm text-slate-500">
+            {fmtNumber(plots.length)} potreros registrados
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/plots/import"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-[0.98]"
+          >
+            <PlotIcon width={18} height={18} />
+            Importar KMZ
+          </Link>
+          <Link
+            href="/plots/new"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 active:scale-[0.98]"
+          >
+            <PlusIcon width={18} height={18} />
+            Nuevo potrero
+          </Link>
+        </div>
+      </div>
 
       {plots.length === 0 ? (
         <EmptyState

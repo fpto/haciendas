@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
+import { getWeightUnit } from "@/lib/units";
 import { updateWeight } from "@/actions/weights";
 import { WeightForm } from "@/components/entity-forms/WeightForm";
 import { ArrowLeftIcon } from "@/components/icons";
@@ -18,12 +19,13 @@ export default async function EditWeightPage({
   const weightId = Number(id);
   if (Number.isNaN(weightId)) notFound();
 
-  const [weight, animals] = await Promise.all([
+  const [weight, animals, unit] = await Promise.all([
     prisma.weight.findUnique({ where: { id: weightId } }),
     prisma.animal.findMany({
       orderBy: [{ ranch: "asc" }, { animalNumber: "asc" }],
       select: { id: true, animalNumber: true, ranch: true, species: true },
     }),
+    getWeightUnit(),
   ]);
   if (!weight) notFound();
 
@@ -42,6 +44,7 @@ export default async function EditWeightPage({
         action={updateWeight.bind(null, weight.id)}
         weight={weight}
         animals={animals}
+        unit={unit}
         submitLabel="Guardar cambios"
       />
     </div>

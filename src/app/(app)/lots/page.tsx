@@ -4,16 +4,18 @@ import { getLotStats } from "@/lib/queries";
 import { PageHeader, EmptyState, TableWrap, Th, Td, Card } from "@/components/ui";
 import { LotsIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
+import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
 export default async function LotsPage() {
-  const [lots, stats] = await Promise.all([
+  const [lots, stats, unit] = await Promise.all([
     prisma.lot.findMany({
       orderBy: [{ ranch: "asc" }, { species: "asc" }, { number: "asc" }],
       include: { _count: { select: { animals: true } } },
     }),
     getLotStats(),
+    getWeightUnit(),
   ]);
 
   const statByLot = new Map(stats.map((s) => [s.lot_id, s]));
@@ -59,13 +61,13 @@ export default async function LotsPage() {
                       <div className="rounded-lg bg-slate-50 py-1.5">
                         <p className="text-xs text-slate-400">Peso prom.</p>
                         <p className="font-semibold">
-                          {fmtNumber(s?.average_weight ?? null, 1)} kg
+                          {fmtWeight(s?.average_weight ?? null, unit)}
                         </p>
                       </div>
                       <div className="rounded-lg bg-slate-50 py-1.5">
                         <p className="text-xs text-slate-400">GDP</p>
                         <p className="font-semibold">
-                          {fmtNumber(s?.daily_gain ?? null, 2)}
+                          {fmtNumber(convertFromKg(s?.daily_gain ?? null, unit), 2)}
                         </p>
                       </div>
                     </div>
@@ -103,13 +105,13 @@ export default async function LotsPage() {
                       <Td className="capitalize">{lot.species ?? "—"}</Td>
                       <Td className="text-right">{lot._count.animals}</Td>
                       <Td className="text-right">
-                        {fmtNumber(s?.average_weight ?? null, 1)} kg
+                        {fmtWeight(s?.average_weight ?? null, unit)}
                       </Td>
                       <Td className="text-right">
-                        {fmtNumber(s?.weight_change ?? null, 1)} kg
+                        {fmtWeight(s?.weight_change ?? null, unit)}
                       </Td>
                       <Td className="text-right">
-                        {fmtNumber(s?.daily_gain ?? null, 2)}
+                        {fmtNumber(convertFromKg(s?.daily_gain ?? null, unit), 2)}
                       </Td>
                       <Td className="text-right">
                         {fmtNumber(s?.days_since_last_weight ?? null)}

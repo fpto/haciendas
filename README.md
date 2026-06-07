@@ -80,6 +80,25 @@ src/app/(app)/            Páginas protegidas (tablero + entidades)
 src/app/login/            Inicio de sesión
 ```
 
+## 🌎 Importar potreros desde Google Earth (KMZ/KML)
+
+Desde **Potreros → Importar KMZ** puedes subir un archivo `.kmz` o `.kml`
+exportado de Google Earth. Cada polígono se convierte en un potrero:
+
+- El **nombre** del polígono se usa como número de potrero.
+- El **área en hectáreas** se calcula automáticamente (geodésica).
+- Los **linderos** se guardan como GeoJSON en el campo `boundaries`.
+- Si ya existe un potrero con ese número (y misma hacienda) se **actualiza**;
+  si no, se **crea**.
+
+## ⚖️ Unidad de peso (kg / lb)
+
+La app puede mostrar y capturar pesos en **kilogramos** o **libras**, con
+**libras como unidad por defecto**. El conmutador está en la barra de
+navegación. Internamente los pesos se almacenan siempre en kilogramos; la
+conversión se aplica solo a la visualización y la captura. Los importes en
+dinero ($/kg, totales) no cambian con la unidad.
+
 ## 🔐 Roles
 
 - **admin**: acceso total (incluye editar y eliminar).

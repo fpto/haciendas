@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { classNames } from "@/lib/utils";
 import type { SessionUser } from "@/lib/auth";
+import { UnitToggle } from "@/components/UnitToggle";
 import {
   DashboardIcon,
   CowIcon,
@@ -37,9 +38,11 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function AppShell({
   user,
+  weightUnit,
   children,
 }: {
   user: SessionUser | null;
+  weightUnit: "kg" | "lb";
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -67,6 +70,12 @@ export function AppShell({
             </Link>
           ))}
         </nav>
+        <div className="flex items-center justify-between px-4 py-3">
+          <span className="text-xs font-medium text-slate-400">
+            Unidad de peso
+          </span>
+          <UnitToggle initial={weightUnit} />
+        </div>
         <UserFooter user={user} />
       </aside>
 
@@ -106,6 +115,12 @@ export function AppShell({
                 </Link>
               ))}
             </nav>
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className="text-xs font-medium text-slate-400">
+                Unidad de peso
+              </span>
+              <UnitToggle initial={weightUnit} />
+            </div>
             <UserFooter user={user} />
           </aside>
         </div>
@@ -124,6 +139,9 @@ export function AppShell({
           <LeafIcon className="text-brand-600" width={22} height={22} />
           <span className="text-lg font-bold text-slate-900">Haciendas</span>
         </Link>
+        <div className="ml-auto">
+          <UnitToggle initial={weightUnit} />
+        </div>
       </header>
 
       {/* ===== Contenido ===== */}

@@ -5,19 +5,23 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str, int, float, date } from "@/actions/helpers";
+import { getWeightUnit, convertToKg } from "@/lib/units";
 
-function weightData(formData: FormData) {
+async function weightData(formData: FormData) {
+  const unit = await getWeightUnit();
+  // El peso se captura en la unidad preferida; se almacena en kg.
+  const entered = float(formData.get("weight"));
   return {
     animalId: int(formData.get("animal_id")),
     date: date(formData.get("date")),
-    weight: float(formData.get("weight")),
+    weight: convertToKg(entered, unit),
     note: str(formData.get("note")),
   };
 }
 
 export async function createWeight(formData: FormData) {
   await requireEditor();
-  const weight = await prisma.weight.create({ data: weightData(formData) });
+  const weight = await prisma.weight.create({ data: await weightData(formData) });
   revalidatePath("/weights");
   if (weight.animalId) revalidatePath(`/animals/${weight.animalId}`);
   redirect(
@@ -31,7 +35,7 @@ export async function updateWeight(id: number, formData: FormData) {
   await requireEditor();
   const weight = await prisma.weight.update({
     where: { id },
-    data: weightData(formData),
+    data: await weightData(formData),
   });
   revalidatePath("/weights");
   if (weight.animalId) revalidatePath(`/animals/${weight.animalId}`);

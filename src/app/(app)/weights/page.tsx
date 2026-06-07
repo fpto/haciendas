@@ -2,16 +2,20 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { PageHeader, EmptyState, TableWrap, Th, Td } from "@/components/ui";
 import { ScaleIcon, ChevronRightIcon } from "@/components/icons";
-import { fmtNumber, fmtDate } from "@/lib/utils";
+import { fmtDate } from "@/lib/utils";
+import { getWeightUnit, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
 export default async function WeightsPage() {
-  const weights = await prisma.weight.findMany({
-    orderBy: { date: "desc" },
-    take: 200,
-    include: { animal: true },
-  });
+  const [weights, unit] = await Promise.all([
+    prisma.weight.findMany({
+      orderBy: { date: "desc" },
+      take: 200,
+      include: { animal: true },
+    }),
+    getWeightUnit(),
+  ]);
 
   return (
     <div>
@@ -49,7 +53,7 @@ export default async function WeightsPage() {
                     : "—"}
                 </Td>
                 <Td className="text-right font-semibold">
-                  {fmtNumber(w.weight, 1)} kg
+                  {fmtWeight(w.weight, unit)}
                 </Td>
                 <Td className="max-w-xs truncate text-slate-500">
                   {w.note ?? "—"}

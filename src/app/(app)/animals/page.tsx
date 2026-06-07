@@ -2,7 +2,8 @@ import Link from "next/link";
 import { getLatestWeights } from "@/lib/queries";
 import { PageHeader, Card, EmptyState, Badge, TableWrap, Th, Td } from "@/components/ui";
 import { CowIcon, SearchIcon, ChevronRightIcon } from "@/components/icons";
-import { fmtNumber, fmtDate } from "@/lib/utils";
+import { fmtNumber } from "@/lib/utils";
+import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function AnimalsPage({
 }) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
+  const unit = await getWeightUnit();
   const { rows, total } = await getLatestWeights({
     search: sp.search,
     sort: sp.sort,
@@ -127,13 +129,16 @@ export default async function AnimalsPage({
                         {r.lot_number ? ` · Lote ${r.lot_number}` : ""}
                       </p>
                     </div>
-                    <Badge color="green">{fmtNumber(r.last_weight, 1)} kg</Badge>
+                    <Badge color="green">{fmtWeight(r.last_weight, unit)}</Badge>
                   </div>
                   <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                    <Metric label="GDP" value={`${fmtNumber(r.daily_gain, 2)}`} />
+                    <Metric
+                      label="GDP"
+                      value={`${fmtNumber(convertFromKg(r.daily_gain, unit), 2)}`}
+                    />
                     <Metric
                       label="Cambio"
-                      value={`${fmtNumber(r.weight_change, 1)} kg`}
+                      value={fmtWeight(r.weight_change, unit)}
                     />
                     <Metric
                       label="Días"
@@ -172,15 +177,17 @@ export default async function AnimalsPage({
                     <Td className="capitalize">{r.species}</Td>
                     <Td>{r.lot_number ?? "—"}</Td>
                     <Td className="text-right font-semibold">
-                      {fmtNumber(r.last_weight, 1)} kg
+                      {fmtWeight(r.last_weight, unit)}
                     </Td>
                     <Td className="text-right text-slate-500">
-                      {fmtNumber(r.former_weight, 1)} kg
+                      {fmtWeight(r.former_weight, unit)}
                     </Td>
                     <Td className="text-right">
-                      {fmtNumber(r.weight_change, 1)} kg
+                      {fmtWeight(r.weight_change, unit)}
                     </Td>
-                    <Td className="text-right">{fmtNumber(r.daily_gain, 2)}</Td>
+                    <Td className="text-right">
+                      {fmtNumber(convertFromKg(r.daily_gain, unit), 2)}
+                    </Td>
                     <Td className="text-right">
                       {fmtNumber(r.days_since_last_weight)}
                     </Td>

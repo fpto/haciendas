@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
+import { getWeightUnit } from "@/lib/units";
 import { createWeight } from "@/actions/weights";
 import { WeightForm } from "@/components/entity-forms/WeightForm";
 import { ArrowLeftIcon } from "@/components/icons";
@@ -14,10 +15,13 @@ export default async function NewWeightPage({
 }) {
   await requireEditor();
   const { animal_id } = await searchParams;
-  const animals = await prisma.animal.findMany({
-    orderBy: [{ ranch: "asc" }, { animalNumber: "asc" }],
-    select: { id: true, animalNumber: true, ranch: true, species: true },
-  });
+  const [animals, unit] = await Promise.all([
+    prisma.animal.findMany({
+      orderBy: [{ ranch: "asc" }, { animalNumber: "asc" }],
+      select: { id: true, animalNumber: true, ranch: true, species: true },
+    }),
+    getWeightUnit(),
+  ]);
 
   return (
     <div>
@@ -34,6 +38,7 @@ export default async function NewWeightPage({
         action={createWeight}
         animals={animals}
         defaultAnimalId={animal_id ? Number(animal_id) : undefined}
+        unit={unit}
         submitLabel="Registrar peso"
       />
     </div>

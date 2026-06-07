@@ -8,6 +8,7 @@ import { Card, DescList, TableWrap, Th, Td, EmptyState, Badge, StatCard } from "
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, ChevronRightIcon, CowIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
+import { getWeightUnit, fmtWeight, convertFromKg } from "@/lib/units";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default async function SaleShowPage({
   ]);
   if (!sale) notFound();
 
+  const unit = await getWeightUnit();
   const s = stats.find((x) => x.sale_id === sale.id);
   const canEdit = isEditor(user?.role);
   const canDelete = isAdmin(user?.role);
@@ -87,11 +89,11 @@ export default async function SaleShowPage({
               { label: "Comprador", value: sale.buyer ?? "—" },
               { label: "Fecha", value: fmtDate(sale.date) },
               { label: "Animales", value: <Badge color="green">{sale.animals.length}</Badge> },
-              { label: "Peso total", value: `${fmtNumber(s?.sum_weight ?? null)} kg` },
-              { label: "Peso promedio", value: `${fmtNumber(s?.avg_weight ?? null, 1)} kg` },
+              { label: "Peso total", value: fmtWeight(s?.sum_weight ?? null, unit, 0) },
+              { label: "Peso promedio", value: fmtWeight(s?.avg_weight ?? null, unit) },
               { label: "Costo total", value: fmtMoney(s?.sale_cost ?? null) },
               { label: "Días en hacienda", value: fmtNumber(s?.days_in_ranch ?? null) },
-              { label: "GDP promedio", value: fmtNumber(s?.daily_gain ?? null, 2) },
+              { label: "GDP promedio", value: fmtNumber(convertFromKg(s?.daily_gain ?? null, unit), 2) },
               { label: "Comentario", value: sale.comment ?? "—" },
             ]}
           />
