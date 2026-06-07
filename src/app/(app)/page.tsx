@@ -6,6 +6,7 @@ import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getActiveWeightMode } from "@/lib/activeWeightMode";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
+import { normalizeLotStatus } from "@/lib/lotStatus";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { PlotsOverviewMap, type PlotMarker } from "@/components/PlotsOverviewMap";
 import {
@@ -37,6 +38,7 @@ export default async function DashboardPage() {
         boundaries: true,
         lots: {
           select: {
+            status: true,
             _count: { select: { animals: true } },
             weighings: {
               orderBy: [{ date: "desc" }, { id: "desc" }],
@@ -54,14 +56,14 @@ export default async function DashboardPage() {
   const bovineHref = weightMode === "lot" ? "/lots" : "/animals";
 
   // Marcadores del mapa: potreros con geometría + número de cabezas en cada uno.
+  // Los lotes vendidos o destruidos ya no aportan cabezas al inventario activo.
   const plotMarkers: PlotMarker[] = plots
     .map((p) => {
       const ring = parseGeoJsonRing(p.boundaries);
       if (!ring) return null;
-      const animalCount = p.lots.reduce(
-        (sum, lot) => sum + lotHeadcount(lot),
-        0,
-      );
+      const animalCount = p.lots
+        .filter((lot) => normalizeLotStatus(lot.status) === "growing")
+        .reduce((sum, lot) => sum + lotHeadcount(lot), 0);
       return {
         id: p.id,
         label: `Potrero ${p.number ?? p.id}`,

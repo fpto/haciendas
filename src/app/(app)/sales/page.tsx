@@ -6,6 +6,7 @@ import { MoneyIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getActiveWeightMode } from "@/lib/activeWeightMode";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,155 @@ function roiColor(roi: number | null): "green" | "red" | "slate" {
 }
 
 export default async function SalesPage() {
+  // En modo "Por Lote" las ventas se gestionan por lote (estado "vendido"), no
+  // por animales individuales.
+  const mode = await getActiveWeightMode();
+  if (mode === "lot") return <LotSalesPage />;
+  return <AnimalSalesPage />;
+}
+
+// ---------------------------------------------------------------------------
+// Ventas por lote (modo "Por Lote"): lista de lotes vendidos. El detalle de
+// cada venta vive en la ficha del lote.
+// ---------------------------------------------------------------------------
+async function LotSalesPage() {
+  const activeHacienda = await getActiveHacienda();
+  const [lots, unit, user] = await Promise.all([
+    prisma.lot.findMany({
+      where: {
+        status: "sold",
+        ...(activeHacienda ? { ranch: activeHacienda } : {}),
+      },
+      orderBy: [{ saleDate: "desc" }, { id: "desc" }],
+      include: {
+        weighings: {
+          orderBy: [{ date: "desc" }, { id: "desc" }],
+          take: 1,
+          select: { averageWeight: true, animalCount: true },
+        },
+      },
+    }),
+    getWeightUnit(),
+    getCurrentUser(),
+  ]);
+  const canEdit = isEditor(user?.role);
+
+  // Peso total y total de la venta de cada lote, calculados con el último pesado.
+  const rows = lots.map((lot) => {
+    const latest = lot.weighings[0] ?? null;
+    const weightKg =
+      latest?.averageWeight != null && latest?.animalCount != null
+        ? latest.averageWeight * latest.animalCount
+        : null;
+    const total =
+      lot.salePrice != null && weightKg != null ? lot.salePrice * weightKg : null;
+    return { lot, headcount: latest?.animalCount ?? null, weightKg, total };
+  });
+
+  return (
+    <div>
+      <PageHeader
+        title="Ventas"
+        subtitle={`${fmtNumber(lots.length)} lotes vendidos${
+          activeHacienda ? ` · ${activeHacienda}` : ""
+        }`}
+        action={canEdit ? { href: "/sales/new", label: "Vender lote" } : undefined}
+      />
+
+      {lots.length === 0 ? (
+        <EmptyState
+          icon={<MoneyIcon width={26} height={26} />}
+          title="Sin ventas"
+          description="Registra una venta eligiendo un lote en crecimiento y sus datos de venta."
+          action={canEdit ? { href: "/sales/new", label: "Vender lote" } : undefined}
+        />
+      ) : (
+        <>
+          {/* Tarjetas móvil */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
+            {rows.map(({ lot, headcount, total }) => (
+              <Link key={lot.id} href={`/lots/${lot.id}`}>
+                <Card className="p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-bold text-slate-900">
+                      {lot.name || `Lote ${lot.number}`}
+                    </p>
+                    <Badge color="blue">{fmtDate(lot.saleDate)}</Badge>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    {[lot.buyer, headcount != null ? `${headcount} cabezas` : null]
+                      .filter(Boolean)
+                      .join(" · ") || "—"}
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-center text-sm">
+                    <div className="rounded-lg bg-slate-50 py-1.5">
+                      <p className="text-xs text-slate-400">Precio/kg</p>
+                      <p className="font-semibold">
+                        {lot.salePrice != null ? fmtMoney(lot.salePrice) : "—"}
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-slate-50 py-1.5">
+                      <p className="text-xs text-slate-400">Total venta</p>
+                      <p className="font-semibold">{fmtMoney(total)}</p>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          {/* Tabla escritorio */}
+          <div className="hidden lg:block">
+            <TableWrap>
+              <thead>
+                <tr>
+                  <Th>Lote</Th>
+                  <Th>Fecha de venta</Th>
+                  <Th>Comprador</Th>
+                  <Th className="text-right">Cabezas</Th>
+                  <Th className="text-right">Peso total</Th>
+                  <Th className="text-right">Precio/kg</Th>
+                  <Th className="text-right">Total venta</Th>
+                  <Th></Th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(({ lot, headcount, weightKg, total }) => (
+                  <tr key={lot.id} className="hover:bg-slate-50">
+                    <Td className="font-semibold text-slate-900">
+                      {lot.name || lot.number || `#${lot.id}`}
+                    </Td>
+                    <Td>{fmtDate(lot.saleDate)}</Td>
+                    <Td>{lot.buyer ?? "—"}</Td>
+                    <Td className="text-right">{headcount ?? "—"}</Td>
+                    <Td className="text-right">{fmtWeight(weightKg, unit, 0)}</Td>
+                    <Td className="text-right">
+                      {lot.salePrice != null ? fmtMoney(lot.salePrice) : "—"}
+                    </Td>
+                    <Td className="text-right font-semibold">{fmtMoney(total)}</Td>
+                    <Td>
+                      <Link
+                        href={`/lots/${lot.id}`}
+                        className="inline-flex text-brand-600"
+                      >
+                        <ChevronRightIcon />
+                      </Link>
+                    </Td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableWrap>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Ventas por animal (modo "Por Animal"): registros de venta con ROI.
+// ---------------------------------------------------------------------------
+async function AnimalSalesPage() {
   const activeHacienda = await getActiveHacienda();
   const [sales, stats, user] = await Promise.all([
     prisma.sale.findMany({
