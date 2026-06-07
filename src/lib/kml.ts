@@ -98,6 +98,19 @@ function textOf(value: unknown): string | null {
   return s || null;
 }
 
+// Las descripciones de Google Earth suelen venir con HTML/CSS; lo limpiamos.
+function stripHtml(value: string | null): string | null {
+  if (!value) return value;
+  const text = value
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text || null;
+}
+
 async function extractKmlText(bytes: Uint8Array): Promise<string> {
   // Un KMZ es un ZIP; intentamos descomprimir y tomar el primer .kml.
   try {
@@ -131,12 +144,35 @@ export async function parseKmzOrKml(
     if (ring.length < 3) continue; // sin polígono usable
     result.push({
       name: textOf(pm.name) ?? "Sin nombre",
-      description: textOf(pm.description),
+      description: stripHtml(textOf(pm.description)),
       ring,
       areaHectares: ringAreaHectares(ring),
     });
   }
   return result;
+}
+
+// Parsea el campo `boundaries` (GeoJSON Polygon en texto) a un anillo [lng,lat][].
+// Devuelve null si no es un polígono válido (p.ej. linderos heredados en texto).
+export function parseGeoJsonRing(
+  boundaries: string | null | undefined,
+): [number, number][] | null {
+  if (!boundaries) return null;
+  try {
+    const obj = JSON.parse(boundaries);
+    const coords = obj?.coordinates?.[0];
+    if (!Array.isArray(coords) || coords.length < 3) return null;
+    const ring: [number, number][] = [];
+    for (const pt of coords) {
+      const lng = Number(pt?.[0]);
+      const lat = Number(pt?.[1]);
+      if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
+      ring.push([lng, lat]);
+    }
+    return ring;
+  } catch {
+    return null;
+  }
 }
 
 // Serializa un anillo a GeoJSON Polygon (texto) para el campo `boundaries`.

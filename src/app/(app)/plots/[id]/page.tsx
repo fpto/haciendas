@@ -7,6 +7,8 @@ import { Card, DescList, TableWrap, Th, Td, EmptyState } from "@/components/ui";
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, PlusIcon, CalendarIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
+import { parseGeoJsonRing } from "@/lib/kml";
+import { PlotMap } from "@/components/PlotMap";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +32,22 @@ export default async function PlotShowPage({
 
   const canEdit = isEditor(user?.role);
   const canDelete = isAdmin(user?.role);
+  const ring = parseGeoJsonRing(plot.boundaries);
+
+  const details = [
+    { label: "Número", value: plot.number ?? "—" },
+    { label: "Hacienda", value: plot.ranch ?? "—" },
+    {
+      label: "Tipo",
+      value: <span className="capitalize">{plot.plotType ?? "—"}</span>,
+    },
+    { label: "Área", value: plot.area ? `${fmtNumber(plot.area, 2)} ha` : "—" },
+    { label: "Comentario", value: plot.comment ?? "—" },
+    // Solo mostramos los linderos como texto si no se pueden dibujar en el mapa.
+    ...(ring
+      ? []
+      : [{ label: "Linderos", value: plot.boundaries ?? "—" }]),
+  ];
 
   return (
     <div>
@@ -57,18 +75,15 @@ export default async function PlotShowPage({
         Potrero {plot.number}
       </h1>
 
+      {ring && (
+        <div className="mb-5">
+          <PlotMap ring={ring} />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <DescList
-            items={[
-              { label: "Número", value: plot.number ?? "—" },
-              { label: "Hacienda", value: plot.ranch ?? "—" },
-              { label: "Tipo", value: <span className="capitalize">{plot.plotType ?? "—"}</span> },
-              { label: "Área", value: plot.area ? `${fmtNumber(plot.area, 2)} ha` : "—" },
-              { label: "Comentario", value: plot.comment ?? "—" },
-              { label: "Linderos", value: plot.boundaries ?? "—" },
-            ]}
-          />
+          <DescList items={details} />
         </Card>
 
         <div className="lg:col-span-2">
