@@ -32,9 +32,6 @@ const NAV = [
   { href: "/weights", label: "Pesos", Icon: ScaleIcon },
 ];
 
-// Barra inferior móvil: los 5 destinos principales.
-const MOBILE_NAV = NAV.slice(0, 5);
-
 function isActive(pathname: string, href: string, exact?: boolean) {
   if (exact) return pathname === href;
   return pathname === href || pathname.startsWith(href + "/");
@@ -45,17 +42,26 @@ export function AppShell({
   weightUnit,
   haciendas,
   activeHacienda,
+  activeWeightMode,
   children,
 }: {
   user: SessionUser | null;
   weightUnit: "kg" | "lb";
   haciendas: { id: number; name: string }[];
   activeHacienda: string | null;
+  activeWeightMode: "lot" | "animal" | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+
+  // En modo "por lote" los pesos se registran a nivel de lote, así que se oculta
+  // la sección de Animales. La barra inferior móvil usa los 5 primeros destinos.
+  const nav = NAV.filter(
+    (item) => !(item.href === "/animals" && activeWeightMode === "lot"),
+  );
+  const mobileNav = nav.slice(0, 5);
 
   // Restaura la preferencia de la barra lateral guardada.
   useEffect(() => {
@@ -92,7 +98,7 @@ export function AppShell({
         </div>
         <HaciendaSwitcher haciendas={haciendas} active={activeHacienda} />
         <nav className="flex-1 space-y-1 px-3 py-4">
-          {NAV.map(({ href, label, Icon, exact }) => (
+          {nav.map(({ href, label, Icon, exact }) => (
             <Link
               key={href}
               href={href}
@@ -153,7 +159,7 @@ export function AppShell({
               onNavigate={() => setOpen(false)}
             />
             <nav className="flex-1 space-y-1 px-3 py-4">
-              {NAV.map(({ href, label, Icon, exact }) => (
+              {nav.map(({ href, label, Icon, exact }) => (
                 <Link
                   key={href}
                   href={href}
@@ -211,7 +217,7 @@ export function AppShell({
 
       {/* ===== Tab bar inferior móvil ===== */}
       <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
-        {MOBILE_NAV.map(({ href, label, Icon, exact }) => {
+        {mobileNav.map(({ href, label, Icon, exact }) => {
           const active = isActive(pathname, href, exact);
           return (
             <Link
