@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { classNames } from "@/lib/utils";
-import { ACTIVE_HACIENDA_COOKIE } from "@/lib/activeHacienda";
+import { ACTIVE_HACIENDA_COOKIE } from "@/lib/activeHaciendaCookie";
 import {
   LeafIcon,
   ChevronDownIcon,
