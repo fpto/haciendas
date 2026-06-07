@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { classNames } from "@/lib/utils";
 import { ACTIVE_HACIENDA_COOKIE } from "@/lib/activeHaciendaCookie";
 import {
-  LeafIcon,
+  BullHeadIcon,
   ChevronDownIcon,
   CheckIcon,
   SettingsIcon,
@@ -73,7 +73,7 @@ export function HaciendaSwitcher({
         aria-expanded={open}
       >
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
-          <LeafIcon width={18} height={18} />
+          <BullHeadIcon width={18} height={18} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-[11px] font-medium uppercase tracking-wide text-slate-400">

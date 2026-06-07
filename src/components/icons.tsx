@@ -210,11 +210,19 @@ export function SearchIcon(p: IconProps) {
   );
 }
 
-export function LeafIcon(p: IconProps) {
+export function BullHeadIcon(p: IconProps) {
   return (
     <svg {...base} {...p}>
-      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a7 7 0 0 1-11 9.8" />
-      <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+      {/* Cuernos */}
+      <path d="M6.5 7.5C4 6.8 2.4 4.8 2.8 2.3" />
+      <path d="M17.5 7.5c2.5-.7 4.1-2.7 3.7-5.2" />
+      {/* Cabeza */}
+      <path d="M6 7C8 5.5 16 5.5 18 7c.6 2.5 0 4.5-1.5 6.5C15 15.7 13.6 17 12 17s-3-1.3-4.5-3.5C6 11.5 5.4 9.5 6 7Z" />
+      {/* Ojos */}
+      <path d="M9.5 10h.01M14.5 10h.01" />
+      {/* Hocico */}
+      <path d="M11 13h.01M13 13h.01" />
+      <path d="M9.5 14.5c.7.5 1.6.8 2.5.8s1.8-.3 2.5-.8" />
     </svg>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { PageHeader, EmptyState, Card, Badge } from "@/components/ui";
-import { LeafIcon, ChevronRightIcon } from "@/components/icons";
+import { BullHeadIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
@@ -33,7 +33,7 @@ export default async function HaciendasPage() {
 
       {haciendas.length === 0 ? (
         <EmptyState
-          icon={<LeafIcon width={26} height={26} />}
+          icon={<BullHeadIcon width={26} height={26} />}
           title="Sin haciendas"
           description="Registra tu primera hacienda para poder seleccionarla en animales, lotes y potreros."
           action={canEdit ? { href: "/haciendas/new", label: "Nueva hacienda" } : undefined}
@@ -47,7 +47,7 @@ export default async function HaciendasPage() {
                   <div className="min-w-0">
                     <p className="flex items-center gap-2 text-lg font-bold text-slate-900">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
-                        <LeafIcon width={18} height={18} />
+                        <BullHeadIcon width={18} height={18} />
                       </span>
                       {h.name}
                     </p>
