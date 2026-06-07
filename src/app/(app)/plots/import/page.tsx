@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
 import { importPlotsFromKmz } from "@/actions/plots";
 import { Card } from "@/components/ui";
-import { Field, Input, Select, SubmitButton, FormError } from "@/components/forms";
+import { Field, Select, SubmitButton, FormError } from "@/components/forms";
+import { RanchSelect } from "@/components/RanchSelect";
 import { ArrowLeftIcon, PlotIcon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +18,10 @@ export default async function ImportPlotsPage({
 }) {
   await requireEditor();
   const { error } = await searchParams;
+  const haciendas = await prisma.hacienda.findMany({
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
+  });
 
   return (
     <div>
@@ -53,10 +59,10 @@ export default async function ImportPlotsPage({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field
-              label="Hacienda / Rancho"
+              label="Hacienda"
               hint="Se asigna a todos los potreros importados."
             >
-              <Input name="ranch" placeholder="Opcional" />
+              <RanchSelect haciendas={haciendas} />
             </Field>
             <Field label="Tipo" hint="Se asigna a todos los importados.">
               <Select name="plot_type" defaultValue="">

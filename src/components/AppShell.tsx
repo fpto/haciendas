@@ -21,6 +21,7 @@ import {
 
 const NAV = [
   { href: "/", label: "Tablero", Icon: DashboardIcon, exact: true },
+  { href: "/haciendas", label: "Haciendas", Icon: LeafIcon },
   { href: "/animals", label: "Animales", Icon: CowIcon },
   { href: "/lots", label: "Lotes", Icon: LotsIcon },
   { href: "/plots", label: "Potreros", Icon: PlotIcon },

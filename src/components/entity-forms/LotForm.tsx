@@ -2,16 +2,19 @@ import Link from "next/link";
 import type { Lot } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
+import { RanchSelect } from "@/components/RanchSelect";
 
 const SPECIES = ["bovino", "ovino", "caprino", "equino", "porcino"];
 
 export function LotForm({
   action,
   lot,
+  haciendas,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   lot?: Lot | null;
+  haciendas: { id: number; name: string }[];
   submitLabel: string;
 }) {
   return (
@@ -24,8 +27,8 @@ export function LotForm({
           <Field label="Nombre">
             <Input name="name" defaultValue={lot?.name ?? ""} />
           </Field>
-          <Field label="Hacienda / Rancho">
-            <Input name="ranch" defaultValue={lot?.ranch ?? ""} />
+          <Field label="Hacienda">
+            <RanchSelect haciendas={haciendas} defaultValue={lot?.ranch} />
           </Field>
           <Field label="Especie">
             <Select name="species" defaultValue={lot?.species ?? "bovino"}>

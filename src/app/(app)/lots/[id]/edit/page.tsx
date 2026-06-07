@@ -17,7 +17,13 @@ export default async function EditLotPage({
   const { id } = await params;
   const lotId = Number(id);
   if (Number.isNaN(lotId)) notFound();
-  const lot = await prisma.lot.findUnique({ where: { id: lotId } });
+  const [lot, haciendas] = await Promise.all([
+    prisma.lot.findUnique({ where: { id: lotId } }),
+    prisma.hacienda.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
   if (!lot) notFound();
 
   return (
@@ -34,6 +40,7 @@ export default async function EditLotPage({
       <LotForm
         action={updateLot.bind(null, lot.id)}
         lot={lot}
+        haciendas={haciendas}
         submitLabel="Guardar cambios"
       />
     </div>

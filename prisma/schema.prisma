@@ -39,6 +39,17 @@ model Animal {
   @@map("animals")
 }
 
+model Hacienda {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  location  String?
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("haciendas")
+}
+
 model Lot {
   id          Int      @id @default(autoincrement())
   ranch       String?

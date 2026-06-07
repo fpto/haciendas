@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
 import { createPlot } from "@/actions/plots";
 import { PlotForm } from "@/components/entity-forms/PlotForm";
@@ -8,6 +9,10 @@ export const dynamic = "force-dynamic";
 
 export default async function NewPlotPage() {
   await requireEditor();
+  const haciendas = await prisma.hacienda.findMany({
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
+  });
   return (
     <div>
       <Link
@@ -19,7 +24,7 @@ export default async function NewPlotPage() {
       <h1 className="mb-5 text-2xl font-bold tracking-tight text-slate-900">
         Nuevo potrero
       </h1>
-      <PlotForm action={createPlot} submitLabel="Crear potrero" />
+      <PlotForm action={createPlot} haciendas={haciendas} submitLabel="Crear potrero" />
     </div>
   );
 }

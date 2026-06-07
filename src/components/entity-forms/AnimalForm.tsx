@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Animal, Lot, Sale } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, SubmitButton } from "@/components/forms";
+import { RanchSelect } from "@/components/RanchSelect";
 import { toDateInput } from "@/lib/utils";
 
 const SPECIES = ["bovino", "ovino", "caprino", "equino", "porcino"];
@@ -12,12 +13,14 @@ export function AnimalForm({
   animal,
   lots,
   sales,
+  haciendas,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   animal?: Animal | null;
   lots: Lot[];
   sales: Sale[];
+  haciendas: { id: number; name: string }[];
   submitLabel: string;
 }) {
   return (
@@ -41,12 +44,8 @@ export function AnimalForm({
               ))}
             </Select>
           </Field>
-          <Field label="Hacienda / Rancho">
-            <Input
-              name="ranch"
-              defaultValue={animal?.ranch ?? ""}
-              placeholder="Nombre de la hacienda"
-            />
+          <Field label="Hacienda">
+            <RanchSelect haciendas={haciendas} defaultValue={animal?.ranch} />
           </Field>
           <Field label="Estatus">
             <Select name="status" defaultValue={animal?.status ?? "engorde"}>

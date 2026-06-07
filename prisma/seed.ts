@@ -24,6 +24,14 @@ async function main() {
   console.log(`✔ Usuario administrador listo: ${user.email}`);
   console.log(`  Contraseña: ${password}`);
   console.log("  (cámbiala con SEED_ADMIN_PASSWORD antes de producción)");
+
+  // Hacienda inicial del sistema.
+  const hacienda = await prisma.hacienda.upsert({
+    where: { name: "Nueva Joya" },
+    update: {},
+    create: { name: "Nueva Joya" },
+  });
+  console.log(`✔ Hacienda inicial lista: ${hacienda.name}`);
 }
 
 main()
