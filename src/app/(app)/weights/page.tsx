@@ -4,12 +4,15 @@ import { PageHeader, EmptyState, TableWrap, Th, Td } from "@/components/ui";
 import { ScaleIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 
 export const dynamic = "force-dynamic";
 
 export default async function WeightsPage() {
+  const activeHacienda = await getActiveHacienda();
   const [weights, unit] = await Promise.all([
     prisma.weight.findMany({
+      where: activeHacienda ? { animal: { ranch: activeHacienda } } : undefined,
       orderBy: { date: "desc" },
       take: 200,
       include: { animal: true },
@@ -21,7 +24,9 @@ export default async function WeightsPage() {
     <div>
       <PageHeader
         title="Pesos"
-        subtitle="Últimos registros de peso"
+        subtitle={`Últimos registros de peso${
+          activeHacienda ? ` · ${activeHacienda}` : ""
+        }`}
         action={{ href: "/weights/new", label: "Registrar peso" }}
       />
 
