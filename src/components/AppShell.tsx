@@ -19,11 +19,19 @@ import {
   LogoutIcon,
   LeafIcon,
   SidebarIcon,
+  UsersIcon,
 } from "@/components/icons";
 
 const SIDEBAR_STORAGE_KEY = "sidebar-collapsed";
 
-const NAV = [
+type NavItem = {
+  href: string;
+  label: string;
+  Icon: (props: { width?: number; height?: number }) => React.ReactNode;
+  exact?: boolean;
+};
+
+const NAV: NavItem[] = [
   { href: "/", label: "Tablero", Icon: DashboardIcon, exact: true },
   { href: "/animals", label: "Animales", Icon: CowIcon },
   { href: "/lots", label: "Lotes", Icon: LotsIcon },
@@ -58,10 +66,19 @@ export function AppShell({
 
   // En modo "por lote" los pesos se registran a nivel de lote, así que se oculta
   // la sección de Animales. La barra inferior móvil usa los 5 primeros destinos.
-  const nav = NAV.filter(
+  const baseNav = NAV.filter(
     (item) => !(item.href === "/animals" && activeWeightMode === "lot"),
   );
-  const mobileNav = nav.slice(0, 5);
+  // La gestión de usuarios solo es visible para administradores y se mantiene
+  // fuera de la barra inferior móvil (que se limita a 5 destinos).
+  const nav: NavItem[] =
+    user?.role === "admin"
+      ? [
+          ...baseNav,
+          { href: "/usuarios", label: "Usuarios", Icon: UsersIcon },
+        ]
+      : baseNav;
+  const mobileNav = baseNav.slice(0, 5);
 
   // Restaura la preferencia de la barra lateral guardada.
   useEffect(() => {

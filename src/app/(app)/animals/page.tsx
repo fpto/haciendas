@@ -5,6 +5,7 @@ import { CowIcon, SearchIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -31,10 +32,12 @@ export default async function AnimalsPage({
 }) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
-  const [unit, activeHacienda] = await Promise.all([
+  const [unit, activeHacienda, user] = await Promise.all([
     getWeightUnit(),
     getActiveHacienda(),
+    getCurrentUser(),
   ]);
+  const canEdit = isEditor(user?.role);
   const { rows, total } = await getLatestWeights({
     search: sp.search,
     ranch: activeHacienda ?? undefined,
@@ -67,7 +70,7 @@ export default async function AnimalsPage({
         subtitle={`${fmtNumber(total)} en engorde · pesos más recientes${
           activeHacienda ? ` · ${activeHacienda}` : ""
         }`}
-        action={{ href: "/animals/new", label: "Nuevo animal" }}
+        action={canEdit ? { href: "/animals/new", label: "Nuevo animal" } : undefined}
       />
 
       {/* Filtros */}
@@ -117,7 +120,7 @@ export default async function AnimalsPage({
           icon={<CowIcon width={26} height={26} />}
           title="Sin resultados"
           description="No hay animales en engorde que coincidan. Registra uno nuevo o ajusta la búsqueda."
-          action={{ href: "/animals/new", label: "Nuevo animal" }}
+          action={canEdit ? { href: "/animals/new", label: "Nuevo animal" } : undefined}
         />
       ) : (
         <>

@@ -3,21 +3,26 @@ import { prisma } from "@/lib/db";
 import { PageHeader, EmptyState, TableWrap, Th, Td } from "@/components/ui";
 import { CalendarIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
+import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function PlotEvaluationsPage() {
-  const evaluations = await prisma.plotEvaluation.findMany({
-    orderBy: { date: "desc" },
-    include: { plot: true },
-  });
+  const [evaluations, user] = await Promise.all([
+    prisma.plotEvaluation.findMany({
+      orderBy: { date: "desc" },
+      include: { plot: true },
+    }),
+    getCurrentUser(),
+  ]);
+  const canEdit = isEditor(user?.role);
 
   return (
     <div>
       <PageHeader
         title="Evaluaciones de potrero"
         subtitle={`${fmtNumber(evaluations.length)} evaluaciones`}
-        action={{ href: "/plot_evaluations/new", label: "Nueva evaluación" }}
+        action={canEdit ? { href: "/plot_evaluations/new", label: "Nueva evaluación" } : undefined}
       />
 
       {evaluations.length === 0 ? (
@@ -25,7 +30,7 @@ export default async function PlotEvaluationsPage() {
           icon={<CalendarIcon width={26} height={26} />}
           title="Sin evaluaciones"
           description="Registra evaluaciones de agua, pasto y cercas de tus potreros."
-          action={{ href: "/plot_evaluations/new", label: "Nueva evaluación" }}
+          action={canEdit ? { href: "/plot_evaluations/new", label: "Nueva evaluación" } : undefined}
         />
       ) : (
         <TableWrap>
