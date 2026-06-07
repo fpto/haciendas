@@ -42,6 +42,30 @@ export async function updateLot(id: number, formData: FormData) {
   redirect(`/lots/${id}?notice=Lote actualizado correctamente`);
 }
 
+// Registra la venta de un lote desde la vista de Ventas (modo "Por Lote"):
+// marca el lote como vendido y guarda los datos de la venta.
+export async function sellLot(formData: FormData) {
+  await requireEditor();
+  const id = int(formData.get("lot_id"));
+  if (id === null) {
+    redirect("/sales/new?error=Selecciona un lote para vender");
+  }
+  await prisma.lot.update({
+    where: { id },
+    data: {
+      status: "sold",
+      saleDate: date(formData.get("sale_date")),
+      buyer: str(formData.get("buyer")),
+      salePrice: float(formData.get("sale_price")),
+      saleComment: str(formData.get("sale_comment")),
+    },
+  });
+  revalidatePath("/sales");
+  revalidatePath("/lots");
+  revalidatePath(`/lots/${id}`);
+  redirect("/sales?notice=Venta del lote registrada correctamente");
+}
+
 export async function deleteLot(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("id"));

@@ -12,7 +12,9 @@ import {
   CowIcon,
   PlusIcon,
   ScaleIcon,
+  MoneyIcon,
 } from "@/components/icons";
+import { getActiveWeightMode } from "@/lib/activeWeightMode";
 import { fmtNumber, fmtDate, fmtMoney } from "@/lib/utils";
 import {
   getWeightUnit,
@@ -62,7 +64,7 @@ export default async function LotShowPage({
   const lotId = Number(id);
   if (Number.isNaN(lotId)) notFound();
 
-  const [lot, user, unit] = await Promise.all([
+  const [lot, user, unit, weightMode] = await Promise.all([
     prisma.lot.findUnique({
       where: { id: lotId },
       include: {
@@ -73,11 +75,14 @@ export default async function LotShowPage({
     }),
     getCurrentUser(),
     getWeightUnit(),
+    getActiveWeightMode(),
   ]);
   if (!lot) notFound();
 
   const canEdit = isEditor(user?.role);
   const canDelete = isAdmin(user?.role);
+  // En modo "Por Lote", un lote en crecimiento se puede vender desde su ficha.
+  const canSell = canEdit && weightMode === "lot" && lot.status === "growing";
 
   // El peso promedio y el número de animales del lote provienen del último pesado.
   const latest = lot.weighings[0] ?? null;
@@ -110,6 +115,14 @@ export default async function LotShowPage({
           <ArrowLeftIcon width={16} height={16} /> Lotes
         </Link>
         <div className="flex items-center gap-2">
+          {canSell && (
+            <Link
+              href={`/sales/new?lot_id=${lot.id}`}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+            >
+              <MoneyIcon width={16} height={16} /> Vender lote
+            </Link>
+          )}
           {canEdit && (
             <Link
               href={`/lots/${lot.id}/edit`}

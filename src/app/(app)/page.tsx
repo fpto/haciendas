@@ -52,10 +52,8 @@ export default async function DashboardPage() {
   ]);
 
   // En modo "Por Lote" la pantalla de animales individuales se oculta, así que
-  // las métricas de bovinos enlazan a los lotes en su lugar. Las ventas también
-  // se gestionan desde los lotes (estado "vendido").
+  // las métricas de bovinos enlazan a los lotes en su lugar.
   const bovineHref = weightMode === "lot" ? "/lots" : "/animals";
-  const salesHref = weightMode === "lot" ? "/lots" : "/sales";
 
   // Marcadores del mapa: potreros con geometría + número de cabezas en cada uno.
   // Los lotes vendidos o destruidos ya no aportan cabezas al inventario activo.
@@ -159,7 +157,7 @@ export default async function DashboardPage() {
             label="Ventas"
             value={fmtNumber(stats.totalSales)}
             icon={<MoneyIcon width={22} height={22} />}
-            href={salesHref}
+            href="/sales"
           />
         </div>
       </section>

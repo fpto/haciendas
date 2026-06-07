@@ -114,8 +114,15 @@ En las haciendas configuradas **Por Lote**, cada lote tiene un **estado**:
   pérdida) y deja el inventario activo.
 
 El estado se elige al crear o editar un lote y se muestra como etiqueta en la
-lista y en la ficha del lote. En modo Por Lote, la tarjeta **Ventas** del tablero
-cuenta los lotes vendidos.
+lista y en la ficha del lote.
+
+En modo Por Lote la sección **Ventas** trabaja por lote (no por animales): lista
+los lotes vendidos y, desde **Vender lote**, permite **elegir un lote en
+crecimiento** y capturar la venta, lo que marca el lote como vendido. También se
+puede vender desde el botón **Vender lote** de la ficha del lote. La función de
+venta por animales (con ROI) solo aparece en haciendas configuradas Por Animal.
+El detalle de cada venta por lote vive en la ficha del lote, y la tarjeta
+**Ventas** del tablero cuenta los lotes vendidos.
 
 ## 🔐 Roles y usuarios
 
