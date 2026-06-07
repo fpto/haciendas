@@ -14,9 +14,43 @@ import {
   ScaleIcon,
 } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
-import { getWeightUnit, fmtWeight } from "@/lib/units";
+import {
+  getWeightUnit,
+  fmtWeight,
+  convertFromKg,
+  gainLabel,
+  type WeightUnit,
+} from "@/lib/units";
 
 export const dynamic = "force-dynamic";
+
+// Ganancia diaria de peso (GDP) en kg/día entre dos pesados consecutivos.
+// `current` es el pesado más reciente y `previous` el anterior.
+function dailyGainKg(
+  current: { averageWeight: number | null; date: Date | null },
+  previous: { averageWeight: number | null; date: Date | null },
+): number | null {
+  if (
+    current.averageWeight == null ||
+    previous.averageWeight == null ||
+    !current.date ||
+    !previous.date
+  )
+    return null;
+  const days =
+    (new Date(current.date).getTime() - new Date(previous.date).getTime()) /
+    86_400_000;
+  if (days <= 0) return null;
+  return (current.averageWeight - previous.averageWeight) / days;
+}
+
+// Formatea una GDP (en kg/día) a la unidad preferida, con signo explícito.
+function fmtGain(kgPerDay: number | null, unit: WeightUnit): string {
+  const v = convertFromKg(kgPerDay, unit);
+  if (v === null) return "—";
+  const sign = v > 0 ? "+" : "";
+  return `${sign}${fmtNumber(v, 2)} ${gainLabel(unit)}`;
+}
 
 export default async function LotShowPage({
   params,
@@ -46,6 +80,13 @@ export default async function LotShowPage({
 
   // El peso promedio y el número de animales del lote provienen del último pesado.
   const latest = lot.weighings[0] ?? null;
+
+  // GDP del lote: ganancia diaria entre el primer y el último pesado registrado.
+  // Solo tiene sentido cuando hay más de un pesado.
+  const oldest =
+    lot.weighings.length > 1 ? lot.weighings[lot.weighings.length - 1] : null;
+  const overallGain =
+    latest && oldest ? dailyGainKg(latest, oldest) : null;
 
   return (
     <div>
@@ -106,6 +147,24 @@ export default async function LotShowPage({
                   ),
               },
               { label: "Último pesado", value: fmtDate(latest?.date) },
+              ...(overallGain !== null
+                ? [
+                    {
+                      label: "GDP (ganancia diaria)",
+                      value: (
+                        <span
+                          className={
+                            overallGain >= 0
+                              ? "font-semibold text-emerald-600"
+                              : "font-semibold text-red-600"
+                          }
+                        >
+                          {fmtGain(overallGain, unit)}
+                        </span>
+                      ),
+                    },
+                  ]
+                : []),
               { label: "Animales registrados", value: <Badge color="slate">{lot.animals.length}</Badge> },
               { label: "Descripción", value: lot.description ?? "—" },
             ]}
@@ -145,18 +204,39 @@ export default async function LotShowPage({
                   <tr>
                     <Th>Fecha</Th>
                     <Th className="text-right">Peso promedio</Th>
+                    {lot.weighings.length > 1 && (
+                      <Th className="text-right">GDP</Th>
+                    )}
                     <Th className="text-right">Animales</Th>
                     <Th>Notas</Th>
                     {canEdit && <Th></Th>}
                   </tr>
                 </thead>
                 <tbody>
-                  {lot.weighings.map((w) => (
+                  {lot.weighings.map((w, i) => {
+                    // Pesado anterior (más antiguo): la lista está ordenada por
+                    // fecha descendente, así que es el siguiente índice.
+                    const previous = lot.weighings[i + 1];
+                    const gain = previous ? dailyGainKg(w, previous) : null;
+                    return (
                     <tr key={w.id} className="hover:bg-slate-50">
                       <Td>{fmtDate(w.date)}</Td>
                       <Td className="text-right font-semibold">
                         {fmtWeight(w.averageWeight, unit)}
                       </Td>
+                      {lot.weighings.length > 1 && (
+                        <Td
+                          className={
+                            gain === null
+                              ? "text-right text-slate-400"
+                              : gain >= 0
+                                ? "text-right font-medium text-emerald-600"
+                                : "text-right font-medium text-red-600"
+                          }
+                        >
+                          {gain === null ? "—" : fmtGain(gain, unit)}
+                        </Td>
+                      )}
                       <Td className="text-right">{w.animalCount ?? "—"}</Td>
                       <Td className="max-w-xs truncate text-slate-500">
                         {w.note ?? "—"}
@@ -172,7 +252,8 @@ export default async function LotShowPage({
                         </Td>
                       )}
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </TableWrap>
             )}
