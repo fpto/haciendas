@@ -42,7 +42,7 @@ export function LotSaleForm({
           <Field label="Comprador">
             <Input name="buyer" />
           </Field>
-          <Field label="Precio de venta" hint="Por kilogramo">
+          <Field label="Precio de venta" hint="Por libra">
             <Input type="number" step="0.01" min="0" name="sale_price" />
           </Field>
         </div>

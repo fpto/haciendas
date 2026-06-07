@@ -97,7 +97,7 @@ La app puede mostrar y capturar pesos en **kilogramos** o **libras**, con
 **libras como unidad por defecto**. El conmutador está en la barra de
 navegación. Internamente los pesos se almacenan siempre en kilogramos; la
 conversión se aplica solo a la visualización y la captura. Los importes en
-dinero ($/kg, totales) no cambian con la unidad.
+dinero (precio por libra, totales) no cambian con la unidad.
 
 ## 🏷️ Estado y venta del lote (modo Por Lote)
 

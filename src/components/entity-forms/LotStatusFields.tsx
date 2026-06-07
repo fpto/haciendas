@@ -51,7 +51,7 @@ export function LotStatusFields({ lot }: { lot?: Lot | null }) {
             <Field label="Comprador">
               <Input name="buyer" defaultValue={lot?.buyer ?? ""} />
             </Field>
-            <Field label="Precio de venta" hint="Por kilogramo">
+            <Field label="Precio de venta" hint="Por libra">
               <Input
                 type="number"
                 step="0.01"
