@@ -46,7 +46,7 @@ de forma nativa en **Vercel**, con una interfaz **moderna y mobile-first**.
    npm run db:seed
    ```
 
-   Credenciales por defecto del seed: `admin@haciendas.mx` / `haciendas123`
+   Credenciales por defecto del seed: `admin@haciendashn.com` / `haciendas123`
    (personalízalas con `SEED_ADMIN_EMAIL` y `SEED_ADMIN_PASSWORD`).
 
 4. Arranca el servidor de desarrollo:

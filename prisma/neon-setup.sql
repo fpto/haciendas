@@ -2,7 +2,7 @@
 -- Setup inicial de la base de datos en Neon (Postgres)
 -- Pega TODO este archivo en: Neon Dashboard -> SQL Editor -> Run
 -- Crea las tablas y un usuario administrador:
---   email:    admin@haciendas.mx
+--   email:    admin@haciendashn.com
 --   password: haciendas123   (cámbiala después de entrar)
 -- ============================================================================
 
@@ -146,6 +146,6 @@ ALTER TABLE "weights" ADD CONSTRAINT "weights_animal_id_fkey" FOREIGN KEY ("anim
 -- Usuario administrador inicial (contraseña: haciendas123)
 -- ============================================================================
 INSERT INTO "users" ("first_name","last_name","email","password_digest","role","created_at","updated_at")
-VALUES ('Admin','Haciendas','admin@haciendas.mx','$2a$10$ZMD7BDr9NKiBVElmis4zGOiSOI0Rz5l8HpEWg5bFMEOu8TGyrvTEu','admin', NOW(), NOW())
+VALUES ('Admin','Haciendas','admin@haciendashn.com','$2a$10$ZMD7BDr9NKiBVElmis4zGOiSOI0Rz5l8HpEWg5bFMEOu8TGyrvTEu','admin', NOW(), NOW())
 ON CONFLICT ("email") DO UPDATE
   SET "password_digest" = EXCLUDED."password_digest", "role" = 'admin';
