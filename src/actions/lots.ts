@@ -4,9 +4,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
-import { str, int } from "@/actions/helpers";
+import { str, int, float, date } from "@/actions/helpers";
+import { normalizeLotStatus } from "@/lib/lotStatus";
 
 function lotData(formData: FormData) {
+  const status = normalizeLotStatus(str(formData.get("status")));
+  // Los datos de venta solo se guardan cuando el lote está vendido; al cambiar
+  // a otro estado se limpian para no dejar información obsoleta.
+  const sold = status === "sold";
   return {
     ranch: str(formData.get("ranch")),
     species: str(formData.get("species")),
@@ -14,6 +19,11 @@ function lotData(formData: FormData) {
     name: str(formData.get("name")),
     description: str(formData.get("description")),
     plotId: int(formData.get("plot_id")),
+    status,
+    saleDate: sold ? date(formData.get("sale_date")) : null,
+    buyer: sold ? str(formData.get("buyer")) : null,
+    salePrice: sold ? float(formData.get("sale_price")) : null,
+    saleComment: sold ? str(formData.get("sale_comment")) : null,
   };
 }
 

@@ -6,6 +6,7 @@ import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getActiveWeightMode } from "@/lib/activeWeightMode";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
+import { normalizeLotStatus } from "@/lib/lotStatus";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { PlotsOverviewMap, type PlotMarker } from "@/components/PlotsOverviewMap";
 import {
@@ -37,6 +38,7 @@ export default async function DashboardPage() {
         boundaries: true,
         lots: {
           select: {
+            status: true,
             _count: { select: { animals: true } },
             weighings: {
               orderBy: [{ date: "desc" }, { id: "desc" }],
@@ -50,18 +52,20 @@ export default async function DashboardPage() {
   ]);
 
   // En modo "Por Lote" la pantalla de animales individuales se oculta, así que
-  // las métricas de bovinos enlazan a los lotes en su lugar.
+  // las métricas de bovinos enlazan a los lotes en su lugar. Las ventas también
+  // se gestionan desde los lotes (estado "vendido").
   const bovineHref = weightMode === "lot" ? "/lots" : "/animals";
+  const salesHref = weightMode === "lot" ? "/lots" : "/sales";
 
   // Marcadores del mapa: potreros con geometría + número de cabezas en cada uno.
+  // Los lotes vendidos o destruidos ya no aportan cabezas al inventario activo.
   const plotMarkers: PlotMarker[] = plots
     .map((p) => {
       const ring = parseGeoJsonRing(p.boundaries);
       if (!ring) return null;
-      const animalCount = p.lots.reduce(
-        (sum, lot) => sum + lotHeadcount(lot),
-        0,
-      );
+      const animalCount = p.lots
+        .filter((lot) => normalizeLotStatus(lot.status) === "growing")
+        .reduce((sum, lot) => sum + lotHeadcount(lot), 0);
       return {
         id: p.id,
         label: `Potrero ${p.number ?? p.id}`,
@@ -155,7 +159,7 @@ export default async function DashboardPage() {
             label="Ventas"
             value={fmtNumber(stats.totalSales)}
             icon={<MoneyIcon width={22} height={22} />}
-            href="/sales"
+            href={salesHref}
           />
         </div>
       </section>

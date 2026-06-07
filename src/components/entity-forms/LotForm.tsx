@@ -3,6 +3,7 @@ import type { Lot, Plot } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
 import { RanchSelect } from "@/components/RanchSelect";
+import { LotStatusFields } from "@/components/entity-forms/LotStatusFields";
 
 const SPECIES = ["bovino", "ovino", "caprino", "equino", "porcino"];
 
@@ -56,6 +57,7 @@ export function LotForm({
         <Field label="Descripción">
           <Textarea name="description" defaultValue={lot?.description ?? ""} />
         </Field>
+        <LotStatusFields lot={lot} />
         <div className="flex items-center gap-3 pt-1">
           <SubmitButton>{submitLabel}</SubmitButton>
           <Link

@@ -99,6 +99,24 @@ navegación. Internamente los pesos se almacenan siempre en kilogramos; la
 conversión se aplica solo a la visualización y la captura. Los importes en
 dinero ($/kg, totales) no cambian con la unidad.
 
+## 🏷️ Estado y venta del lote (modo Por Lote)
+
+En las haciendas configuradas **Por Lote**, cada lote tiene un **estado**:
+
+- **En crecimiento** (`growing`): el lote sigue en engorde. Es el estado por
+  defecto y el único que cuenta como **inventario activo** en las métricas de
+  bovinos del tablero y en el número de cabezas del mapa de potreros.
+- **Vendido** (`sold`): al marcar el lote como vendido se capturan los **datos de
+  la venta** (fecha, comprador, precio por kg y comentario). El total de la venta
+  se calcula con el peso total del último pesado (peso promedio × cabezas) por el
+  precio por kg.
+- **Destruido** (`destroyed`): el lote se dio de baja (muerte, decomiso u otra
+  pérdida) y deja el inventario activo.
+
+El estado se elige al crear o editar un lote y se muestra como etiqueta en la
+lista y en la ficha del lote. En modo Por Lote, la tarjeta **Ventas** del tablero
+cuenta los lotes vendidos.
+
 ## 🔐 Roles y usuarios
 
 La aplicación maneja **dos tipos de usuario**:

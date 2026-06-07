@@ -60,6 +60,16 @@ model Lot {
   name        String?
   description String?
   plotId      Int?     @map("plot_id")
+  // Estado del lote en modo "Por Lote": "growing" (en crecimiento), "sold"
+  // (vendido) o "destroyed" (destruido). Solo los lotes en crecimiento cuentan
+  // como inventario activo en engorde.
+  status      String?  @default("growing")
+  // Datos de la venta del lote (solo aplican cuando status = "sold"). El precio
+  // de venta se guarda por kilogramo, igual que en las ventas por animal.
+  saleDate    DateTime? @db.Date  @map("sale_date")
+  buyer       String?
+  salePrice   Float?    @map("sale_price")
+  saleComment String?   @map("sale_comment")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 

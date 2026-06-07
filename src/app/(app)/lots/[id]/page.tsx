@@ -13,7 +13,7 @@ import {
   PlusIcon,
   ScaleIcon,
 } from "@/components/icons";
-import { fmtNumber, fmtDate } from "@/lib/utils";
+import { fmtNumber, fmtDate, fmtMoney } from "@/lib/utils";
 import {
   getWeightUnit,
   fmtWeight,
@@ -21,6 +21,7 @@ import {
   gainLabel,
   type WeightUnit,
 } from "@/lib/units";
+import { lotStatusLabel, lotStatusBadgeColor } from "@/lib/lotStatus";
 
 export const dynamic = "force-dynamic";
 
@@ -88,6 +89,17 @@ export default async function LotShowPage({
   const overallGain =
     latest && oldest ? dailyGainKg(latest, oldest) : null;
 
+  // Total de la venta del lote: precio por kg × peso total del último pesado
+  // (peso promedio × número de cabezas). Solo aplica a lotes vendidos.
+  const saleWeightKg =
+    latest?.averageWeight != null && latest?.animalCount != null
+      ? latest.averageWeight * latest.animalCount
+      : null;
+  const saleTotal =
+    lot.salePrice != null && saleWeightKg != null
+      ? lot.salePrice * saleWeightKg
+      : null;
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -110,15 +122,28 @@ export default async function LotShowPage({
         </div>
       </div>
 
-      <h1 className="mb-6 text-2xl font-bold tracking-tight text-slate-900">
-        {lot.name || `Lote ${lot.number}`}
-      </h1>
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          {lot.name || `Lote ${lot.number}`}
+        </h1>
+        <Badge color={lotStatusBadgeColor(lot.status)}>
+          {lotStatusLabel(lot.status)}
+        </Badge>
+      </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <DescList
             items={[
               { label: "Número", value: lot.number ?? "—" },
+              {
+                label: "Estado",
+                value: (
+                  <Badge color={lotStatusBadgeColor(lot.status)}>
+                    {lotStatusLabel(lot.status)}
+                  </Badge>
+                ),
+              },
               { label: "Hacienda", value: lot.ranch ?? "—" },
               {
                 label: "Potrero",
@@ -172,6 +197,35 @@ export default async function LotShowPage({
         </Card>
 
         <div className="lg:col-span-2 space-y-8">
+          {lot.status === "sold" && (
+            <div>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+                Venta del lote
+              </h2>
+              <Card>
+                <DescList
+                  items={[
+                    { label: "Comprador", value: lot.buyer ?? "—" },
+                    { label: "Fecha de venta", value: fmtDate(lot.saleDate) },
+                    {
+                      label: "Precio de venta",
+                      value:
+                        lot.salePrice != null
+                          ? `${fmtMoney(lot.salePrice)}/kg`
+                          : "—",
+                    },
+                    {
+                      label: "Peso total vendido",
+                      value: fmtWeight(saleWeightKg, unit, 0),
+                    },
+                    { label: "Total de la venta", value: fmtMoney(saleTotal) },
+                    { label: "Comentario", value: lot.saleComment ?? "—" },
+                  ]}
+                />
+              </Card>
+            </div>
+          )}
+
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">

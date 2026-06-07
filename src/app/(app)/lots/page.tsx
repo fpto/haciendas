@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { PageHeader, EmptyState, TableWrap, Th, Td, Card } from "@/components/ui";
+import { PageHeader, EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { LotsIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
+import { lotStatusLabel, lotStatusBadgeColor } from "@/lib/lotStatus";
 import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
@@ -53,14 +54,17 @@ export default async function LotsPage() {
               return (
                 <Link key={lot.id} href={`/lots/${lot.id}`}>
                   <Card className="p-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       <p className="font-bold text-slate-900">
                         {lot.name || `Lote ${lot.number}`}
                       </p>
-                      <span className="text-xs text-slate-400">
-                        {latest?.animalCount ?? lot._count.animals} cabezas
-                      </span>
+                      <Badge color={lotStatusBadgeColor(lot.status)}>
+                        {lotStatusLabel(lot.status)}
+                      </Badge>
                     </div>
+                    <p className="mt-0.5 text-xs text-slate-400">
+                      {latest?.animalCount ?? lot._count.animals} cabezas
+                    </p>
                     <p className="text-xs text-slate-500">
                       {[
                         lot.ranch,
@@ -94,6 +98,7 @@ export default async function LotsPage() {
               <thead>
                 <tr>
                   <Th>Lote</Th>
+                  <Th>Estado</Th>
                   <Th>Hacienda</Th>
                   <Th>Potrero</Th>
                   <Th>Especie</Th>
@@ -110,6 +115,11 @@ export default async function LotsPage() {
                     <tr key={lot.id} className="hover:bg-slate-50">
                       <Td className="font-semibold text-slate-900">
                         {lot.name || lot.number || `#${lot.id}`}
+                      </Td>
+                      <Td>
+                        <Badge color={lotStatusBadgeColor(lot.status)}>
+                          {lotStatusLabel(lot.status)}
+                        </Badge>
                       </Td>
                       <Td>{lot.ranch ?? "—"}</Td>
                       <Td>

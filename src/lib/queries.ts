@@ -49,11 +49,19 @@ export async function getDashboardStats(
   const saleWhere = activeRanch
     ? { animals: { some: { ranch: activeRanch } } }
     : undefined;
+  // En modo "Por Lote" las ventas son lotes con estado "vendido"; en modo "Por
+  // Animal" son los registros de venta (tabla sales).
+  const salesPromise =
+    mode === "lot"
+      ? prisma.lot.count({
+          where: { ...(activeRanch ? { ranch: activeRanch } : {}), status: "sold" },
+        })
+      : prisma.sale.count({ where: saleWhere });
   const [totalAnimals, totalLots, totalPlots, totalSales] = await Promise.all([
     prisma.animal.count({ where: animalWhere }),
     prisma.lot.count({ where: animalWhere }),
     prisma.plot.count({ where: animalWhere }),
-    prisma.sale.count({ where: saleWhere }),
+    salesPromise,
   ]);
 
   return {
@@ -192,7 +200,8 @@ async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {
     JOIN (
       SELECT lot_id, MIN(date) AS first_date FROM lot_weighings GROUP BY lot_id
     ) AS firsts ON firsts.lot_id = lots.id
-    WHERE lots.species = 'bovino'${ranchClause}
+    WHERE lots.species = 'bovino'
+      AND COALESCE(lots.status, 'growing') = 'growing'${ranchClause}
   `,
     ...params,
   );
@@ -206,7 +215,8 @@ async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {
     JOIN lot_weighings latest ON latest.lot_id = lots.id AND latest.date = dates.latest_date
     JOIN lot_weighings prev ON prev.lot_id = lots.id AND prev.date = dates.before_date
     WHERE (dates.latest_date - dates.before_date) > 0
-      AND lots.species = 'bovino'${ranchClause}
+      AND lots.species = 'bovino'
+      AND COALESCE(lots.status, 'growing') = 'growing'${ranchClause}
   `,
     ...params,
   );
