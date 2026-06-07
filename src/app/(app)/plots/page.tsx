@@ -4,6 +4,7 @@ import { getLatestPlotScores } from "@/lib/queries";
 import { EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { PlotIcon, ChevronRightIcon, PlusIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +16,10 @@ function scoreColor(avg: number | null): "green" | "amber" | "red" | "slate" {
 }
 
 export default async function PlotsPage() {
+  const activeHacienda = await getActiveHacienda();
   const [plots, scores] = await Promise.all([
     prisma.plot.findMany({
+      where: activeHacienda ? { ranch: activeHacienda } : undefined,
       orderBy: [{ ranch: "asc" }, { number: "asc" }],
       include: { _count: { select: { evaluations: true } } },
     }),
@@ -33,6 +36,7 @@ export default async function PlotsPage() {
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
             {fmtNumber(plots.length)} potreros registrados
+            {activeHacienda ? ` · ${activeHacienda}` : ""}
           </p>
         </div>
         <div className="flex items-center gap-2">

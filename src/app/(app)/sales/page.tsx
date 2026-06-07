@@ -5,6 +5,7 @@ import { PageHeader, EmptyState, TableWrap, Th, Td, Card, Badge } from "@/compon
 import { MoneyIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 
 export const dynamic = "force-dynamic";
 
@@ -14,12 +15,16 @@ function roiColor(roi: number | null): "green" | "red" | "slate" {
 }
 
 export default async function SalesPage() {
+  const activeHacienda = await getActiveHacienda();
   const [sales, stats] = await Promise.all([
     prisma.sale.findMany({
+      where: activeHacienda
+        ? { animals: { some: { ranch: activeHacienda } } }
+        : undefined,
       orderBy: { date: "desc" },
       include: { _count: { select: { animals: true } } },
     }),
-    getSaleStats(),
+    getSaleStats(activeHacienda ?? undefined),
   ]);
   const unit = await getWeightUnit();
   const statBySale = new Map(stats.map((s) => [s.sale_id, s]));
@@ -28,7 +33,9 @@ export default async function SalesPage() {
     <div>
       <PageHeader
         title="Ventas"
-        subtitle={`${fmtNumber(sales.length)} ventas registradas`}
+        subtitle={`${fmtNumber(sales.length)} ventas registradas${
+          activeHacienda ? ` · ${activeHacienda}` : ""
+        }`}
         action={{ href: "/sales/new", label: "Nueva venta" }}
       />
 

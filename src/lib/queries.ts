@@ -19,11 +19,19 @@ export type DashboardStats = {
   totalSales: number;
 };
 
-export async function getDashboardStats(): Promise<DashboardStats> {
+export async function getDashboardStats(
+  ranch?: string,
+): Promise<DashboardStats> {
+  // Filtro opcional por hacienda activa (placeholder $1 sobre animals.ranch).
+  const activeRanch = ranch?.trim() || undefined;
+  const ranchClause = activeRanch ? ` AND animals.ranch = $1` : "";
+  const params: unknown[] = activeRanch ? [activeRanch] : [];
+
   // Peso promedio y conteo por especie (solo animales en engorde).
   const avgWeight = await prisma.$queryRawUnsafe<
     { species: string; count: number; average_weight: number }[]
-  >(`
+  >(
+    `
     SELECT animals.species AS species,
            COUNT(DISTINCT animals.id)::float8 AS count,
            AVG(weights.weight)::float8 AS average_weight
@@ -40,14 +48,17 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       GROUP BY animal_id
     ) AS dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
     JOIN weights w2 ON w2.animal_id = dates.animal_id AND w2.date = dates.before_date
-    WHERE animals.status = 'engorde'
+    WHERE animals.status = 'engorde'${ranchClause}
     GROUP BY animals.species
-  `);
+  `,
+    ...params,
+  );
 
   // Ganancia diaria de peso (GDP) por especie.
   const dailyGain = await prisma.$queryRawUnsafe<
     { species: string; daily_gain: number }[]
-  >(`
+  >(
+    `
     SELECT animals.species AS species,
            AVG(COALESCE((weights.weight - w2.weight) / NULLIF((dates.latest_date - dates.before_date), 0), 0))::float8 AS daily_gain
     FROM animals
@@ -64,14 +75,17 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     ) AS dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
     JOIN weights w2 ON w2.animal_id = dates.animal_id AND w2.date = dates.before_date
     WHERE (dates.latest_date - dates.before_date) > 0
-      AND animals.status = 'engorde'
+      AND animals.status = 'engorde'${ranchClause}
     GROUP BY animals.species
-  `);
+  `,
+    ...params,
+  );
 
   // Días desde el ingreso (promedio) por especie.
   const daysInRanch = await prisma.$queryRawUnsafe<
     { species: string; days_in_ranch: number }[]
-  >(`
+  >(
+    `
     SELECT animals.species AS species,
            AVG(w.days_in_ranch)::float8 AS days_in_ranch
     FROM animals
@@ -79,19 +93,27 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       SELECT animal_id, date(NOW()) - MIN(weights.date) AS days_in_ranch
       FROM weights GROUP BY animal_id
     ) AS w ON w.animal_id = animals.id
-    WHERE animals.status = 'engorde'
+    WHERE animals.status = 'engorde'${ranchClause}
     GROUP BY animals.species
-  `);
+  `,
+    ...params,
+  );
 
   const bovineAvg = avgWeight.find((r) => r.species === "bovino");
   const bovineGain = dailyGain.find((r) => r.species === "bovino");
   const bovineDays = daysInRanch.find((r) => r.species === "bovino");
 
+  // Conteos de inventario, filtrados por la hacienda activa cuando aplica. Las
+  // ventas se asocian a una hacienda a través de los animales que incluyen.
+  const animalWhere = activeRanch ? { ranch: activeRanch } : undefined;
+  const saleWhere = activeRanch
+    ? { animals: { some: { ranch: activeRanch } } }
+    : undefined;
   const [totalAnimals, totalLots, totalPlots, totalSales] = await Promise.all([
-    prisma.animal.count(),
-    prisma.lot.count(),
-    prisma.plot.count(),
-    prisma.sale.count(),
+    prisma.animal.count({ where: animalWhere }),
+    prisma.lot.count({ where: animalWhere }),
+    prisma.plot.count({ where: animalWhere }),
+    prisma.sale.count({ where: saleWhere }),
   ]);
 
   return {
@@ -140,6 +162,7 @@ const SORT_COLUMNS: Record<string, string> = {
 // Replica Animal.latest_weights + search + sort + paginate + growing (engorde).
 export async function getLatestWeights(opts: {
   search?: string;
+  ranch?: string;
   sort?: string;
   direction?: string;
   page?: number;
@@ -169,11 +192,21 @@ export async function getLatestWeights(opts: {
     WHERE animals.status = 'engorde'
   `;
 
+  // Cláusulas de filtro con placeholders numerados según el orden de `params`.
+  const params: unknown[] = [];
+  let filterClause = "";
+
   const search = opts.search?.trim();
-  const searchClause = search
-    ? ` AND (CAST(animals.animal_number AS text) = $1 OR animals.species ILIKE $1 OR animals.ranch ILIKE $1)`
-    : "";
-  const params: unknown[] = search ? [search] : [];
+  if (search) {
+    params.push(search);
+    filterClause += ` AND (CAST(animals.animal_number AS text) = $${params.length} OR animals.species ILIKE $${params.length} OR animals.ranch ILIKE $${params.length})`;
+  }
+
+  const ranch = opts.ranch?.trim();
+  if (ranch) {
+    params.push(ranch);
+    filterClause += ` AND animals.ranch = $${params.length}`;
+  }
 
   const selectSql = `
     SELECT
@@ -195,12 +228,12 @@ export async function getLatestWeights(opts: {
       animals.status AS status,
       animals.purchase_price AS purchase_price,
       animals.provider AS provider
-    ${base}${searchClause}
+    ${base}${filterClause}
     ORDER BY ${orderBy} ${direction}
     LIMIT ${perPage} OFFSET ${offset}
   `;
 
-  const countSql = `SELECT COUNT(*)::float8 AS total ${base}${searchClause}`;
+  const countSql = `SELECT COUNT(*)::float8 AS total ${base}${filterClause}`;
 
   const rows = await prisma.$queryRawUnsafe<LatestWeightRow[]>(
     selectSql,
@@ -335,8 +368,12 @@ export type SaleStatRow = {
   daily_gain: number | null;
 };
 
-export async function getSaleStats(): Promise<SaleStatRow[]> {
-  const rows = await prisma.$queryRawUnsafe<SaleStatRow[]>(`
+export async function getSaleStats(ranch?: string): Promise<SaleStatRow[]> {
+  const activeRanch = ranch?.trim() || undefined;
+  const ranchClause = activeRanch ? ` WHERE animals.ranch = $1` : "";
+  const params: unknown[] = activeRanch ? [activeRanch] : [];
+  const rows = await prisma.$queryRawUnsafe<SaleStatRow[]>(
+    `
     SELECT
       sales.id AS sale_id,
       sales.date AS date,
@@ -359,10 +396,12 @@ export async function getSaleStats(): Promise<SaleStatRow[]> {
       FROM weights GROUP BY weights.animal_id
     ) AS dates ON dates.animal_id = animals.id
     JOIN weights latest_weight ON latest_weight.animal_id = animals.id AND dates.latest_date = latest_weight.date
-    JOIN weights first_weight ON first_weight.animal_id = animals.id AND dates.first_date = first_weight.date
+    JOIN weights first_weight ON first_weight.animal_id = animals.id AND dates.first_date = first_weight.date${ranchClause}
     GROUP BY sales.id
     ORDER BY sales.date DESC NULLS LAST
-  `);
+  `,
+    ...params,
+  );
   return rows.map((r) => ({
     ...r,
     animal_count: toNum(r.animal_count) ?? 0,

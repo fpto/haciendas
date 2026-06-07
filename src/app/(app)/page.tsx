@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { getDashboardStats } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getWeightUnit, convertFromKg, weightLabel, gainLabel } from "@/lib/units";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
 import { parseGeoJsonRing } from "@/lib/kml";
@@ -19,11 +20,13 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  const activeHacienda = await getActiveHacienda();
   const [stats, user, unit, plots] = await Promise.all([
-    getDashboardStats(),
+    getDashboardStats(activeHacienda ?? undefined),
     getCurrentUser(),
     getWeightUnit(),
     prisma.plot.findMany({
+      where: activeHacienda ? { ranch: activeHacienda } : undefined,
       select: {
         id: true,
         number: true,
@@ -67,7 +70,9 @@ export default async function DashboardPage() {
           Hola{user?.firstName ? `, ${user.firstName}` : ""} 👋
         </h1>
         <p className="mt-0.5 text-sm text-slate-500">
-          Resumen general de tu operación ganadera
+          {activeHacienda
+            ? `Resumen de ${activeHacienda}`
+            : "Resumen general de tu operación ganadera"}
         </p>
       </div>
 

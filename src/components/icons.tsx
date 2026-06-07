@@ -136,6 +136,22 @@ export function ChevronRightIcon(p: IconProps) {
   );
 }
 
+export function ChevronDownIcon(p: IconProps) {
+  return (
+    <svg {...base} {...p}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+export function CheckIcon(p: IconProps) {
+  return (
+    <svg {...base} {...p}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
 export function ArrowLeftIcon(p: IconProps) {
   return (
     <svg {...base} {...p}>
