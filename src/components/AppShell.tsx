@@ -17,7 +17,7 @@ import {
   MenuIcon,
   CloseIcon,
   LogoutIcon,
-  LeafIcon,
+  BullHeadIcon,
   SidebarIcon,
   UsersIcon,
 } from "@/components/icons";
@@ -214,7 +214,7 @@ export function AppShell({
           <MenuIcon />
         </button>
         <Link href="/" className="flex items-center gap-2">
-          <LeafIcon className="text-brand-600" width={22} height={22} />
+          <BullHeadIcon className="text-brand-600" width={22} height={22} />
           <span className="text-lg font-bold text-slate-900">Haciendas</span>
         </Link>
         <div className="ml-auto">
@@ -262,7 +262,7 @@ function Brand() {
       className="flex items-center gap-2.5 px-5 py-4"
     >
       <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white">
-        <LeafIcon width={20} height={20} />
+        <BullHeadIcon width={20} height={20} />
       </span>
       <span className="text-lg font-bold tracking-tight text-slate-900">
         Haciendas
