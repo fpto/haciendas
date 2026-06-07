@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { classNames } from "@/lib/utils";
@@ -17,7 +17,10 @@ import {
   CloseIcon,
   LogoutIcon,
   LeafIcon,
+  SidebarIcon,
 } from "@/components/icons";
+
+const SIDEBAR_STORAGE_KEY = "sidebar-collapsed";
 
 const NAV = [
   { href: "/", label: "Tablero", Icon: DashboardIcon, exact: true },
@@ -48,12 +51,41 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Restaura la preferencia de la barra lateral guardada.
+  useEffect(() => {
+    setCollapsed(localStorage.getItem(SIDEBAR_STORAGE_KEY) === "1");
+  }, []);
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem(SIDEBAR_STORAGE_KEY, next ? "1" : "0");
+      return next;
+    });
+  }
 
   return (
     <div className="min-h-dvh">
       {/* ===== Sidebar desktop ===== */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-white lg:flex">
-        <Brand />
+      <aside
+        className={classNames(
+          "fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-200 lg:flex",
+          collapsed && "lg:-translate-x-full",
+        )}
+      >
+        <div className="flex items-center justify-between pr-2">
+          <Brand />
+          <button
+            onClick={toggleCollapsed}
+            className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            aria-label="Ocultar barra lateral"
+            title="Ocultar barra lateral"
+          >
+            <SidebarIcon width={20} height={20} />
+          </button>
+        </div>
         <nav className="flex-1 space-y-1 px-3 py-4">
           {NAV.map(({ href, label, Icon, exact }) => (
             <Link
@@ -79,6 +111,18 @@ export function AppShell({
         </div>
         <UserFooter user={user} />
       </aside>
+
+      {/* ===== Botón para mostrar la barra (escritorio, cuando está oculta) ===== */}
+      {collapsed && (
+        <button
+          onClick={toggleCollapsed}
+          className="fixed left-4 top-4 z-30 hidden items-center justify-center rounded-lg border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 lg:flex"
+          aria-label="Mostrar barra lateral"
+          title="Mostrar barra lateral"
+        >
+          <SidebarIcon width={20} height={20} />
+        </button>
+      )}
 
       {/* ===== Drawer móvil ===== */}
       {open && (
@@ -146,7 +190,12 @@ export function AppShell({
       </header>
 
       {/* ===== Contenido ===== */}
-      <main className="px-4 pb-24 pt-5 sm:px-6 lg:ml-64 lg:px-10 lg:pb-10 lg:pt-8">
+      <main
+        className={classNames(
+          "px-4 pb-24 pt-5 transition-[margin,padding] duration-200 sm:px-6 lg:px-10 lg:pb-10 lg:pt-8",
+          collapsed ? "lg:ml-0 lg:pt-20" : "lg:ml-64",
+        )}
+      >
         <div className="mx-auto max-w-6xl">{children}</div>
       </main>
 

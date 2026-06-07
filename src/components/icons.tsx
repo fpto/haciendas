@@ -119,6 +119,15 @@ export function LogoutIcon(p: IconProps) {
   );
 }
 
+export function SidebarIcon(p: IconProps) {
+  return (
+    <svg {...base} {...p}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <line x1="9" y1="4" x2="9" y2="20" />
+    </svg>
+  );
+}
+
 export function ChevronRightIcon(p: IconProps) {
   return (
     <svg {...base} {...p}>
