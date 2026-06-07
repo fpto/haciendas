@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { classNames } from "@/lib/utils";
 import type { SessionUser } from "@/lib/auth";
 import { UnitToggle } from "@/components/UnitToggle";
+import { HaciendaSwitcher } from "@/components/HaciendaSwitcher";
 import {
   DashboardIcon,
   CowIcon,
@@ -24,7 +25,6 @@ const SIDEBAR_STORAGE_KEY = "sidebar-collapsed";
 
 const NAV = [
   { href: "/", label: "Tablero", Icon: DashboardIcon, exact: true },
-  { href: "/haciendas", label: "Haciendas", Icon: LeafIcon },
   { href: "/animals", label: "Animales", Icon: CowIcon },
   { href: "/lots", label: "Lotes", Icon: LotsIcon },
   { href: "/plots", label: "Potreros", Icon: PlotIcon },
@@ -43,10 +43,14 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 export function AppShell({
   user,
   weightUnit,
+  haciendas,
+  activeHacienda,
   children,
 }: {
   user: SessionUser | null;
   weightUnit: "kg" | "lb";
+  haciendas: { id: number; name: string }[];
+  activeHacienda: string | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -86,6 +90,7 @@ export function AppShell({
             <SidebarIcon width={20} height={20} />
           </button>
         </div>
+        <HaciendaSwitcher haciendas={haciendas} active={activeHacienda} />
         <nav className="flex-1 space-y-1 px-3 py-4">
           {NAV.map(({ href, label, Icon, exact }) => (
             <Link
@@ -142,6 +147,11 @@ export function AppShell({
                 <CloseIcon />
               </button>
             </div>
+            <HaciendaSwitcher
+              haciendas={haciendas}
+              active={activeHacienda}
+              onNavigate={() => setOpen(false)}
+            />
             <nav className="flex-1 space-y-1 px-3 py-4">
               {NAV.map(({ href, label, Icon, exact }) => (
                 <Link
