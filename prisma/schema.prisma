@@ -57,12 +57,32 @@ model Lot {
   number      String?
   name        String?
   description String?
+  plotId      Int?     @map("plot_id")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  animals Animal[]
+  plot      Plot?         @relation(fields: [plotId], references: [id])
+  animals   Animal[]
+  weighings LotWeighing[]
 
+  @@index([plotId])
   @@map("lots")
+}
+
+model LotWeighing {
+  id            Int       @id @default(autoincrement())
+  lotId         Int?      @map("lot_id")
+  date          DateTime? @db.Date
+  averageWeight Float?    @map("average_weight")
+  animalCount   Int?      @map("animal_count")
+  note          String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  lot Lot? @relation(fields: [lotId], references: [id], onDelete: Cascade)
+
+  @@index([lotId])
+  @@map("lot_weighings")
 }
 
 model PlotEvaluation {
@@ -94,6 +114,7 @@ model Plot {
   updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
   evaluations PlotEvaluation[]
+  lots        Lot[]
 
   @@map("plots")
 }
