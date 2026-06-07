@@ -52,7 +52,7 @@ export default async function WeightsPage() {
                 <Th>Fecha</Th>
                 <Th>Lote</Th>
                 <Th className="text-right">Peso promedio</Th>
-                <Th className="text-right">Animales</Th>
+                <Th className="text-right">Cabezas</Th>
                 <Th>Nota</Th>
                 <Th></Th>
               </tr>
