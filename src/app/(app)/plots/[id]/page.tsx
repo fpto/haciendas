@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser, isAdmin, isEditor } from "@/lib/auth";
 import { deletePlot } from "@/actions/plots";
-import { Card, DescList, TableWrap, Th, Td, EmptyState } from "@/components/ui";
+import { Card, DescList, TableWrap, Th, Td, Badge, EmptyState } from "@/components/ui";
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, PlusIcon, CalendarIcon } from "@/components/icons";
-import { fmtNumber, fmtDate } from "@/lib/utils";
+import { fmtNumber, fmtDate, lotHeadcount } from "@/lib/utils";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { PlotMap } from "@/components/PlotMap";
 
@@ -24,7 +24,19 @@ export default async function PlotShowPage({
   const [plot, user] = await Promise.all([
     prisma.plot.findUnique({
       where: { id: plotId },
-      include: { evaluations: { orderBy: { date: "desc" } } },
+      include: {
+        evaluations: { orderBy: { date: "desc" } },
+        lots: {
+          select: {
+            _count: { select: { animals: true } },
+            weighings: {
+              orderBy: [{ date: "desc" }, { id: "desc" }],
+              take: 1,
+              select: { animalCount: true },
+            },
+          },
+        },
+      },
     }),
     getCurrentUser(),
   ]);
@@ -34,12 +46,19 @@ export default async function PlotShowPage({
   const canDelete = isAdmin(user?.role);
   const ring = parseGeoJsonRing(plot.boundaries);
 
+  // Animales en el potrero: suma del número de animales de los lotes ubicados aquí.
+  const animalCount = plot.lots.reduce((sum, lot) => sum + lotHeadcount(lot), 0);
+
   const details = [
     { label: "Número", value: plot.number ?? "—" },
     { label: "Hacienda", value: plot.ranch ?? "—" },
     {
       label: "Tipo",
       value: <span className="capitalize">{plot.plotType ?? "—"}</span>,
+    },
+    {
+      label: "Animales",
+      value: <Badge color="green">{fmtNumber(animalCount)}</Badge>,
     },
     { label: "Área", value: plot.area ? `${fmtNumber(plot.area, 2)} ha` : "—" },
     { label: "Comentario", value: plot.comment ?? "—" },

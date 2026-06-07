@@ -63,3 +63,14 @@ export function toNum(value: unknown): number | null {
 export function classNames(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
+
+// Número de animales de un lote: se toma del último pesado (animalCount); si el
+// lote aún no tiene pesados, se usa el conteo de animales registrados.
+export function lotHeadcount(lot: {
+  weighings: { animalCount: number | null }[];
+  _count?: { animals: number };
+}): number {
+  const latest = lot.weighings[0];
+  if (latest?.animalCount != null) return latest.animalCount;
+  return lot._count?.animals ?? 0;
+}

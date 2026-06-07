@@ -1,8 +1,11 @@
+import { prisma } from "@/lib/db";
 import { getDashboardStats } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getWeightUnit, convertFromKg, weightLabel, gainLabel } from "@/lib/units";
 import { StatCard, Card } from "@/components/ui";
-import { fmtNumber } from "@/lib/utils";
+import { fmtNumber, lotHeadcount } from "@/lib/utils";
+import { parseGeoJsonRing } from "@/lib/kml";
+import { PlotsOverviewMap, type PlotMarker } from "@/components/PlotsOverviewMap";
 import {
   CowIcon,
   ScaleIcon,
@@ -16,11 +19,46 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [stats, user, unit] = await Promise.all([
+  const [stats, user, unit, plots] = await Promise.all([
     getDashboardStats(),
     getCurrentUser(),
     getWeightUnit(),
+    prisma.plot.findMany({
+      select: {
+        id: true,
+        number: true,
+        boundaries: true,
+        lots: {
+          select: {
+            _count: { select: { animals: true } },
+            weighings: {
+              orderBy: [{ date: "desc" }, { id: "desc" }],
+              take: 1,
+              select: { animalCount: true },
+            },
+          },
+        },
+      },
+    }),
   ]);
+
+  // Marcadores del mapa: potreros con geometría + número de animales en cada uno.
+  const plotMarkers: PlotMarker[] = plots
+    .map((p) => {
+      const ring = parseGeoJsonRing(p.boundaries);
+      if (!ring) return null;
+      const animalCount = p.lots.reduce(
+        (sum, lot) => sum + lotHeadcount(lot),
+        0,
+      );
+      return {
+        id: p.id,
+        label: `Potrero ${p.number ?? p.id}`,
+        ring,
+        animalCount,
+      };
+    })
+    .filter((m): m is PlotMarker => m !== null);
 
   return (
     <div>
@@ -102,6 +140,24 @@ export default async function DashboardPage() {
             href="/sales"
           />
         </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+          Mapa de potreros
+        </h2>
+        {plotMarkers.length === 0 ? (
+          <Card className="p-5">
+            <p className="text-sm text-slate-500">
+              Aún no hay potreros con geometría para mostrar en el mapa. Importa
+              tus potreros desde un archivo KMZ en{" "}
+              <span className="font-semibold text-slate-700">Potreros</span> para
+              verlos aquí con el número de animales en cada uno.
+            </p>
+          </Card>
+        ) : (
+          <PlotsOverviewMap plots={plotMarkers} />
+        )}
       </section>
 
       <Card className="mt-8 p-5">
