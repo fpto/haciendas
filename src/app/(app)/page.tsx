@@ -3,6 +3,7 @@ import { getDashboardStats } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getWeightUnit, convertFromKg, weightLabel, gainLabel } from "@/lib/units";
 import { getActiveHacienda } from "@/lib/activeHacienda";
+import { getActiveWeightMode } from "@/lib/activeWeightMode";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
 import { parseGeoJsonRing } from "@/lib/kml";
@@ -20,9 +21,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const activeHacienda = await getActiveHacienda();
+  const [activeHacienda, weightMode] = await Promise.all([
+    getActiveHacienda(),
+    getActiveWeightMode(),
+  ]);
   const [stats, user, unit, plots] = await Promise.all([
-    getDashboardStats(activeHacienda ?? undefined),
+    getDashboardStats(activeHacienda ?? undefined, weightMode ?? undefined),
     getCurrentUser(),
     getWeightUnit(),
     prisma.plot.findMany({
@@ -167,10 +171,23 @@ export default async function DashboardPage() {
 
       <Card className="mt-8 p-5">
         <p className="text-sm text-slate-500">
-          Las métricas de bovinos consideran únicamente los animales con estatus{" "}
-          <span className="font-semibold text-slate-700">engorde</span> y se
-          calculan a partir de sus dos pesos más recientes. La{" "}
-          <span className="font-semibold text-slate-700">GDP</span> es la
+          {weightMode === "animal" ? (
+            <>
+              Las métricas de bovinos consideran únicamente los animales con
+              estatus{" "}
+              <span className="font-semibold text-slate-700">engorde</span> y se
+              calculan a partir de sus dos pesos más recientes.{" "}
+            </>
+          ) : (
+            <>
+              Las métricas de bovinos se calculan a partir de la información del
+              lote: las cabezas salen del último pesado de cada lote y el peso
+              promedio y la{" "}
+              <span className="font-semibold text-slate-700">GDP</span> se
+              obtienen de las dos pesadas de lote más recientes.{" "}
+            </>
+          )}
+          La <span className="font-semibold text-slate-700">GDP</span> es la
           ganancia diaria de peso ({gainLabel(unit)}).
         </p>
       </Card>

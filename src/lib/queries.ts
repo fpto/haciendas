@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/utils";
+import { type WeightMode } from "@/lib/weightMode";
 
 // ---------------------------------------------------------------------------
 // Consultas SQL crudas portadas desde los modelos de Rails (Animal, Lot, Plot,
@@ -19,13 +20,59 @@ export type DashboardStats = {
   totalSales: number;
 };
 
+// Métricas de bovinos en engorde (cabezas, peso promedio, GDP y días en
+// hacienda) usadas en la cabecera del dashboard.
+type BovineStats = {
+  count: number;
+  averageWeight: number;
+  dailyGain: number;
+  daysInRanch: number;
+};
+
 export async function getDashboardStats(
   ranch?: string,
+  mode: WeightMode = "lot",
 ): Promise<DashboardStats> {
-  // Filtro opcional por hacienda activa (placeholder $1 sobre animals.ranch).
   const activeRanch = ranch?.trim() || undefined;
-  const ranchClause = activeRanch ? ` AND animals.ranch = $1` : "";
-  const params: unknown[] = activeRanch ? [activeRanch] : [];
+
+  // Las métricas de bovinos se derivan de la información del lote (pesadas de
+  // lote) cuando la hacienda está configurada "Por Lote", o de los pesos
+  // individuales de cada animal cuando está "Por Animal".
+  const bovine =
+    mode === "animal"
+      ? await getBovineStatsByAnimal(activeRanch)
+      : await getBovineStatsByLot(activeRanch);
+
+  // Conteos de inventario, filtrados por la hacienda activa cuando aplica. Las
+  // ventas se asocian a una hacienda a través de los animales que incluyen.
+  const animalWhere = activeRanch ? { ranch: activeRanch } : undefined;
+  const saleWhere = activeRanch
+    ? { animals: { some: { ranch: activeRanch } } }
+    : undefined;
+  const [totalAnimals, totalLots, totalPlots, totalSales] = await Promise.all([
+    prisma.animal.count({ where: animalWhere }),
+    prisma.lot.count({ where: animalWhere }),
+    prisma.plot.count({ where: animalWhere }),
+    prisma.sale.count({ where: saleWhere }),
+  ]);
+
+  return {
+    bovineCount: bovine.count,
+    bovineAverageWeight: bovine.averageWeight,
+    bovineDailyGain: bovine.dailyGain,
+    bovineDaysInRanch: bovine.daysInRanch,
+    totalAnimals,
+    totalLots,
+    totalPlots,
+    totalSales,
+  };
+}
+
+// Métricas de bovinos calculadas a partir de los pesos individuales de cada
+// animal (modelo Weight). Se usan en modo "Por Animal".
+async function getBovineStatsByAnimal(ranch?: string): Promise<BovineStats> {
+  const ranchClause = ranch ? ` AND animals.ranch = $1` : "";
+  const params: unknown[] = ranch ? [ranch] : [];
 
   // Peso promedio y conteo por especie (solo animales en engorde).
   const avgWeight = await prisma.$queryRawUnsafe<
@@ -103,28 +150,72 @@ export async function getDashboardStats(
   const bovineGain = dailyGain.find((r) => r.species === "bovino");
   const bovineDays = daysInRanch.find((r) => r.species === "bovino");
 
-  // Conteos de inventario, filtrados por la hacienda activa cuando aplica. Las
-  // ventas se asocian a una hacienda a través de los animales que incluyen.
-  const animalWhere = activeRanch ? { ranch: activeRanch } : undefined;
-  const saleWhere = activeRanch
-    ? { animals: { some: { ranch: activeRanch } } }
-    : undefined;
-  const [totalAnimals, totalLots, totalPlots, totalSales] = await Promise.all([
-    prisma.animal.count({ where: animalWhere }),
-    prisma.lot.count({ where: animalWhere }),
-    prisma.plot.count({ where: animalWhere }),
-    prisma.sale.count({ where: saleWhere }),
-  ]);
+  return {
+    count: toNum(bovineAvg?.count) ?? 0,
+    averageWeight: toNum(bovineAvg?.average_weight) ?? 0,
+    dailyGain: toNum(bovineGain?.daily_gain) ?? 0,
+    daysInRanch: toNum(bovineDays?.days_in_ranch) ?? 0,
+  };
+}
+
+// Métricas de bovinos calculadas a partir de la información del lote (modelo
+// LotWeighing). Se usan en modo "Por Lote": el número de animales sale del
+// conteo del último pesado de cada lote y el peso/GDP se calculan por lote (no
+// por animal), ponderando el peso promedio por las cabezas de cada lote.
+async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {
+  const ranchClause = ranch ? ` AND lots.ranch = $1` : "";
+  const params: unknown[] = ranch ? [ranch] : [];
+
+  // Las dos pesadas de lote más recientes por lote (última y anterior).
+  const latestDates = `
+    SELECT lot_id,
+           MAX(date) AS latest_date,
+           MIN(date) AS before_date
+    FROM lot_weighings lw
+    WHERE (SELECT COUNT(*) FROM lot_weighings f
+           WHERE f.lot_id = lw.lot_id AND f.date > lw.date) < 2
+    GROUP BY lot_id
+  `;
+
+  // Cabezas, peso promedio (ponderado por cabezas) y días en hacienda.
+  const summary = await prisma.$queryRawUnsafe<
+    { count: number; average_weight: number; days_in_ranch: number }[]
+  >(
+    `
+    SELECT
+      SUM(latest.animal_count)::float8 AS count,
+      (SUM(latest.average_weight * latest.animal_count) / NULLIF(SUM(latest.animal_count), 0))::float8 AS average_weight,
+      AVG(date(NOW()) - firsts.first_date)::float8 AS days_in_ranch
+    FROM lots
+    JOIN (${latestDates}) AS dates ON dates.lot_id = lots.id
+    JOIN lot_weighings latest ON latest.lot_id = lots.id AND latest.date = dates.latest_date
+    JOIN (
+      SELECT lot_id, MIN(date) AS first_date FROM lot_weighings GROUP BY lot_id
+    ) AS firsts ON firsts.lot_id = lots.id
+    WHERE lots.species = 'bovino'${ranchClause}
+  `,
+    ...params,
+  );
+
+  // Ganancia diaria de peso (GDP) por lote, promediada entre lotes.
+  const gain = await prisma.$queryRawUnsafe<{ daily_gain: number }[]>(
+    `
+    SELECT AVG(COALESCE((latest.average_weight - prev.average_weight) / NULLIF((dates.latest_date - dates.before_date), 0), 0))::float8 AS daily_gain
+    FROM lots
+    JOIN (${latestDates}) AS dates ON dates.lot_id = lots.id
+    JOIN lot_weighings latest ON latest.lot_id = lots.id AND latest.date = dates.latest_date
+    JOIN lot_weighings prev ON prev.lot_id = lots.id AND prev.date = dates.before_date
+    WHERE (dates.latest_date - dates.before_date) > 0
+      AND lots.species = 'bovino'${ranchClause}
+  `,
+    ...params,
+  );
 
   return {
-    bovineCount: toNum(bovineAvg?.count) ?? 0,
-    bovineAverageWeight: toNum(bovineAvg?.average_weight) ?? 0,
-    bovineDailyGain: toNum(bovineGain?.daily_gain) ?? 0,
-    bovineDaysInRanch: toNum(bovineDays?.days_in_ranch) ?? 0,
-    totalAnimals,
-    totalLots,
-    totalPlots,
-    totalSales,
+    count: toNum(summary[0]?.count) ?? 0,
+    averageWeight: toNum(summary[0]?.average_weight) ?? 0,
+    dailyGain: toNum(gain[0]?.daily_gain) ?? 0,
+    daysInRanch: toNum(summary[0]?.days_in_ranch) ?? 0,
   };
 }
 
