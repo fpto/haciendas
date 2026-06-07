@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS "haciendas" (
   "name" TEXT NOT NULL,
   "location" TEXT,
   "notes" TEXT,
+  "weight_mode" TEXT NOT NULL DEFAULT 'lot',
   "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT "haciendas_pkey" PRIMARY KEY ("id")
