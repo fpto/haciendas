@@ -203,7 +203,16 @@ export default async function LotShowPage({
                     },
                   ]
                 : []),
-              { label: "Animales registrados", value: <Badge color="slate">{lot.animals.length}</Badge> },
+              // En modo "Por Lote" no se gestionan animales individuales, así
+              // que se omite el conteo de animales registrados del lote.
+              ...(weightMode !== "lot"
+                ? [
+                    {
+                      label: "Animales registrados",
+                      value: <Badge color="slate">{lot.animals.length}</Badge>,
+                    },
+                  ]
+                : []),
               { label: "Descripción", value: lot.description ?? "—" },
             ]}
           />
@@ -326,52 +335,56 @@ export default async function LotShowPage({
             )}
           </div>
 
-          <div>
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
-              Animales del lote
-            </h2>
-            {lot.animals.length === 0 ? (
-              <EmptyState
-                icon={<CowIcon width={24} height={24} />}
-                title="Sin animales"
-                description="Asigna animales a este lote desde la ficha de cada animal."
-              />
-            ) : (
-              <TableWrap>
-                <thead>
-                  <tr>
-                    <Th>#</Th>
-                    <Th>Especie</Th>
-                    <Th>Estatus</Th>
-                    <Th></Th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lot.animals.map((a) => (
-                    <tr key={a.id} className="hover:bg-slate-50">
-                      <Td className="font-semibold text-slate-900">
-                        {a.animalNumber ?? a.id}
-                      </Td>
-                      <Td className="capitalize">{a.species ?? "—"}</Td>
-                      <Td>
-                        <Badge color={a.status === "engorde" ? "green" : "slate"}>
-                          {a.status ?? "—"}
-                        </Badge>
-                      </Td>
-                      <Td>
-                        <Link
-                          href={`/animals/${a.id}`}
-                          className="inline-flex text-brand-600"
-                        >
-                          <ChevronRightIcon />
-                        </Link>
-                      </Td>
+          {/* La lista de animales individuales del lote solo aplica en modo
+              "Por Animal"; en modo "Por Lote" se oculta por completo. */}
+          {weightMode !== "lot" && (
+            <div>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+                Animales del lote
+              </h2>
+              {lot.animals.length === 0 ? (
+                <EmptyState
+                  icon={<CowIcon width={24} height={24} />}
+                  title="Sin animales"
+                  description="Asigna animales a este lote desde la ficha de cada animal."
+                />
+              ) : (
+                <TableWrap>
+                  <thead>
+                    <tr>
+                      <Th>#</Th>
+                      <Th>Especie</Th>
+                      <Th>Estatus</Th>
+                      <Th></Th>
                     </tr>
-                  ))}
-                </tbody>
-              </TableWrap>
-            )}
-          </div>
+                  </thead>
+                  <tbody>
+                    {lot.animals.map((a) => (
+                      <tr key={a.id} className="hover:bg-slate-50">
+                        <Td className="font-semibold text-slate-900">
+                          {a.animalNumber ?? a.id}
+                        </Td>
+                        <Td className="capitalize">{a.species ?? "—"}</Td>
+                        <Td>
+                          <Badge color={a.status === "engorde" ? "green" : "slate"}>
+                            {a.status ?? "—"}
+                          </Badge>
+                        </Td>
+                        <Td>
+                          <Link
+                            href={`/animals/${a.id}`}
+                            className="inline-flex text-brand-600"
+                          >
+                            <ChevronRightIcon />
+                          </Link>
+                        </Td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </TableWrap>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

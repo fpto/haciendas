@@ -7,7 +7,7 @@ import { Card, DescList, StatCard } from "@/components/ui";
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, CowIcon, LotsIcon, PlotIcon, SettingsIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
-import { weightModeLabel } from "@/lib/weightMode";
+import { weightModeLabel, normalizeWeightMode } from "@/lib/weightMode";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { HaciendaPlotsMap } from "@/components/HaciendaPlotsMap";
 
@@ -51,6 +51,10 @@ export default async function HaciendaShowPage({
   const canEdit = isEditor(user?.role);
   const canDelete = isAdmin(user?.role);
 
+  // En las haciendas configuradas "Por Lote" no se gestionan animales
+  // individuales, así que se oculta la tarjeta de "Animales".
+  const showAnimals = normalizeWeightMode(hacienda.weightMode) !== "lot";
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -91,14 +95,20 @@ export default async function HaciendaShowPage({
         {hacienda.name}
       </h1>
 
-      <div className="mb-6 grid grid-cols-3 gap-3 sm:gap-4">
-        <StatCard
-          label="Animales"
-          value={fmtNumber(animals)}
-          icon={<CowIcon width={22} height={22} />}
-          href="/animals"
-          accent="brand"
-        />
+      <div
+        className={`mb-6 grid gap-3 sm:gap-4 ${
+          showAnimals ? "grid-cols-3" : "grid-cols-2"
+        }`}
+      >
+        {showAnimals && (
+          <StatCard
+            label="Animales"
+            value={fmtNumber(animals)}
+            icon={<CowIcon width={22} height={22} />}
+            href="/animals"
+            accent="brand"
+          />
+        )}
         <StatCard
           label="Lotes"
           value={fmtNumber(lots)}
