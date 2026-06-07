@@ -138,7 +138,7 @@ export default async function LotShowPage({
                 value: fmtWeight(latest?.averageWeight ?? null, unit),
               },
               {
-                label: "Número de animales",
+                label: "Número de cabezas",
                 value:
                   latest?.animalCount != null ? (
                     <Badge color="green">{latest.animalCount}</Badge>
@@ -191,7 +191,7 @@ export default async function LotShowPage({
               <EmptyState
                 icon={<ScaleIcon width={24} height={24} />}
                 title="Sin pesados"
-                description="Registra el primer pesado del lote con su peso promedio y número de animales."
+                description="Registra el primer pesado del lote con su peso promedio y número de cabezas."
                 action={
                   canEdit
                     ? { href: `/lot_weighings/new?lot_id=${lot.id}`, label: "Nuevo pesado" }
@@ -207,7 +207,7 @@ export default async function LotShowPage({
                     {lot.weighings.length > 1 && (
                       <Th className="text-right">GDP</Th>
                     )}
-                    <Th className="text-right">Animales</Th>
+                    <Th className="text-right">Cabezas</Th>
                     <Th>Notas</Th>
                     {canEdit && <Th></Th>}
                   </tr>

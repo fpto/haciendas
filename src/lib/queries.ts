@@ -159,7 +159,7 @@ async function getBovineStatsByAnimal(ranch?: string): Promise<BovineStats> {
 }
 
 // Métricas de bovinos calculadas a partir de la información del lote (modelo
-// LotWeighing). Se usan en modo "Por Lote": el número de animales sale del
+// LotWeighing). Se usan en modo "Por Lote": el número de cabezas sale del
 // conteo del último pesado de cada lote y el peso/GDP se calculan por lote (no
 // por animal), ponderando el peso promedio por las cabezas de cada lote.
 async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {

@@ -12,7 +12,7 @@ export type PlotMarker = {
 };
 
 // Mapa satelital con TODOS los potreros dibujados y, en el centro de cada uno,
-// un círculo con el número de animales que hay en ese potrero. Leaflet se carga
+// un círculo con el número de cabezas que hay en ese potrero. Leaflet se carga
 // de forma diferida (solo en el cliente) para evitar acceder a `window` en SSR.
 export function PlotsOverviewMap({ plots }: { plots: PlotMarker[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,9 +64,9 @@ export function PlotsOverviewMap({ plots }: { plots: PlotMarker[] }) {
         const pBounds = polygon.getBounds();
         bounds.extend(pBounds);
 
-        // Círculo con el número de animales en el centro del potrero.
-        // Solo se muestra cuando el potrero tiene animales; los potreros
-        // con cero animales no llevan círculo.
+        // Círculo con el número de cabezas en el centro del potrero.
+        // Solo se muestra cuando el potrero tiene cabezas; los potreros
+        // con cero cabezas no llevan círculo.
         if (p.animalCount <= 0) continue;
         const icon = L.divIcon({
           className: "plot-count-marker",
@@ -76,7 +76,7 @@ export function PlotsOverviewMap({ plots }: { plots: PlotMarker[] }) {
         });
         L.marker(pBounds.getCenter(), { icon })
           .addTo(map!)
-          .bindPopup(`<b>${p.label}</b><br/>${p.animalCount} animales`);
+          .bindPopup(`<b>${p.label}</b><br/>${p.animalCount} cabezas`);
       }
 
       if (bounds.isValid()) map.fitBounds(bounds, { padding: [30, 30] });

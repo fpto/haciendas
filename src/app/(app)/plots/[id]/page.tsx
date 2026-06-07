@@ -46,7 +46,7 @@ export default async function PlotShowPage({
   const canDelete = isAdmin(user?.role);
   const ring = parseGeoJsonRing(plot.boundaries);
 
-  // Animales en el potrero: suma del número de animales de los lotes ubicados aquí.
+  // Cabezas en el potrero: suma del número de cabezas de los lotes ubicados aquí.
   const animalCount = plot.lots.reduce((sum, lot) => sum + lotHeadcount(lot), 0);
 
   const details = [
@@ -57,7 +57,7 @@ export default async function PlotShowPage({
       value: <span className="capitalize">{plot.plotType ?? "—"}</span>,
     },
     {
-      label: "Animales",
+      label: "Cabezas",
       value: <Badge color="green">{fmtNumber(animalCount)}</Badge>,
     },
     { label: "Área", value: plot.area ? `${fmtNumber(plot.area, 2)} ha` : "—" },
