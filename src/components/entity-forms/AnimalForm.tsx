@@ -100,7 +100,7 @@ export function AnimalForm({
               defaultValue={toDateInput(animal?.birthday)}
             />
           </Field>
-          <Field label="Precio de compra" hint="$/kg al ingreso">
+          <Field label="Precio de compra" hint="$/lb al ingreso">
             <Input
               type="number"
               step="0.01"
@@ -108,7 +108,7 @@ export function AnimalForm({
               defaultValue={animal?.purchasePrice ?? ""}
             />
           </Field>
-          <Field label="Precio de venta" hint="$/kg a la salida">
+          <Field label="Precio de venta" hint="$/lb a la salida">
             <Input
               type="number"
               step="0.01"

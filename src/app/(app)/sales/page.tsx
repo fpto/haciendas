@@ -99,7 +99,7 @@ async function LotSalesPage() {
                   </p>
                   <div className="mt-3 grid grid-cols-2 gap-2 text-center text-sm">
                     <div className="rounded-lg bg-slate-50 py-1.5">
-                      <p className="text-xs text-slate-400">Precio/kg</p>
+                      <p className="text-xs text-slate-400">Precio/lb</p>
                       <p className="font-semibold">
                         {lot.salePrice != null ? fmtMoney(lot.salePrice) : "—"}
                       </p>
@@ -124,7 +124,7 @@ async function LotSalesPage() {
                   <Th>Comprador</Th>
                   <Th className="text-right">Cabezas</Th>
                   <Th className="text-right">Peso total</Th>
-                  <Th className="text-right">Precio/kg</Th>
+                  <Th className="text-right">Precio/lb</Th>
                   <Th className="text-right">Total venta</Th>
                   <Th></Th>
                 </tr>

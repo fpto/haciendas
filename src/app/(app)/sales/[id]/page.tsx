@@ -129,7 +129,7 @@ export default async function SaleShowPage({
                     <Td className="capitalize">{a.species ?? "—"}</Td>
                     <Td>{a.ranch ?? "—"}</Td>
                     <Td className="text-right">
-                      {a.salePrice ? `${fmtMoney(a.salePrice)}/kg` : "—"}
+                      {a.salePrice ? `${fmtMoney(a.salePrice)}/lb` : "—"}
                     </Td>
                     <Td>
                       <Link

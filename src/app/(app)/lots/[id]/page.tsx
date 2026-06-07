@@ -224,7 +224,7 @@ export default async function LotShowPage({
                       label: "Precio de venta",
                       value:
                         lot.salePrice != null
-                          ? `${fmtMoney(lot.salePrice)}/kg`
+                          ? `${fmtMoney(lot.salePrice)}/lb`
                           : "—",
                     },
                     {

@@ -103,8 +103,8 @@ export default async function AnimalShowPage({
                 { label: "Marca / Arete", value: animal.mark ?? "—" },
                 { label: "Proveedor", value: animal.provider ?? "—" },
                 { label: "Nacimiento", value: fmtDate(animal.birthday) },
-                { label: "Precio compra", value: animal.purchasePrice ? `${fmtMoney(animal.purchasePrice)}/kg` : "—" },
-                { label: "Precio venta", value: animal.salePrice ? `${fmtMoney(animal.salePrice)}/kg` : "—" },
+                { label: "Precio compra", value: animal.purchasePrice ? `${fmtMoney(animal.purchasePrice)}/lb` : "—" },
+                { label: "Precio venta", value: animal.salePrice ? `${fmtMoney(animal.salePrice)}/lb` : "—" },
                 {
                   label: "Venta",
                   value: animal.sale ? (

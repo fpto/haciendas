@@ -15,9 +15,9 @@ export function fmtNumber(
 export function fmtMoney(value: number | null | undefined): string {
   if (value === null || value === undefined || Number.isNaN(Number(value)))
     return "—";
-  return Number(value).toLocaleString("es-MX", {
+  return Number(value).toLocaleString("es-HN", {
     style: "currency",
-    currency: "MXN",
+    currency: "HNL",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
