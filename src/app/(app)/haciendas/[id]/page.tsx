@@ -5,8 +5,9 @@ import { getCurrentUser, isAdmin, isEditor } from "@/lib/auth";
 import { deleteHacienda } from "@/actions/haciendas";
 import { Card, DescList, StatCard } from "@/components/ui";
 import { DeleteButton } from "@/components/DeleteButton";
-import { ArrowLeftIcon, EditIcon, CowIcon, LotsIcon, PlotIcon } from "@/components/icons";
+import { ArrowLeftIcon, EditIcon, CowIcon, LotsIcon, PlotIcon, SettingsIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
+import { weightModeLabel } from "@/lib/weightMode";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { HaciendaPlotsMap } from "@/components/HaciendaPlotsMap";
 
@@ -62,6 +63,14 @@ export default async function HaciendaShowPage({
         <div className="flex items-center gap-2">
           {canEdit && (
             <Link
+              href={`/haciendas/${hacienda.id}/configuracion`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+            >
+              <SettingsIcon width={16} height={16} /> Configuración
+            </Link>
+          )}
+          {canEdit && (
+            <Link
               href={`/haciendas/${hacienda.id}/edit`}
               className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
             >
@@ -111,6 +120,7 @@ export default async function HaciendaShowPage({
           items={[
             { label: "Nombre", value: hacienda.name },
             { label: "Ubicación", value: hacienda.location ?? "—" },
+            { label: "Medición de peso", value: weightModeLabel(hacienda.weightMode) },
             { label: "Notas", value: hacienda.notes ?? "—" },
           ]}
         />

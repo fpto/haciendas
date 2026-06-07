@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str } from "@/actions/helpers";
+import { normalizeWeightMode } from "@/lib/weightMode";
 
 function haciendaData(formData: FormData) {
   return {
@@ -41,6 +42,17 @@ export async function updateHacienda(id: number, formData: FormData) {
   revalidatePath("/haciendas");
   revalidatePath(`/haciendas/${id}`);
   redirect(`/haciendas/${id}?notice=Hacienda actualizada correctamente`);
+}
+
+export async function updateHaciendaConfig(id: number, formData: FormData) {
+  await requireEditor();
+  const weightMode = normalizeWeightMode(str(formData.get("weightMode")));
+  await prisma.hacienda.update({ where: { id }, data: { weightMode } });
+  revalidatePath(`/haciendas/${id}`);
+  revalidatePath(`/haciendas/${id}/configuracion`);
+  redirect(
+    `/haciendas/${id}/configuracion?notice=Configuración guardada correctamente`,
+  );
 }
 
 export async function deleteHacienda(formData: FormData) {
