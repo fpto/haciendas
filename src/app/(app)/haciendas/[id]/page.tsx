@@ -7,6 +7,8 @@ import { Card, DescList, StatCard } from "@/components/ui";
 import { DeleteButton } from "@/components/DeleteButton";
 import { ArrowLeftIcon, EditIcon, CowIcon, LotsIcon, PlotIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
+import { parseGeoJsonRing } from "@/lib/kml";
+import { HaciendaPlotsMap } from "@/components/HaciendaPlotsMap";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +27,25 @@ export default async function HaciendaShowPage({
   ]);
   if (!hacienda) notFound();
 
-  const [animals, lots, plots] = await Promise.all([
+  const [animals, lots, plotRecords] = await Promise.all([
     prisma.animal.count({ where: { ranch: hacienda.name } }),
     prisma.lot.count({ where: { ranch: hacienda.name } }),
-    prisma.plot.count({ where: { ranch: hacienda.name } }),
+    prisma.plot.findMany({
+      where: { ranch: hacienda.name },
+      select: { id: true, number: true, boundaries: true },
+      orderBy: { number: "asc" },
+    }),
   ]);
+  const plots = plotRecords.length;
+
+  // Potreros con linderos válidos para dibujar en el mapa satelital.
+  const mapPlots = plotRecords
+    .map((p) => ({
+      id: p.id,
+      number: p.number,
+      ring: parseGeoJsonRing(p.boundaries),
+    }))
+    .filter((p): p is { id: number; number: string | null; ring: [number, number][] } => p.ring !== null);
 
   const canEdit = isEditor(user?.role);
   const canDelete = isAdmin(user?.role);
@@ -90,7 +106,7 @@ export default async function HaciendaShowPage({
         />
       </div>
 
-      <Card className="max-w-xl">
+      <Card className="mb-6 max-w-xl">
         <DescList
           items={[
             { label: "Nombre", value: hacienda.name },
@@ -99,6 +115,15 @@ export default async function HaciendaShowPage({
           ]}
         />
       </Card>
+
+      {mapPlots.length > 0 && (
+        <div>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+            Mapa de potreros
+          </h2>
+          <HaciendaPlotsMap plots={mapPlots} />
+        </div>
+      )}
     </div>
   );
 }
