@@ -140,6 +140,7 @@ const SORT_COLUMNS: Record<string, string> = {
 // Replica Animal.latest_weights + search + sort + paginate + growing (engorde).
 export async function getLatestWeights(opts: {
   search?: string;
+  ranch?: string;
   sort?: string;
   direction?: string;
   page?: number;
@@ -169,11 +170,21 @@ export async function getLatestWeights(opts: {
     WHERE animals.status = 'engorde'
   `;
 
+  // Cláusulas de filtro con placeholders numerados según el orden de `params`.
+  const params: unknown[] = [];
+  let filterClause = "";
+
   const search = opts.search?.trim();
-  const searchClause = search
-    ? ` AND (CAST(animals.animal_number AS text) = $1 OR animals.species ILIKE $1 OR animals.ranch ILIKE $1)`
-    : "";
-  const params: unknown[] = search ? [search] : [];
+  if (search) {
+    params.push(search);
+    filterClause += ` AND (CAST(animals.animal_number AS text) = $${params.length} OR animals.species ILIKE $${params.length} OR animals.ranch ILIKE $${params.length})`;
+  }
+
+  const ranch = opts.ranch?.trim();
+  if (ranch) {
+    params.push(ranch);
+    filterClause += ` AND animals.ranch = $${params.length}`;
+  }
 
   const selectSql = `
     SELECT
@@ -195,12 +206,12 @@ export async function getLatestWeights(opts: {
       animals.status AS status,
       animals.purchase_price AS purchase_price,
       animals.provider AS provider
-    ${base}${searchClause}
+    ${base}${filterClause}
     ORDER BY ${orderBy} ${direction}
     LIMIT ${perPage} OFFSET ${offset}
   `;
 
-  const countSql = `SELECT COUNT(*)::float8 AS total ${base}${searchClause}`;
+  const countSql = `SELECT COUNT(*)::float8 AS total ${base}${filterClause}`;
 
   const rows = await prisma.$queryRawUnsafe<LatestWeightRow[]>(
     selectSql,

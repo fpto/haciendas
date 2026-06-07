@@ -4,6 +4,7 @@ import { PageHeader, Card, EmptyState, Badge, TableWrap, Th, Td } from "@/compon
 import { CowIcon, SearchIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 
 export const dynamic = "force-dynamic";
 
@@ -30,9 +31,13 @@ export default async function AnimalsPage({
 }) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
-  const unit = await getWeightUnit();
+  const [unit, activeHacienda] = await Promise.all([
+    getWeightUnit(),
+    getActiveHacienda(),
+  ]);
   const { rows, total } = await getLatestWeights({
     search: sp.search,
+    ranch: activeHacienda ?? undefined,
     sort: sp.sort,
     direction: sp.direction,
     page,
@@ -59,7 +64,9 @@ export default async function AnimalsPage({
     <div>
       <PageHeader
         title="Animales"
-        subtitle={`${fmtNumber(total)} en engorde · pesos más recientes`}
+        subtitle={`${fmtNumber(total)} en engorde · pesos más recientes${
+          activeHacienda ? ` · ${activeHacienda}` : ""
+        }`}
         action={{ href: "/animals/new", label: "Nuevo animal" }}
       />
 

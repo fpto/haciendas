@@ -4,12 +4,15 @@ import { PageHeader, EmptyState, TableWrap, Th, Td, Card } from "@/components/ui
 import { LotsIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
+import { getActiveHacienda } from "@/lib/activeHacienda";
 
 export const dynamic = "force-dynamic";
 
 export default async function LotsPage() {
+  const activeHacienda = await getActiveHacienda();
   const [lots, unit] = await Promise.all([
     prisma.lot.findMany({
+      where: activeHacienda ? { ranch: activeHacienda } : undefined,
       orderBy: [{ ranch: "asc" }, { species: "asc" }, { number: "asc" }],
       include: {
         _count: { select: { animals: true } },
@@ -25,7 +28,9 @@ export default async function LotsPage() {
     <div>
       <PageHeader
         title="Lotes"
-        subtitle={`${fmtNumber(lots.length)} lotes registrados`}
+        subtitle={`${fmtNumber(lots.length)} lotes registrados${
+          activeHacienda ? ` · ${activeHacienda}` : ""
+        }`}
         action={{ href: "/lots/new", label: "Nuevo lote" }}
       />
 
