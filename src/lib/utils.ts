@@ -64,7 +64,7 @@ export function classNames(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// Número de animales de un lote: se toma del último pesado (animalCount); si el
+// Número de cabezas de un lote: se toma del último pesado (animalCount); si el
 // lote aún no tiene pesados, se usa el conteo de animales registrados.
 export function lotHeadcount(lot: {
   weighings: { animalCount: number | null }[];

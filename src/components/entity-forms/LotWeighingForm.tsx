@@ -64,7 +64,7 @@ export function LotWeighingForm({
             />
           </Field>
         </div>
-        <Field label="Número de animales">
+        <Field label="Número de cabezas">
           <Input
             type="number"
             step="1"

@@ -49,7 +49,7 @@ export default async function DashboardPage() {
     }),
   ]);
 
-  // Marcadores del mapa: potreros con geometría + número de animales en cada uno.
+  // Marcadores del mapa: potreros con geometría + número de cabezas en cada uno.
   const plotMarkers: PlotMarker[] = plots
     .map((p) => {
       const ring = parseGeoJsonRing(p.boundaries);
@@ -161,7 +161,7 @@ export default async function DashboardPage() {
               Aún no hay potreros con geometría para mostrar en el mapa. Importa
               tus potreros desde un archivo KMZ en{" "}
               <span className="font-semibold text-slate-700">Potreros</span> para
-              verlos aquí con el número de animales en cada uno.
+              verlos aquí con el número de cabezas en cada uno.
             </p>
           </Card>
         ) : (

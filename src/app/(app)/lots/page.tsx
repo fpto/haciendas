@@ -18,7 +18,7 @@ export default async function LotsPage() {
       include: {
         _count: { select: { animals: true } },
         plot: { select: { id: true, number: true } },
-        // Último pesado del lote: define el peso promedio y el número de animales.
+        // Último pesado del lote: define el peso promedio y el número de cabezas.
         weighings: { orderBy: [{ date: "desc" }, { id: "desc" }], take: 1 },
       },
     }),
@@ -58,7 +58,7 @@ export default async function LotsPage() {
                         {lot.name || `Lote ${lot.number}`}
                       </p>
                       <span className="text-xs text-slate-400">
-                        {latest?.animalCount ?? lot._count.animals} animales
+                        {latest?.animalCount ?? lot._count.animals} cabezas
                       </span>
                     </div>
                     <p className="text-xs text-slate-500">
@@ -97,7 +97,7 @@ export default async function LotsPage() {
                   <Th>Hacienda</Th>
                   <Th>Potrero</Th>
                   <Th>Especie</Th>
-                  <Th className="text-right">Animales</Th>
+                  <Th className="text-right">Cabezas</Th>
                   <Th className="text-right">Peso promedio</Th>
                   <Th className="text-right">Último pesado</Th>
                   <Th></Th>
