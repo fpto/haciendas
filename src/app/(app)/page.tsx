@@ -124,12 +124,17 @@ export default async function DashboardPage() {
           Inventario
         </h2>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <StatCard
-            label="Animales"
-            value={fmtNumber(stats.totalAnimals)}
-            icon={<CowIcon width={22} height={22} />}
-            href="/animals"
-          />
+          {/* En modo "Por Lote" no se registran animales individuales, así que
+              la tarjeta de "Animales" (que mostraría 0) se omite para no
+              confundirla con las "Cabezas" del pesado por lotes. */}
+          {weightMode !== "lot" && (
+            <StatCard
+              label="Animales"
+              value={fmtNumber(stats.totalAnimals)}
+              icon={<CowIcon width={22} height={22} />}
+              href="/animals"
+            />
+          )}
           <StatCard
             label="Lotes"
             value={fmtNumber(stats.totalLots)}
