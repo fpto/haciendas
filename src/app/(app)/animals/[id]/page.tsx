@@ -86,7 +86,6 @@ export default async function AnimalShowPage({
           <Card>
             <DescList
               items={[
-                { label: "Especie", value: <span className="capitalize">{animal.species ?? "—"}</span> },
                 { label: "Hacienda", value: animal.ranch ?? "—" },
                 {
                   label: "Lote",

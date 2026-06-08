@@ -18,7 +18,7 @@ export default async function NewWeightPage({
   const [animals, unit] = await Promise.all([
     prisma.animal.findMany({
       orderBy: [{ ranch: "asc" }, { animalNumber: "asc" }],
-      select: { id: true, animalNumber: true, ranch: true, species: true },
+      select: { id: true, animalNumber: true, ranch: true },
     }),
     getWeightUnit(),
   ]);

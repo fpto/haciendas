@@ -23,7 +23,7 @@ export default async function EditLotWeighingPage({
     prisma.lotWeighing.findUnique({ where: { id: weighingId } }),
     prisma.lot.findMany({
       orderBy: [{ ranch: "asc" }, { number: "asc" }],
-      select: { id: true, number: true, name: true, ranch: true, species: true },
+      select: { id: true, number: true, name: true, ranch: true },
     }),
     getWeightUnit(),
   ]);

@@ -16,7 +16,7 @@ export function LotWeighingForm({
 }: {
   action: (formData: FormData) => void | Promise<void>;
   weighing?: LotWeighing | null;
-  lots: Pick<Lot, "id" | "number" | "name" | "ranch" | "species">[];
+  lots: Pick<Lot, "id" | "number" | "name" | "ranch">[];
   defaultLotId?: number;
   unit: WeightUnit;
   submitLabel: string;
@@ -35,7 +35,7 @@ export function LotWeighingForm({
             <option value="">— Selecciona un lote —</option>
             {lots.map((l) => (
               <option key={l.id} value={l.id}>
-                {[l.name || l.number || `#${l.id}`, l.ranch, l.species]
+                {[l.name || l.number || `#${l.id}`, l.ranch]
                   .filter(Boolean)
                   .join(" · ")}
               </option>

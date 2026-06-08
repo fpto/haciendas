@@ -84,7 +84,7 @@ export default async function AnimalsPage({
           <input
             name="search"
             defaultValue={sp.search ?? ""}
-            placeholder="Buscar por número, especie o hacienda…"
+            placeholder="Buscar por número o hacienda…"
             className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-3 text-base shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
@@ -135,7 +135,7 @@ export default async function AnimalsPage({
                         #{r.animal_number}
                       </p>
                       <p className="text-xs text-slate-500">
-                        {r.ranch} · {r.species}
+                        {r.ranch}
                         {r.lot_number ? ` · Lote ${r.lot_number}` : ""}
                       </p>
                     </div>
@@ -167,7 +167,6 @@ export default async function AnimalsPage({
                 <tr>
                   <Th>#</Th>
                   <Th>Hacienda</Th>
-                  <Th>Especie</Th>
                   <Th>Lote</Th>
                   <Th className="text-right">Último peso</Th>
                   <Th className="text-right">Anterior</Th>
@@ -184,7 +183,6 @@ export default async function AnimalsPage({
                       {r.animal_number}
                     </Td>
                     <Td>{r.ranch}</Td>
-                    <Td className="capitalize">{r.species}</Td>
                     <Td>{r.lot_number ?? "—"}</Td>
                     <Td className="text-right font-semibold">
                       {fmtWeight(r.last_weight, unit)}

@@ -82,13 +82,12 @@ async function getBovineStatsByAnimal(ranch?: string): Promise<BovineStats> {
   const ranchClause = ranch ? ` AND animals.ranch = $1` : "";
   const params: unknown[] = ranch ? [ranch] : [];
 
-  // Peso promedio y conteo por especie (solo animales en engorde).
+  // Peso promedio y conteo de animales en engorde.
   const avgWeight = await prisma.$queryRawUnsafe<
-    { species: string; count: number; average_weight: number }[]
+    { count: number; average_weight: number }[]
   >(
     `
-    SELECT animals.species AS species,
-           COUNT(DISTINCT animals.id)::float8 AS count,
+    SELECT COUNT(DISTINCT animals.id)::float8 AS count,
            AVG(weights.weight)::float8 AS average_weight
     FROM animals
     JOIN weights ON weights.animal_id = animals.id
@@ -104,18 +103,14 @@ async function getBovineStatsByAnimal(ranch?: string): Promise<BovineStats> {
     ) AS dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
     JOIN weights w2 ON w2.animal_id = dates.animal_id AND w2.date = dates.before_date
     WHERE animals.status = 'engorde'${ranchClause}
-    GROUP BY animals.species
   `,
     ...params,
   );
 
-  // Ganancia diaria de peso (GDP) por especie.
-  const dailyGain = await prisma.$queryRawUnsafe<
-    { species: string; daily_gain: number }[]
-  >(
+  // Ganancia diaria de peso (GDP) promedio.
+  const dailyGain = await prisma.$queryRawUnsafe<{ daily_gain: number }[]>(
     `
-    SELECT animals.species AS species,
-           AVG(COALESCE((weights.weight - w2.weight) / NULLIF((dates.latest_date - dates.before_date), 0), 0))::float8 AS daily_gain
+    SELECT AVG(COALESCE((weights.weight - w2.weight) / NULLIF((dates.latest_date - dates.before_date), 0), 0))::float8 AS daily_gain
     FROM animals
     JOIN weights ON weights.animal_id = animals.id
     JOIN (
@@ -131,38 +126,31 @@ async function getBovineStatsByAnimal(ranch?: string): Promise<BovineStats> {
     JOIN weights w2 ON w2.animal_id = dates.animal_id AND w2.date = dates.before_date
     WHERE (dates.latest_date - dates.before_date) > 0
       AND animals.status = 'engorde'${ranchClause}
-    GROUP BY animals.species
   `,
     ...params,
   );
 
-  // Días desde el ingreso (promedio) por especie.
+  // Días desde el ingreso (promedio).
   const daysInRanch = await prisma.$queryRawUnsafe<
-    { species: string; days_in_ranch: number }[]
+    { days_in_ranch: number }[]
   >(
     `
-    SELECT animals.species AS species,
-           AVG(w.days_in_ranch)::float8 AS days_in_ranch
+    SELECT AVG(w.days_in_ranch)::float8 AS days_in_ranch
     FROM animals
     JOIN (
       SELECT animal_id, date(NOW()) - MIN(weights.date) AS days_in_ranch
       FROM weights GROUP BY animal_id
     ) AS w ON w.animal_id = animals.id
     WHERE animals.status = 'engorde'${ranchClause}
-    GROUP BY animals.species
   `,
     ...params,
   );
 
-  const bovineAvg = avgWeight.find((r) => r.species === "bovino");
-  const bovineGain = dailyGain.find((r) => r.species === "bovino");
-  const bovineDays = daysInRanch.find((r) => r.species === "bovino");
-
   return {
-    count: toNum(bovineAvg?.count) ?? 0,
-    averageWeight: toNum(bovineAvg?.average_weight) ?? 0,
-    dailyGain: toNum(bovineGain?.daily_gain) ?? 0,
-    daysInRanch: toNum(bovineDays?.days_in_ranch) ?? 0,
+    count: toNum(avgWeight[0]?.count) ?? 0,
+    averageWeight: toNum(avgWeight[0]?.average_weight) ?? 0,
+    dailyGain: toNum(dailyGain[0]?.daily_gain) ?? 0,
+    daysInRanch: toNum(daysInRanch[0]?.days_in_ranch) ?? 0,
   };
 }
 
@@ -200,8 +188,7 @@ async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {
     JOIN (
       SELECT lot_id, MIN(date) AS first_date FROM lot_weighings GROUP BY lot_id
     ) AS firsts ON firsts.lot_id = lots.id
-    WHERE lots.species = 'bovino'
-      AND COALESCE(lots.status, 'growing') = 'growing'${ranchClause}
+    WHERE COALESCE(lots.status, 'growing') = 'growing'${ranchClause}
   `,
     ...params,
   );
@@ -215,7 +202,6 @@ async function getBovineStatsByLot(ranch?: string): Promise<BovineStats> {
     JOIN lot_weighings latest ON latest.lot_id = lots.id AND latest.date = dates.latest_date
     JOIN lot_weighings prev ON prev.lot_id = lots.id AND prev.date = dates.before_date
     WHERE (dates.latest_date - dates.before_date) > 0
-      AND lots.species = 'bovino'
       AND COALESCE(lots.status, 'growing') = 'growing'${ranchClause}
   `,
     ...params,
@@ -234,7 +220,6 @@ export type LatestWeightRow = {
   animal_id: number;
   animal_number: number;
   ranch: string;
-  species: string;
   lot_id: number | null;
   lot_number: string | null;
   latest_date: Date;
@@ -253,7 +238,6 @@ export type LatestWeightRow = {
 const SORT_COLUMNS: Record<string, string> = {
   animal_number: "animal_number",
   ranch: "ranch",
-  species: "species",
   last_weight: "last_weight",
   days_since_last_weight: "days_since_last_weight",
   daily_gain: "daily_gain",
@@ -300,7 +284,7 @@ export async function getLatestWeights(opts: {
   const search = opts.search?.trim();
   if (search) {
     params.push(search);
-    filterClause += ` AND (CAST(animals.animal_number AS text) = $${params.length} OR animals.species ILIKE $${params.length} OR animals.ranch ILIKE $${params.length})`;
+    filterClause += ` AND (CAST(animals.animal_number AS text) = $${params.length} OR animals.ranch ILIKE $${params.length})`;
   }
 
   const ranch = opts.ranch?.trim();
@@ -315,7 +299,6 @@ export async function getLatestWeights(opts: {
       weights.animal_id AS animal_id,
       animals.animal_number AS animal_number,
       animals.ranch AS ranch,
-      animals.species AS species,
       animals.lot_id AS lot_id,
       lots.number AS lot_number,
       dates.latest_date AS latest_date,
@@ -359,7 +342,6 @@ export async function getLatestWeights(opts: {
 
 export type LotStatRow = {
   ranch: string | null;
-  species: string | null;
   lot_id: number | null;
   number: string | null;
   name: string | null;
@@ -374,7 +356,6 @@ export async function getLotStats(): Promise<LotStatRow[]> {
   const rows = await prisma.$queryRawUnsafe<LotStatRow[]>(`
     SELECT
       lots.ranch AS ranch,
-      lots.species AS species,
       animals.lot_id AS lot_id,
       lots.number AS number,
       lots.name AS name,
@@ -396,8 +377,8 @@ export async function getLotStats(): Promise<LotStatRow[]> {
       GROUP BY animal_id
     ) AS dates ON weights.animal_id = dates.animal_id AND weights.date = dates.latest_date
     JOIN weights w2 ON w2.animal_id = dates.animal_id AND w2.date = dates.before_date
-    GROUP BY lots.ranch, lots.species, animals.lot_id, lots.number, lots.name
-    ORDER BY lots.ranch, lots.species, lots.number
+    GROUP BY lots.ranch, animals.lot_id, lots.number, lots.name
+    ORDER BY lots.ranch, lots.number
   `);
   return rows.map((r) => ({
     ...r,

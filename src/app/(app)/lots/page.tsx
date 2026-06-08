@@ -15,7 +15,7 @@ export default async function LotsPage() {
   const [lots, unit, user] = await Promise.all([
     prisma.lot.findMany({
       where: activeHacienda ? { ranch: activeHacienda } : undefined,
-      orderBy: [{ ranch: "asc" }, { species: "asc" }, { number: "asc" }],
+      orderBy: [{ ranch: "asc" }, { number: "asc" }],
       include: {
         _count: { select: { animals: true } },
         plot: { select: { id: true, number: true } },
@@ -68,7 +68,6 @@ export default async function LotsPage() {
                     <p className="text-xs text-slate-500">
                       {[
                         lot.ranch,
-                        lot.species,
                         lot.plot?.number ? `Potrero ${lot.plot.number}` : null,
                       ]
                         .filter(Boolean)
@@ -101,7 +100,6 @@ export default async function LotsPage() {
                   <Th>Estado</Th>
                   <Th>Hacienda</Th>
                   <Th>Potrero</Th>
-                  <Th>Especie</Th>
                   <Th className="text-right">Cabezas</Th>
                   <Th className="text-right">Peso promedio</Th>
                   <Th className="text-right">Último pesado</Th>
@@ -125,7 +123,6 @@ export default async function LotsPage() {
                       <Td>
                         {lot.plot?.number ? `Potrero ${lot.plot.number}` : "—"}
                       </Td>
-                      <Td className="capitalize">{lot.species ?? "—"}</Td>
                       <Td className="text-right">
                         {latest?.animalCount ?? lot._count.animals}
                       </Td>

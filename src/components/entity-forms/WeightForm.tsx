@@ -16,7 +16,7 @@ export function WeightForm({
 }: {
   action: (formData: FormData) => void | Promise<void>;
   weight?: Weight | null;
-  animals: Pick<Animal, "id" | "animalNumber" | "ranch" | "species">[];
+  animals: Pick<Animal, "id" | "animalNumber" | "ranch">[];
   defaultAnimalId?: number;
   unit: WeightUnit;
   submitLabel: string;
@@ -35,7 +35,7 @@ export function WeightForm({
             <option value="">— Selecciona un animal —</option>
             {animals.map((a) => (
               <option key={a.id} value={a.id}>
-                {[`#${a.animalNumber ?? a.id}`, a.ranch, a.species]
+                {[`#${a.animalNumber ?? a.id}`, a.ranch]
                   .filter(Boolean)
                   .join(" · ")}
               </option>
