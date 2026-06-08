@@ -91,6 +91,29 @@ exportado de Google Earth. Cada polígono se convierte en un potrero:
 - Si ya existe un potrero con ese número (y misma hacienda) se **actualiza**;
   si no, se **crea**.
 
+## 📍 Corrales (ubicación puntual)
+
+A diferencia de un **potrero** (un polígono con linderos), un **corral** es una
+**ubicación puntual** definida por **latitud y longitud**. Los lotes de ganado
+pueden asignarse a un corral igual que a un potrero (un lote puede tener
+potrero, corral, ambos o ninguno).
+
+Desde **Corrales** puedes crear, editar y eliminar corrales, y ver su ubicación
+en un mapa satelital con un marcador. La ficha de cada corral muestra los lotes
+asignados y el total de cabezas.
+
+Desde **Corrales → Importar KMZ** puedes subir un archivo `.kmz` o `.kml` de
+Google Earth. Cada **punto/marcador** se convierte en un corral:
+
+- El **nombre** del punto se usa como número de corral.
+- Las **coordenadas** del punto se guardan como latitud y longitud.
+- Si ya existe un corral con ese número (y misma hacienda) se **actualiza**;
+  si no, se **crea**.
+
+> Migración de BD: si ya tienes la base de datos creada, aplica
+> `prisma/neon-corrals.sql` en el SQL Editor de Neon (o corre `npm run db:push`)
+> para agregar la tabla `corrals` y la columna `lots.corral_id`.
+
 ## ⚖️ Unidad de peso (kg / lb)
 
 La app puede mostrar y capturar pesos en **kilogramos** o **libras**, con

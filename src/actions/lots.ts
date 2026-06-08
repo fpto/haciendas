@@ -18,6 +18,7 @@ function lotData(formData: FormData) {
     name: str(formData.get("name")),
     description: str(formData.get("description")),
     plotId: int(formData.get("plot_id")),
+    corralId: int(formData.get("corral_id")),
     status,
     saleDate: sold ? date(formData.get("sale_date")) : null,
     buyer: sold ? str(formData.get("buyer")) : null,

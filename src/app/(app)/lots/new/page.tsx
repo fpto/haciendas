@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function NewLotPage() {
   await requireEditor();
-  const [haciendas, plots] = await Promise.all([
+  const [haciendas, plots, corrals] = await Promise.all([
     prisma.hacienda.findMany({
       orderBy: { name: "asc" },
       select: { id: true, name: true },
@@ -17,6 +17,10 @@ export default async function NewLotPage() {
     prisma.plot.findMany({
       orderBy: [{ ranch: "asc" }, { number: "asc" }],
       select: { id: true, number: true, ranch: true, plotType: true },
+    }),
+    prisma.corral.findMany({
+      orderBy: [{ ranch: "asc" }, { number: "asc" }],
+      select: { id: true, number: true, ranch: true },
     }),
   ]);
   return (
@@ -34,6 +38,7 @@ export default async function NewLotPage() {
         action={createLot}
         haciendas={haciendas}
         plots={plots}
+        corrals={corrals}
         submitLabel="Crear lote"
       />
     </div>

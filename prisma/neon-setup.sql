@@ -38,6 +38,7 @@ CREATE TABLE "lots" (
     "name" TEXT,
     "description" TEXT,
     "plot_id" INTEGER,
+    "corral_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -89,6 +90,20 @@ CREATE TABLE "plots" (
 );
 
 -- CreateTable
+CREATE TABLE "corrals" (
+    "id" SERIAL NOT NULL,
+    "number" TEXT,
+    "ranch" TEXT,
+    "comment" TEXT,
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "corrals_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "sales" (
     "id" SERIAL NOT NULL,
     "date" DATE,
@@ -137,6 +152,9 @@ CREATE INDEX "animals_sale_id_idx" ON "animals"("sale_id");
 CREATE INDEX "lots_plot_id_idx" ON "lots"("plot_id");
 
 -- CreateIndex
+CREATE INDEX "lots_corral_id_idx" ON "lots"("corral_id");
+
+-- CreateIndex
 CREATE INDEX "lot_weighings_lot_id_idx" ON "lot_weighings"("lot_id");
 
 -- CreateIndex
@@ -156,6 +174,9 @@ ALTER TABLE "animals" ADD CONSTRAINT "animals_sale_id_fkey" FOREIGN KEY ("sale_i
 
 -- AddForeignKey
 ALTER TABLE "lots" ADD CONSTRAINT "lots_plot_id_fkey" FOREIGN KEY ("plot_id") REFERENCES "plots"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lots" ADD CONSTRAINT "lots_corral_id_fkey" FOREIGN KEY ("corral_id") REFERENCES "corrals"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "lot_weighings" ADD CONSTRAINT "lot_weighings_lot_id_fkey" FOREIGN KEY ("lot_id") REFERENCES "lots"("id") ON DELETE CASCADE ON UPDATE CASCADE;
