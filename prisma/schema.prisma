@@ -58,6 +58,7 @@ model Lot {
   name        String?
   description String?
   plotId      Int?     @map("plot_id")
+  corralId    Int?     @map("corral_id")
   // Estado del lote en modo "Por Lote": "growing" (en crecimiento), "sold"
   // (vendido) o "destroyed" (destruido). Solo los lotes en crecimiento cuentan
   // como inventario activo en engorde.
@@ -72,10 +73,12 @@ model Lot {
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   plot      Plot?         @relation(fields: [plotId], references: [id])
+  corral    Corral?       @relation(fields: [corralId], references: [id])
   animals   Animal[]
   weighings LotWeighing[]
 
   @@index([plotId])
+  @@index([corralId])
   @@map("lots")
 }
 
@@ -127,6 +130,24 @@ model Plot {
   lots        Lot[]
 
   @@map("plots")
+}
+
+// Corral (encierro/comedero): a diferencia de un potrero (polígono), es una
+// ubicación puntual definida por latitud/longitud. Los lotes de ganado pueden
+// asignarse a un corral igual que a un potrero.
+model Corral {
+  id        Int      @id @default(autoincrement())
+  number    String?
+  ranch     String?
+  comment   String?
+  latitude  Float?
+  longitude Float?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  lots Lot[]
+
+  @@map("corrals")
 }
 
 model Sale {

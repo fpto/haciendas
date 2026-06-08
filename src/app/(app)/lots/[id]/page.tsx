@@ -69,6 +69,7 @@ export default async function LotShowPage({
       where: { id: lotId },
       include: {
         plot: true,
+        corral: true,
         animals: { orderBy: { animalNumber: "asc" } },
         weighings: { orderBy: [{ date: "desc" }, { id: "desc" }] },
       },
@@ -165,6 +166,21 @@ export default async function LotShowPage({
                     {lot.plot.number
                       ? `Potrero ${lot.plot.number}`
                       : `#${lot.plot.id}`}
+                  </Link>
+                ) : (
+                  "—"
+                ),
+              },
+              {
+                label: "Corral",
+                value: lot.corral ? (
+                  <Link
+                    href={`/corrals/${lot.corral.id}`}
+                    className="text-brand-600"
+                  >
+                    {lot.corral.number
+                      ? `Corral ${lot.corral.number}`
+                      : `#${lot.corral.id}`}
                   </Link>
                 ) : (
                   "—"

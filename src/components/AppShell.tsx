@@ -12,6 +12,7 @@ import {
   CowIcon,
   LotsIcon,
   PlotIcon,
+  CorralIcon,
   MoneyIcon,
   ScaleIcon,
   MenuIcon,
@@ -36,6 +37,7 @@ const NAV: NavItem[] = [
   { href: "/animals", label: "Animales", Icon: CowIcon },
   { href: "/lots", label: "Lotes", Icon: LotsIcon },
   { href: "/plots", label: "Potreros", Icon: PlotIcon },
+  { href: "/corrals", label: "Corrales", Icon: CorralIcon },
   { href: "/sales", label: "Ventas", Icon: MoneyIcon },
   { href: "/weights", label: "Pesos", Icon: ScaleIcon },
 ];

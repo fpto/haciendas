@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Lot, Plot } from "@prisma/client";
+import type { Lot, Plot, Corral } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
 import { RanchSelect } from "@/components/RanchSelect";
@@ -10,12 +10,14 @@ export function LotForm({
   lot,
   haciendas,
   plots,
+  corrals,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   lot?: Lot | null;
   haciendas: { id: number; name: string }[];
   plots: Pick<Plot, "id" | "number" | "ranch" | "plotType">[];
+  corrals: Pick<Corral, "id" | "number" | "ranch">[];
   submitLabel: string;
 }) {
   return (
@@ -38,6 +40,16 @@ export function LotForm({
                 <option key={p.id} value={p.id}>
                   {[p.ranch, p.plotType, p.number].filter(Boolean).join(" · ") ||
                     `#${p.id}`}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Corral" hint="Ubicación del lote">
+            <Select name="corral_id" defaultValue={lot?.corralId ?? ""}>
+              <option value="">— Sin corral —</option>
+              {corrals.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {[c.ranch, c.number].filter(Boolean).join(" · ") || `#${c.id}`}
                 </option>
               ))}
             </Select>

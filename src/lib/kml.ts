@@ -9,6 +9,14 @@ export type ParsedPolygon = {
   areaHectares: number | null;
 };
 
+export type ParsedPoint = {
+  name: string;
+  description: string | null;
+  // Coordenadas en formato GeoJSON (lng, lat).
+  longitude: number;
+  latitude: number;
+};
+
 const EARTH_RADIUS_M = 6378137;
 
 // Área geodésica de un polígono (fórmula de exceso esférico) en hectáreas.
@@ -70,6 +78,32 @@ function extractRing(placemark: Record<string, unknown>): [number, number][] {
     if (parsed.length >= 3) return parsed;
   }
   return [];
+}
+
+// Extrae la primera coordenada de un Point dentro de un Placemark.
+function extractPoint(
+  placemark: Record<string, unknown>,
+): [number, number] | null {
+  const points: unknown[] = [];
+  const collectPoints = (node: unknown) => {
+    if (!node || typeof node !== "object") return;
+    const obj = node as Record<string, unknown>;
+    if (obj.Point) {
+      const p = obj.Point;
+      if (Array.isArray(p)) points.push(...p);
+      else points.push(p);
+    }
+    if (obj.MultiGeometry) collectPoints(obj.MultiGeometry);
+  };
+  collectPoints(placemark);
+
+  for (const point of points) {
+    if (!point || typeof point !== "object") continue;
+    const coords = (point as Record<string, unknown>).coordinates;
+    const parsed = parseCoordinates(coords);
+    if (parsed.length >= 1) return parsed[0];
+  }
+  return null;
 }
 
 // Recorre el árbol KML recolectando todos los nodos Placemark.
@@ -147,6 +181,36 @@ export async function parseKmzOrKml(
       description: stripHtml(textOf(pm.description)),
       ring,
       areaHectares: ringAreaHectares(ring),
+    });
+  }
+  return result;
+}
+
+// Igual que parseKmzOrKml pero extrae puntos (Placemark > Point) en vez de
+// polígonos. Se usa para importar corrales, que son ubicaciones puntuales.
+export async function parseKmzOrKmlPoints(
+  bytes: Uint8Array,
+): Promise<ParsedPoint[]> {
+  const xml = await extractKmlText(bytes);
+  const parser = new XMLParser({
+    ignoreAttributes: true,
+    parseTagValue: false,
+    trimValues: true,
+  });
+  const doc = parser.parse(xml);
+
+  const placemarks: Record<string, unknown>[] = [];
+  collectPlacemarks(doc, placemarks);
+
+  const result: ParsedPoint[] = [];
+  for (const pm of placemarks) {
+    const point = extractPoint(pm);
+    if (!point) continue; // sin punto usable
+    result.push({
+      name: textOf(pm.name) ?? "Sin nombre",
+      description: stripHtml(textOf(pm.description)),
+      longitude: point[0],
+      latitude: point[1],
     });
   }
   return result;
