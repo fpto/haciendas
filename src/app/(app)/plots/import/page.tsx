@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
 import { importPlotsFromKmz } from "@/actions/plots";
 import { Card } from "@/components/ui";
 import { Field, Select, SubmitButton, FormError } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 import { ArrowLeftIcon, PlotIcon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
@@ -18,10 +16,6 @@ export default async function ImportPlotsPage({
 }) {
   await requireEditor();
   const { error } = await searchParams;
-  const haciendas = await prisma.hacienda.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
 
   return (
     <div>
@@ -57,24 +51,16 @@ export default async function ImportPlotsPage({
             />
           </Field>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field
-              label="Hacienda"
-              hint="Se asigna a todos los potreros importados."
-            >
-              <RanchSelect haciendas={haciendas} />
-            </Field>
-            <Field label="Tipo" hint="Se asigna a todos los importados.">
-              <Select name="plot_type" defaultValue="">
-                <option value="">— Sin tipo —</option>
-                {TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          </div>
+          <Field label="Tipo" hint="Se asigna a todos los potreros importados.">
+            <Select name="plot_type" defaultValue="">
+              <option value="">— Sin tipo —</option>
+              {TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </Select>
+          </Field>
 
           <div className="rounded-xl bg-brand-50 p-4 text-sm text-brand-900">
             <p className="mb-1 flex items-center gap-1.5 font-semibold">
@@ -93,9 +79,8 @@ export default async function ImportPlotsPage({
                 Los <strong>linderos</strong> se guardan como GeoJSON.
               </li>
               <li>
-                Si ya existe un potrero con ese número{" "}
-                {`(y misma hacienda)`} se <strong>actualiza</strong>; si no, se{" "}
-                <strong>crea</strong>.
+                Si ya existe un potrero con ese número se{" "}
+                <strong>actualiza</strong>; si no, se <strong>crea</strong>.
               </li>
             </ul>
           </div>

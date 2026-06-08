@@ -10,11 +10,9 @@ import {
 
 export function HaciendaConfigForm({
   action,
-  haciendaId,
   weightMode,
 }: {
   action: (formData: FormData) => void | Promise<void>;
-  haciendaId: number;
   weightMode: WeightMode;
 }) {
   const current = normalizeWeightMode(weightMode);
@@ -28,7 +26,7 @@ export function HaciendaConfigForm({
             <h2 className="text-sm font-semibold">Modo de medición de peso</h2>
           </div>
           <p className="mt-1 text-sm text-slate-500">
-            Define cómo se registran las pesadas del ganado en esta hacienda.
+            Define cómo se registran las pesadas del ganado.
           </p>
         </div>
 
@@ -61,7 +59,7 @@ export function HaciendaConfigForm({
         <div className="flex items-center gap-3 pt-1">
           <SubmitButton>Guardar configuración</SubmitButton>
           <Link
-            href={`/haciendas/${haciendaId}`}
+            href="/"
             className="rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100"
           >
             Cancelar

@@ -2,19 +2,16 @@ import Link from "next/link";
 import type { Plot } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 
 const TYPES = ["pastoreo", "agrícola", "reserva", "corral"];
 
 export function PlotForm({
   action,
   plot,
-  haciendas,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   plot?: Plot | null;
-  haciendas: { id: number; name: string }[];
   submitLabel: string;
 }) {
   return (
@@ -31,9 +28,6 @@ export function PlotForm({
               name="area"
               defaultValue={plot?.area ?? ""}
             />
-          </Field>
-          <Field label="Hacienda">
-            <RanchSelect haciendas={haciendas} defaultValue={plot?.ranch} />
           </Field>
           <Field label="Tipo">
             <Select name="plot_type" defaultValue={plot?.plotType ?? "pastoreo"}>

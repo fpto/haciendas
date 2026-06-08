@@ -4,7 +4,6 @@ import { getLatestPlotScores } from "@/lib/queries";
 import { EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { PlotIcon, ChevronRightIcon, PlusIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
-import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -17,11 +16,9 @@ function scoreColor(avg: number | null): "green" | "amber" | "red" | "slate" {
 }
 
 export default async function PlotsPage() {
-  const activeHacienda = await getActiveHacienda();
   const [plots, scores, user] = await Promise.all([
     prisma.plot.findMany({
-      where: activeHacienda ? { ranch: activeHacienda } : undefined,
-      orderBy: [{ ranch: "asc" }, { number: "asc" }],
+      orderBy: [{ number: "asc" }],
       include: { _count: { select: { evaluations: true } } },
     }),
     getLatestPlotScores(),
@@ -39,7 +36,6 @@ export default async function PlotsPage() {
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
             {fmtNumber(plots.length)} potreros registrados
-            {activeHacienda ? ` · ${activeHacienda}` : ""}
           </p>
         </div>
         {canEdit && (
@@ -86,7 +82,7 @@ export default async function PlotsPage() {
                       </Badge>
                     </div>
                     <p className="text-xs text-slate-500">
-                      {[plot.ranch, plot.plotType].filter(Boolean).join(" · ")}
+                      {plot.plotType ?? "Sin tipo"}
                       {plot.area ? ` · ${fmtNumber(plot.area, 1)} ha` : ""}
                     </p>
                     <div className="mt-3 grid grid-cols-3 gap-2 text-center text-sm">
@@ -105,7 +101,6 @@ export default async function PlotsPage() {
               <thead>
                 <tr>
                   <Th>Potrero</Th>
-                  <Th>Hacienda</Th>
                   <Th>Tipo</Th>
                   <Th className="text-right">Área (ha)</Th>
                   <Th className="text-right">Agua</Th>
@@ -123,7 +118,6 @@ export default async function PlotsPage() {
                       <Td className="font-semibold text-slate-900">
                         {plot.number ?? plot.id}
                       </Td>
-                      <Td>{plot.ranch ?? "—"}</Td>
                       <Td className="capitalize">{plot.plotType ?? "—"}</Td>
                       <Td className="text-right">{fmtNumber(plot.area, 1)}</Td>
                       <Td className="text-right">{s?.water_score ?? "—"}</Td>

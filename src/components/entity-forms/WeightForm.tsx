@@ -35,9 +35,7 @@ export function WeightForm({
             <option value="">— Selecciona un animal —</option>
             {animals.map((a) => (
               <option key={a.id} value={a.id}>
-                {[`#${a.animalNumber ?? a.id}`, a.ranch]
-                  .filter(Boolean)
-                  .join(" · ")}
+                {`#${a.animalNumber ?? a.id}`}
               </option>
             ))}
           </Select>

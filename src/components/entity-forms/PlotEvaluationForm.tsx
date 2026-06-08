@@ -28,7 +28,7 @@ export function PlotEvaluationForm({
             <option value="">— Selecciona un potrero —</option>
             {plots.map((p) => (
               <option key={p.id} value={p.id}>
-                {[p.ranch, p.plotType, p.number].filter(Boolean).join(" · ")}
+                {[p.plotType, p.number].filter(Boolean).join(" · ")}
               </option>
             ))}
           </Select>

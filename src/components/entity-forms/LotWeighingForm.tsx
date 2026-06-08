@@ -35,9 +35,7 @@ export function LotWeighingForm({
             <option value="">— Selecciona un lote —</option>
             {lots.map((l) => (
               <option key={l.id} value={l.id}>
-                {[l.name || l.number || `#${l.id}`, l.ranch]
-                  .filter(Boolean)
-                  .join(" · ")}
+                {l.name || l.number || `#${l.id}`}
               </option>
             ))}
           </Select>

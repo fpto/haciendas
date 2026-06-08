@@ -9,13 +9,9 @@ export const dynamic = "force-dynamic";
 
 export default async function NewAnimalPage() {
   await requireEditor();
-  const [lots, sales, haciendas] = await Promise.all([
-    prisma.lot.findMany({ orderBy: [{ ranch: "asc" }, { number: "asc" }] }),
+  const [lots, sales] = await Promise.all([
+    prisma.lot.findMany({ orderBy: [{ number: "asc" }] }),
     prisma.sale.findMany({ orderBy: { date: "desc" } }),
-    prisma.hacienda.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
   ]);
 
   return (
@@ -33,7 +29,6 @@ export default async function NewAnimalPage() {
         action={createAnimal}
         lots={lots}
         sales={sales}
-        haciendas={haciendas}
         submitLabel="Crear animal"
       />
     </div>

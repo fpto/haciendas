@@ -18,14 +18,10 @@ export default async function EditAnimalPage({
   const animalId = Number(id);
   if (Number.isNaN(animalId)) notFound();
 
-  const [animal, lots, sales, haciendas] = await Promise.all([
+  const [animal, lots, sales] = await Promise.all([
     prisma.animal.findUnique({ where: { id: animalId } }),
-    prisma.lot.findMany({ orderBy: [{ ranch: "asc" }, { number: "asc" }] }),
+    prisma.lot.findMany({ orderBy: [{ number: "asc" }] }),
     prisma.sale.findMany({ orderBy: { date: "desc" } }),
-    prisma.hacienda.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
   ]);
   if (!animal) notFound();
 
@@ -45,7 +41,6 @@ export default async function EditAnimalPage({
         animal={animal}
         lots={lots}
         sales={sales}
-        haciendas={haciendas}
         submitLabel="Guardar cambios"
       />
     </div>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
 import { createCorral } from "@/actions/corrals";
 import { CorralForm } from "@/components/entity-forms/CorralForm";
@@ -9,10 +8,6 @@ export const dynamic = "force-dynamic";
 
 export default async function NewCorralPage() {
   await requireEditor();
-  const haciendas = await prisma.hacienda.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
   return (
     <div>
       <Link
@@ -24,11 +19,7 @@ export default async function NewCorralPage() {
       <h1 className="mb-5 text-2xl font-bold tracking-tight text-slate-900">
         Nuevo corral
       </h1>
-      <CorralForm
-        action={createCorral}
-        haciendas={haciendas}
-        submitLabel="Crear corral"
-      />
+      <CorralForm action={createCorral} submitLabel="Crear corral" />
     </div>
   );
 }

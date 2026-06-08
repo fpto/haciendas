@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { classNames } from "@/lib/utils";
 import type { SessionUser } from "@/lib/auth";
 import { UnitToggle } from "@/components/UnitToggle";
-import { HaciendaSwitcher } from "@/components/HaciendaSwitcher";
+import { HACIENDA_NAME } from "@/lib/brand";
 import {
   DashboardIcon,
   CowIcon,
@@ -21,6 +21,7 @@ import {
   BullHeadIcon,
   SidebarIcon,
   UsersIcon,
+  SettingsIcon,
 } from "@/components/icons";
 
 const SIDEBAR_STORAGE_KEY = "sidebar-collapsed";
@@ -50,16 +51,12 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 export function AppShell({
   user,
   weightUnit,
-  haciendas,
-  activeHacienda,
-  activeWeightMode,
+  weightMode,
   children,
 }: {
   user: SessionUser | null;
   weightUnit: "kg" | "lb";
-  haciendas: { id: number; name: string }[];
-  activeHacienda: string | null;
-  activeWeightMode: "lot" | "animal" | null;
+  weightMode: "lot" | "animal";
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -69,15 +66,17 @@ export function AppShell({
   // En modo "por lote" los pesos se registran a nivel de lote, así que se oculta
   // la sección de Animales. La barra inferior móvil usa los 5 primeros destinos.
   const baseNav = NAV.filter(
-    (item) => !(item.href === "/animals" && activeWeightMode === "lot"),
+    (item) => !(item.href === "/animals" && weightMode === "lot"),
   );
-  // La gestión de usuarios solo es visible para administradores y se mantiene
-  // fuera de la barra inferior móvil (que se limita a 5 destinos).
+  // La gestión de usuarios y la configuración solo son visibles para
+  // administradores y se mantienen fuera de la barra inferior móvil (que se
+  // limita a 5 destinos).
   const nav: NavItem[] =
     user?.role === "admin"
       ? [
           ...baseNav,
           { href: "/usuarios", label: "Usuarios", Icon: UsersIcon },
+          { href: "/configuracion", label: "Configuración", Icon: SettingsIcon },
         ]
       : baseNav;
   const mobileNav = baseNav.slice(0, 5);
@@ -115,7 +114,6 @@ export function AppShell({
             <SidebarIcon width={20} height={20} />
           </button>
         </div>
-        <HaciendaSwitcher haciendas={haciendas} active={activeHacienda} />
         <nav className="flex-1 space-y-1 px-3 py-4">
           {nav.map(({ href, label, Icon, exact }) => (
             <Link
@@ -172,11 +170,6 @@ export function AppShell({
                 <CloseIcon />
               </button>
             </div>
-            <HaciendaSwitcher
-              haciendas={haciendas}
-              active={activeHacienda}
-              onNavigate={() => setOpen(false)}
-            />
             <nav className="flex-1 space-y-1 px-3 py-4">
               {nav.map(({ href, label, Icon, exact }) => (
                 <Link
@@ -217,7 +210,7 @@ export function AppShell({
         </button>
         <Link href="/" className="flex items-center gap-2">
           <BullHeadIcon className="text-brand-600" width={22} height={22} />
-          <span className="text-lg font-bold text-slate-900">Haciendas</span>
+          <span className="text-lg font-bold text-slate-900">{HACIENDA_NAME}</span>
         </Link>
         <div className="ml-auto">
           <UnitToggle initial={weightUnit} />
@@ -267,7 +260,7 @@ function Brand() {
         <BullHeadIcon width={20} height={20} />
       </span>
       <span className="text-lg font-bold tracking-tight text-slate-900">
-        Haciendas
+        {HACIENDA_NAME}
       </span>
     </Link>
   );

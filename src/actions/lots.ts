@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str, int, float, date } from "@/actions/helpers";
 import { normalizeLotStatus } from "@/lib/lotStatus";
+import { HACIENDA_NAME } from "@/lib/brand";
 
 function lotData(formData: FormData) {
   const status = normalizeLotStatus(str(formData.get("status")));
@@ -13,7 +14,7 @@ function lotData(formData: FormData) {
   // a otro estado se limpian para no dejar información obsoleta.
   const sold = status === "sold";
   return {
-    ranch: str(formData.get("ranch")),
+    ranch: HACIENDA_NAME,
     number: str(formData.get("number")),
     name: str(formData.get("name")),
     description: str(formData.get("description")),

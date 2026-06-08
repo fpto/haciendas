@@ -20,7 +20,7 @@ export default async function LoginPage({
             <BullHeadIcon width={28} height={28} />
           </span>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Haciendas
+            Nueva Joya
           </h1>
           <p className="mt-1 text-sm text-slate-500">
             Gestión ganadera — inicia sesión para continuar

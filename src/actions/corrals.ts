@@ -6,11 +6,12 @@ import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str, float } from "@/actions/helpers";
 import { parseKmzOrKmlPoints } from "@/lib/kml";
+import { HACIENDA_NAME } from "@/lib/brand";
 
 function corralData(formData: FormData) {
   return {
     number: str(formData.get("number")),
-    ranch: str(formData.get("ranch")),
+    ranch: HACIENDA_NAME,
     comment: str(formData.get("comment")),
     latitude: float(formData.get("latitude")),
     longitude: float(formData.get("longitude")),
@@ -43,12 +44,12 @@ export async function deleteCorral(formData: FormData) {
 // Importa corrales desde un archivo .kmz/.kml de Google Earth.
 // Cada punto (Placemark con Point) se convierte en un corral: su nombre se usa
 // como número y sus coordenadas como latitud/longitud. Si ya existe un corral
-// con ese número (y misma hacienda, si se indica) se actualiza; si no, se crea.
+// con ese número se actualiza; si no, se crea.
 export async function importCorralsFromKmz(formData: FormData) {
   await requireEditor();
 
   const file = formData.get("file");
-  const ranch = str(formData.get("ranch"));
+  const ranch = HACIENDA_NAME;
 
   if (!file || typeof file === "string" || file.size === 0) {
     redirect("/corrals/import?error=Selecciona un archivo .kmz o .kml válido");

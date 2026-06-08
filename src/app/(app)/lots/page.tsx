@@ -5,17 +5,14 @@ import { LotsIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
 import { lotStatusLabel, lotStatusBadgeColor } from "@/lib/lotStatus";
-import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function LotsPage() {
-  const activeHacienda = await getActiveHacienda();
   const [lots, unit, user] = await Promise.all([
     prisma.lot.findMany({
-      where: activeHacienda ? { ranch: activeHacienda } : undefined,
-      orderBy: [{ ranch: "asc" }, { number: "asc" }],
+      orderBy: [{ number: "asc" }],
       include: {
         _count: { select: { animals: true } },
         plot: { select: { id: true, number: true } },
@@ -32,9 +29,7 @@ export default async function LotsPage() {
     <div>
       <PageHeader
         title="Lotes"
-        subtitle={`${fmtNumber(lots.length)} lotes registrados${
-          activeHacienda ? ` · ${activeHacienda}` : ""
-        }`}
+        subtitle={`${fmtNumber(lots.length)} lotes registrados`}
         action={canEdit ? { href: "/lots/new", label: "Nuevo lote" } : undefined}
       />
 
@@ -66,12 +61,9 @@ export default async function LotsPage() {
                       {latest?.animalCount ?? lot._count.animals} cabezas
                     </p>
                     <p className="text-xs text-slate-500">
-                      {[
-                        lot.ranch,
-                        lot.plot?.number ? `Potrero ${lot.plot.number}` : null,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
+                      {lot.plot?.number
+                        ? `Potrero ${lot.plot.number}`
+                        : "Sin potrero"}
                     </p>
                     <div className="mt-3 grid grid-cols-2 gap-2 text-center text-sm">
                       <div className="rounded-lg bg-slate-50 py-1.5">
@@ -98,7 +90,6 @@ export default async function LotsPage() {
                 <tr>
                   <Th>Lote</Th>
                   <Th>Estado</Th>
-                  <Th>Hacienda</Th>
                   <Th>Potrero</Th>
                   <Th className="text-right">Cabezas</Th>
                   <Th className="text-right">Peso promedio</Th>
@@ -119,7 +110,6 @@ export default async function LotsPage() {
                           {lotStatusLabel(lot.status)}
                         </Badge>
                       </Td>
-                      <Td>{lot.ranch ?? "—"}</Td>
                       <Td>
                         {lot.plot?.number ? `Potrero ${lot.plot.number}` : "—"}
                       </Td>

@@ -6,8 +6,7 @@ import { sellLot } from "@/actions/lots";
 import { SaleForm } from "@/components/entity-forms/SaleForm";
 import { LotSaleForm } from "@/components/entity-forms/LotSaleForm";
 import { ArrowLeftIcon } from "@/components/icons";
-import { getActiveHacienda } from "@/lib/activeHacienda";
-import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getWeightMode } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
@@ -17,29 +16,19 @@ export default async function NewSalePage({
   searchParams: Promise<{ lot_id?: string }>;
 }) {
   await requireEditor();
-  const [mode, activeHacienda, sp] = await Promise.all([
-    getActiveWeightMode(),
-    getActiveHacienda(),
-    searchParams,
-  ]);
+  const [mode, sp] = await Promise.all([getWeightMode(), searchParams]);
 
   // En modo "Por Lote" la venta se hace eligiendo un lote en crecimiento; en
   // modo "Por Animal" se mantiene el registro de venta basado en animales.
   if (mode === "lot") {
     const lots = await prisma.lot.findMany({
-      where: {
-        status: "growing",
-        ...(activeHacienda ? { ranch: activeHacienda } : {}),
-      },
-      orderBy: [{ ranch: "asc" }, { number: "asc" }],
-      select: { id: true, number: true, name: true, ranch: true },
+      where: { status: "growing" },
+      orderBy: [{ number: "asc" }],
+      select: { id: true, number: true, name: true },
     });
     const lotOptions = lots.map((l) => ({
       id: l.id,
-      label:
-        [l.name || (l.number ? `Lote ${l.number}` : `#${l.id}`), l.ranch]
-          .filter(Boolean)
-          .join(" · "),
+      label: l.name || (l.number ? `Lote ${l.number}` : `#${l.id}`),
     }));
     const defaultLotId = sp.lot_id ? Number(sp.lot_id) : undefined;
 

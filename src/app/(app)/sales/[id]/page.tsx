@@ -114,7 +114,6 @@ export default async function SaleShowPage({
               <thead>
                 <tr>
                   <Th>#</Th>
-                  <Th>Hacienda</Th>
                   <Th className="text-right">Precio venta</Th>
                   <Th></Th>
                 </tr>
@@ -125,7 +124,6 @@ export default async function SaleShowPage({
                     <Td className="font-semibold text-slate-900">
                       {a.animalNumber ?? a.id}
                     </Td>
-                    <Td>{a.ranch ?? "—"}</Td>
                     <Td className="text-right">
                       {a.salePrice ? `${fmtMoney(a.salePrice)}/lb` : "—"}
                     </Td>

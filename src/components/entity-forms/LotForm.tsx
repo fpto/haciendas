@@ -2,20 +2,17 @@ import Link from "next/link";
 import type { Lot, Plot, Corral } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 import { LotStatusFields } from "@/components/entity-forms/LotStatusFields";
 
 export function LotForm({
   action,
   lot,
-  haciendas,
   plots,
   corrals,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   lot?: Lot | null;
-  haciendas: { id: number; name: string }[];
   plots: Pick<Plot, "id" | "number" | "ranch" | "plotType">[];
   corrals: Pick<Corral, "id" | "number" | "ranch">[];
   submitLabel: string;
@@ -30,15 +27,12 @@ export function LotForm({
           <Field label="Nombre">
             <Input name="name" defaultValue={lot?.name ?? ""} />
           </Field>
-          <Field label="Hacienda">
-            <RanchSelect haciendas={haciendas} defaultValue={lot?.ranch} />
-          </Field>
           <Field label="Potrero" hint="Ubicación del lote">
             <Select name="plot_id" defaultValue={lot?.plotId ?? ""}>
               <option value="">— Sin potrero —</option>
               {plots.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {[p.ranch, p.plotType, p.number].filter(Boolean).join(" · ") ||
+                  {[p.plotType, p.number].filter(Boolean).join(" · ") ||
                     `#${p.id}`}
                 </option>
               ))}
@@ -49,7 +43,7 @@ export function LotForm({
               <option value="">— Sin corral —</option>
               {corrals.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {[c.ranch, c.number].filter(Boolean).join(" · ") || `#${c.id}`}
+                  {c.number ? `Corral ${c.number}` : `#${c.id}`}
                 </option>
               ))}
             </Select>

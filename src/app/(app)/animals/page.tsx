@@ -4,7 +4,6 @@ import { PageHeader, Card, EmptyState, Badge, TableWrap, Th, Td } from "@/compon
 import { CowIcon, SearchIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber } from "@/lib/utils";
 import { getWeightUnit, convertFromKg, fmtWeight } from "@/lib/units";
-import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +13,6 @@ const PER_PAGE = 50;
 const SORTS = [
   { value: "lot_id", label: "Lote" },
   { value: "animal_number", label: "Número" },
-  { value: "ranch", label: "Hacienda" },
   { value: "last_weight", label: "Último peso" },
   { value: "daily_gain", label: "GDP" },
   { value: "days_since_last_weight", label: "Días sin pesar" },
@@ -32,15 +30,13 @@ export default async function AnimalsPage({
 }) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
-  const [unit, activeHacienda, user] = await Promise.all([
+  const [unit, user] = await Promise.all([
     getWeightUnit(),
-    getActiveHacienda(),
     getCurrentUser(),
   ]);
   const canEdit = isEditor(user?.role);
   const { rows, total } = await getLatestWeights({
     search: sp.search,
-    ranch: activeHacienda ?? undefined,
     sort: sp.sort,
     direction: sp.direction,
     page,
@@ -67,9 +63,7 @@ export default async function AnimalsPage({
     <div>
       <PageHeader
         title="Animales"
-        subtitle={`${fmtNumber(total)} en engorde · pesos más recientes${
-          activeHacienda ? ` · ${activeHacienda}` : ""
-        }`}
+        subtitle={`${fmtNumber(total)} en engorde · pesos más recientes`}
         action={canEdit ? { href: "/animals/new", label: "Nuevo animal" } : undefined}
       />
 
@@ -84,7 +78,7 @@ export default async function AnimalsPage({
           <input
             name="search"
             defaultValue={sp.search ?? ""}
-            placeholder="Buscar por número o hacienda…"
+            placeholder="Buscar por número…"
             className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-3 text-base shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
@@ -135,8 +129,7 @@ export default async function AnimalsPage({
                         #{r.animal_number}
                       </p>
                       <p className="text-xs text-slate-500">
-                        {r.ranch}
-                        {r.lot_number ? ` · Lote ${r.lot_number}` : ""}
+                        {r.lot_number ? `Lote ${r.lot_number}` : "Sin lote"}
                       </p>
                     </div>
                     <Badge color="green">{fmtWeight(r.last_weight, unit)}</Badge>
@@ -166,7 +159,6 @@ export default async function AnimalsPage({
               <thead>
                 <tr>
                   <Th>#</Th>
-                  <Th>Hacienda</Th>
                   <Th>Lote</Th>
                   <Th className="text-right">Último peso</Th>
                   <Th className="text-right">Anterior</Th>
@@ -182,7 +174,6 @@ export default async function AnimalsPage({
                     <Td className="font-semibold text-slate-900">
                       {r.animal_number}
                     </Td>
-                    <Td>{r.ranch}</Td>
                     <Td>{r.lot_number ?? "—"}</Td>
                     <Td className="text-right font-semibold">
                       {fmtWeight(r.last_weight, unit)}

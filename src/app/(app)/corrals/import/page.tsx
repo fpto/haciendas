@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
 import { requireEditor } from "@/lib/auth";
 import { importCorralsFromKmz } from "@/actions/corrals";
 import { Card } from "@/components/ui";
 import { Field, SubmitButton, FormError } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 import { ArrowLeftIcon, CorralIcon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +14,6 @@ export default async function ImportCorralsPage({
 }) {
   await requireEditor();
   const { error } = await searchParams;
-  const haciendas = await prisma.hacienda.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
 
   return (
     <div>
@@ -55,13 +49,6 @@ export default async function ImportCorralsPage({
             />
           </Field>
 
-          <Field
-            label="Hacienda"
-            hint="Se asigna a todos los corrales importados."
-          >
-            <RanchSelect haciendas={haciendas} />
-          </Field>
-
           <div className="rounded-xl bg-brand-50 p-4 text-sm text-brand-900">
             <p className="mb-1 flex items-center gap-1.5 font-semibold">
               <CorralIcon width={16} height={16} /> Cómo funciona
@@ -76,7 +63,7 @@ export default async function ImportCorralsPage({
                 <strong>latitud y longitud</strong>.
               </li>
               <li>
-                Si ya existe un corral con ese número {`(y misma hacienda)`} se{" "}
+                Si ya existe un corral con ese número se{" "}
                 <strong>actualiza</strong>; si no, se <strong>crea</strong>.
               </li>
             </ul>

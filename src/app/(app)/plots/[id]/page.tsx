@@ -51,7 +51,6 @@ export default async function PlotShowPage({
 
   const details = [
     { label: "Número", value: plot.number ?? "—" },
-    { label: "Hacienda", value: plot.ranch ?? "—" },
     {
       label: "Tipo",
       value: <span className="capitalize">{plot.plotType ?? "—"}</span>,

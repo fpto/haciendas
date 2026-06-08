@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Haciendas — Gestión Ganadera",
+  title: "Nueva Joya — Gestión Ganadera",
   description:
-    "Gestión de animales, lotes, potreros, pesos y ventas para haciendas ganaderas.",
+    "Gestión de animales, lotes, potreros, pesos y ventas de la hacienda Nueva Joya.",
 };
 
 export const viewport: Viewport = {
