@@ -10,6 +10,10 @@ import { normalizeLotStatus } from "@/lib/lotStatus";
 import { parseGeoJsonRing } from "@/lib/kml";
 import { PlotsOverviewMap, type PlotMarker } from "@/components/PlotsOverviewMap";
 import {
+  CorralsOverviewMap,
+  type CorralMarker,
+} from "@/components/CorralsOverviewMap";
+import {
   CowIcon,
   ScaleIcon,
   CalendarIcon,
@@ -23,7 +27,7 @@ export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const weightMode = await getWeightMode();
-  const [stats, user, unit, plots] = await Promise.all([
+  const [stats, user, unit, plots, corrals] = await Promise.all([
     getDashboardStats(undefined, weightMode),
     getCurrentUser(),
     getWeightUnit(),
@@ -32,6 +36,25 @@ export default async function DashboardPage() {
         id: true,
         number: true,
         boundaries: true,
+        lots: {
+          select: {
+            status: true,
+            _count: { select: { animals: true } },
+            weighings: {
+              orderBy: [{ date: "desc" }, { id: "desc" }],
+              take: 1,
+              select: { animalCount: true },
+            },
+          },
+        },
+      },
+    }),
+    prisma.corral.findMany({
+      select: {
+        id: true,
+        number: true,
+        latitude: true,
+        longitude: true,
         lots: {
           select: {
             status: true,
@@ -68,6 +91,24 @@ export default async function DashboardPage() {
       };
     })
     .filter((m): m is PlotMarker => m !== null);
+
+  // Marcadores del mapa de corrales: corrales con ubicación + número de cabezas.
+  // Igual que en potreros, solo los lotes en crecimiento aportan cabezas.
+  const corralMarkers: CorralMarker[] = corrals
+    .map((c) => {
+      if (c.latitude == null || c.longitude == null) return null;
+      const animalCount = c.lots
+        .filter((lot) => normalizeLotStatus(lot.status) === "growing")
+        .reduce((sum, lot) => sum + lotHeadcount(lot), 0);
+      return {
+        id: c.id,
+        label: `Corral ${c.number ?? c.id}`,
+        lat: c.latitude,
+        lng: c.longitude,
+        animalCount,
+      };
+    })
+    .filter((m): m is CorralMarker => m !== null);
 
   return (
     <div>
@@ -154,6 +195,24 @@ export default async function DashboardPage() {
             href="/sales"
           />
         </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+          Mapa de corrales
+        </h2>
+        {corralMarkers.length === 0 ? (
+          <Card className="p-5">
+            <p className="text-sm text-slate-500">
+              Aún no hay corrales con ubicación para mostrar en el mapa. Crea
+              corrales o impórtalos desde un archivo KMZ en{" "}
+              <span className="font-semibold text-slate-700">Corrales</span> para
+              verlos aquí con el número de cabezas en cada uno.
+            </p>
+          </Card>
+        ) : (
+          <CorralsOverviewMap corrals={corralMarkers} />
+        )}
       </section>
 
       <section className="mt-8">

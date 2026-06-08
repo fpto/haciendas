@@ -16,6 +16,7 @@ export default async function LotsPage() {
       include: {
         _count: { select: { animals: true } },
         plot: { select: { id: true, number: true } },
+        corral: { select: { id: true, number: true } },
         // Último pesado del lote: define el peso promedio y el número de cabezas.
         weighings: { orderBy: [{ date: "desc" }, { id: "desc" }], take: 1 },
       },
@@ -61,9 +62,12 @@ export default async function LotsPage() {
                       {latest?.animalCount ?? lot._count.animals} cabezas
                     </p>
                     <p className="text-xs text-slate-500">
-                      {lot.plot?.number
-                        ? `Potrero ${lot.plot.number}`
-                        : "Sin potrero"}
+                      {[
+                        lot.plot?.number ? `Potrero ${lot.plot.number}` : null,
+                        lot.corral?.number ? `Corral ${lot.corral.number}` : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ") || "Sin ubicación"}
                     </p>
                     <div className="mt-3 grid grid-cols-2 gap-2 text-center text-sm">
                       <div className="rounded-lg bg-slate-50 py-1.5">
@@ -91,6 +95,7 @@ export default async function LotsPage() {
                   <Th>Lote</Th>
                   <Th>Estado</Th>
                   <Th>Potrero</Th>
+                  <Th>Corral</Th>
                   <Th className="text-right">Cabezas</Th>
                   <Th className="text-right">Peso promedio</Th>
                   <Th className="text-right">Último pesado</Th>
@@ -112,6 +117,9 @@ export default async function LotsPage() {
                       </Td>
                       <Td>
                         {lot.plot?.number ? `Potrero ${lot.plot.number}` : "—"}
+                      </Td>
+                      <Td>
+                        {lot.corral?.number ? `Corral ${lot.corral.number}` : "—"}
                       </Td>
                       <Td className="text-right">
                         {latest?.animalCount ?? lot._count.animals}
