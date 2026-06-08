@@ -14,7 +14,6 @@ function lotData(formData: FormData) {
   const sold = status === "sold";
   return {
     ranch: str(formData.get("ranch")),
-    species: str(formData.get("species")),
     number: str(formData.get("number")),
     name: str(formData.get("name")),
     description: str(formData.get("description")),

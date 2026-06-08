@@ -23,7 +23,7 @@ export default async function EditWeightPage({
     prisma.weight.findUnique({ where: { id: weightId } }),
     prisma.animal.findMany({
       orderBy: [{ ranch: "asc" }, { animalNumber: "asc" }],
-      select: { id: true, animalNumber: true, ranch: true, species: true },
+      select: { id: true, animalNumber: true, ranch: true },
     }),
     getWeightUnit(),
   ]);

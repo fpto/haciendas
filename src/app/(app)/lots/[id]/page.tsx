@@ -170,7 +170,6 @@ export default async function LotShowPage({
                   "—"
                 ),
               },
-              { label: "Especie", value: <span className="capitalize">{lot.species ?? "—"}</span> },
               {
                 label: "Peso promedio",
                 value: fmtWeight(latest?.averageWeight ?? null, unit),
@@ -353,7 +352,6 @@ export default async function LotShowPage({
                   <thead>
                     <tr>
                       <Th>#</Th>
-                      <Th>Especie</Th>
                       <Th>Estatus</Th>
                       <Th></Th>
                     </tr>
@@ -364,7 +362,6 @@ export default async function LotShowPage({
                         <Td className="font-semibold text-slate-900">
                           {a.animalNumber ?? a.id}
                         </Td>
-                        <Td className="capitalize">{a.species ?? "—"}</Td>
                         <Td>
                           <Badge color={a.status === "engorde" ? "green" : "slate"}>
                             {a.status ?? "—"}

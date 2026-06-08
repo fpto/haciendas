@@ -5,7 +5,6 @@ import { Field, Input, Select, SubmitButton } from "@/components/forms";
 import { RanchSelect } from "@/components/RanchSelect";
 import { toDateInput } from "@/lib/utils";
 
-const SPECIES = ["bovino", "ovino", "caprino", "equino", "porcino"];
 const STATUSES = ["engorde", "cría", "reproducción", "vendido", "muerto"];
 
 export function AnimalForm({
@@ -35,15 +34,6 @@ export function AnimalForm({
               placeholder="Ej. 1024"
             />
           </Field>
-          <Field label="Especie">
-            <Select name="species" defaultValue={animal?.species ?? "bovino"}>
-              {SPECIES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </Select>
-          </Field>
           <Field label="Hacienda">
             <RanchSelect haciendas={haciendas} defaultValue={animal?.ranch} />
           </Field>
@@ -61,7 +51,7 @@ export function AnimalForm({
               <option value="">— Sin lote —</option>
               {lots.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {[l.ranch, l.species, l.number].filter(Boolean).join(" · ")}
+                  {[l.ranch, l.number].filter(Boolean).join(" · ")}
                 </option>
               ))}
             </Select>

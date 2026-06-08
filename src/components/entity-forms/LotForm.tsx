@@ -5,8 +5,6 @@ import { Field, Input, Select, Textarea, SubmitButton } from "@/components/forms
 import { RanchSelect } from "@/components/RanchSelect";
 import { LotStatusFields } from "@/components/entity-forms/LotStatusFields";
 
-const SPECIES = ["bovino", "ovino", "caprino", "equino", "porcino"];
-
 export function LotForm({
   action,
   lot,
@@ -32,15 +30,6 @@ export function LotForm({
           </Field>
           <Field label="Hacienda">
             <RanchSelect haciendas={haciendas} defaultValue={lot?.ranch} />
-          </Field>
-          <Field label="Especie">
-            <Select name="species" defaultValue={lot?.species ?? "bovino"}>
-              {SPECIES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </Select>
           </Field>
           <Field label="Potrero" hint="Ubicación del lote">
             <Select name="plot_id" defaultValue={lot?.plotId ?? ""}>

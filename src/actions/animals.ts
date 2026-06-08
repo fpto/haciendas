@@ -9,7 +9,6 @@ import { str, int, float, date } from "@/actions/helpers";
 function animalData(formData: FormData) {
   return {
     animalNumber: int(formData.get("animal_number")),
-    species: str(formData.get("species")),
     birthday: date(formData.get("birthday")),
     ranch: str(formData.get("ranch")),
     lotId: int(formData.get("lot_id")),

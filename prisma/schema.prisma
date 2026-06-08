@@ -15,7 +15,6 @@ datasource db {
 model Animal {
   id            Int       @id @default(autoincrement())
   animalNumber  Int?      @map("animal_number")
-  species       String?
   birthday      DateTime? @db.Date
   ranch         String?
   lotId         Int?      @map("lot_id")
@@ -55,7 +54,6 @@ model Hacienda {
 model Lot {
   id          Int      @id @default(autoincrement())
   ranch       String?
-  species     String?
   number      String?
   name        String?
   description String?

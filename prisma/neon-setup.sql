@@ -13,7 +13,6 @@ CREATE SCHEMA IF NOT EXISTS "public";
 CREATE TABLE "animals" (
     "id" SERIAL NOT NULL,
     "animal_number" INTEGER,
-    "species" TEXT,
     "birthday" DATE,
     "ranch" TEXT,
     "lot_id" INTEGER,
@@ -35,7 +34,6 @@ CREATE TABLE "animals" (
 CREATE TABLE "lots" (
     "id" SERIAL NOT NULL,
     "ranch" TEXT,
-    "species" TEXT,
     "number" TEXT,
     "name" TEXT,
     "description" TEXT,
