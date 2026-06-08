@@ -5,12 +5,13 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str, int, float, date } from "@/actions/helpers";
+import { HACIENDA_NAME } from "@/lib/brand";
 
 function animalData(formData: FormData) {
   return {
     animalNumber: int(formData.get("animal_number")),
     birthday: date(formData.get("birthday")),
-    ranch: str(formData.get("ranch")),
+    ranch: HACIENDA_NAME,
     lotId: int(formData.get("lot_id")),
     status: str(formData.get("status")),
     breed: str(formData.get("breed")),

@@ -21,7 +21,7 @@ export function LotSaleForm({
       <Card className="space-y-5 p-5 sm:p-6">
         <Field
           label="Lote a vender"
-          hint="Solo se listan los lotes en crecimiento de la hacienda activa."
+          hint="Solo se listan los lotes en crecimiento."
         >
           <Select name="lot_id" defaultValue={defaultLotId ?? ""} required>
             <option value="" disabled>

@@ -2,8 +2,8 @@ import { prisma } from "@/lib/db";
 import { getDashboardStats } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getWeightUnit, convertFromKg, weightLabel, gainLabel } from "@/lib/units";
-import { getActiveHacienda } from "@/lib/activeHacienda";
-import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getWeightMode } from "@/lib/settings";
+import { HACIENDA_NAME } from "@/lib/brand";
 import { StatCard, Card } from "@/components/ui";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
 import { normalizeLotStatus } from "@/lib/lotStatus";
@@ -22,16 +22,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [activeHacienda, weightMode] = await Promise.all([
-    getActiveHacienda(),
-    getActiveWeightMode(),
-  ]);
+  const weightMode = await getWeightMode();
   const [stats, user, unit, plots] = await Promise.all([
-    getDashboardStats(activeHacienda ?? undefined, weightMode ?? undefined),
+    getDashboardStats(undefined, weightMode),
     getCurrentUser(),
     getWeightUnit(),
     prisma.plot.findMany({
-      where: activeHacienda ? { ranch: activeHacienda } : undefined,
       select: {
         id: true,
         number: true,
@@ -80,9 +76,7 @@ export default async function DashboardPage() {
           Hola{user?.firstName ? `, ${user.firstName}` : ""} 👋
         </h1>
         <p className="mt-0.5 text-sm text-slate-500">
-          {activeHacienda
-            ? `Resumen de ${activeHacienda}`
-            : "Resumen general de tu operación ganadera"}
+          Resumen de {HACIENDA_NAME}
         </p>
       </div>
 

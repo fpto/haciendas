@@ -51,7 +51,6 @@ export default async function CorralShowPage({
 
   const details = [
     { label: "Número", value: corral.number ?? "—" },
-    { label: "Hacienda", value: corral.ranch ?? "—" },
     {
       label: "Cabezas",
       value: <Badge color="green">{fmtNumber(animalCount)}</Badge>,

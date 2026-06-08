@@ -17,13 +17,7 @@ export default async function EditCorralPage({
   const { id } = await params;
   const corralId = Number(id);
   if (Number.isNaN(corralId)) notFound();
-  const [corral, haciendas] = await Promise.all([
-    prisma.corral.findUnique({ where: { id: corralId } }),
-    prisma.hacienda.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
-  ]);
+  const corral = await prisma.corral.findUnique({ where: { id: corralId } });
   if (!corral) notFound();
 
   return (
@@ -40,7 +34,6 @@ export default async function EditCorralPage({
       <CorralForm
         action={updateCorral.bind(null, corral.id)}
         corral={corral}
-        haciendas={haciendas}
         submitLabel="Guardar cambios"
       />
     </div>

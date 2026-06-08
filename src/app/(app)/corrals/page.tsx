@@ -3,17 +3,14 @@ import { prisma } from "@/lib/db";
 import { EmptyState, TableWrap, Th, Td, Card, Badge } from "@/components/ui";
 import { CorralIcon, ChevronRightIcon, PlusIcon } from "@/components/icons";
 import { fmtNumber, lotHeadcount } from "@/lib/utils";
-import { getActiveHacienda } from "@/lib/activeHacienda";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function CorralsPage() {
-  const activeHacienda = await getActiveHacienda();
   const [corrals, user] = await Promise.all([
     prisma.corral.findMany({
-      where: activeHacienda ? { ranch: activeHacienda } : undefined,
-      orderBy: [{ ranch: "asc" }, { number: "asc" }],
+      orderBy: [{ number: "asc" }],
       include: {
         lots: {
           select: {
@@ -44,7 +41,6 @@ export default async function CorralsPage() {
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
             {fmtNumber(corrals.length)} corrales registrados
-            {activeHacienda ? ` · ${activeHacienda}` : ""}
           </p>
         </div>
         {canEdit && (
@@ -87,10 +83,9 @@ export default async function CorralsPage() {
                     <Badge color="green">{fmtNumber(headcount(corral))} cab.</Badge>
                   </div>
                   <p className="text-xs text-slate-500">
-                    {corral.ranch ?? "—"}
                     {corral.latitude != null && corral.longitude != null
-                      ? ` · ${fmtNumber(corral.latitude, 4)}, ${fmtNumber(corral.longitude, 4)}`
-                      : ""}
+                      ? `${fmtNumber(corral.latitude, 4)}, ${fmtNumber(corral.longitude, 4)}`
+                      : "Sin ubicación"}
                   </p>
                 </Card>
               </Link>
@@ -102,7 +97,6 @@ export default async function CorralsPage() {
               <thead>
                 <tr>
                   <Th>Corral</Th>
-                  <Th>Hacienda</Th>
                   <Th>Ubicación</Th>
                   <Th className="text-right">Cabezas</Th>
                   <Th></Th>
@@ -114,7 +108,6 @@ export default async function CorralsPage() {
                     <Td className="font-semibold text-slate-900">
                       {corral.number ?? corral.id}
                     </Td>
-                    <Td>{corral.ranch ?? "—"}</Td>
                     <Td>
                       {corral.latitude != null && corral.longitude != null
                         ? `${fmtNumber(corral.latitude, 5)}, ${fmtNumber(corral.longitude, 5)}`

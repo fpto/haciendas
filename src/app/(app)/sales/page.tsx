@@ -5,8 +5,7 @@ import { PageHeader, EmptyState, TableWrap, Th, Td, Card, Badge } from "@/compon
 import { MoneyIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtNumber, fmtDate, fmtMoney, fmtPercent } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
-import { getActiveHacienda } from "@/lib/activeHacienda";
-import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getWeightMode } from "@/lib/settings";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +18,7 @@ function roiColor(roi: number | null): "green" | "red" | "slate" {
 export default async function SalesPage() {
   // En modo "Por Lote" las ventas se gestionan por lote (estado "vendido"), no
   // por animales individuales.
-  const mode = await getActiveWeightMode();
+  const mode = await getWeightMode();
   if (mode === "lot") return <LotSalesPage />;
   return <AnimalSalesPage />;
 }
@@ -29,13 +28,9 @@ export default async function SalesPage() {
 // cada venta vive en la ficha del lote.
 // ---------------------------------------------------------------------------
 async function LotSalesPage() {
-  const activeHacienda = await getActiveHacienda();
   const [lots, unit, user] = await Promise.all([
     prisma.lot.findMany({
-      where: {
-        status: "sold",
-        ...(activeHacienda ? { ranch: activeHacienda } : {}),
-      },
+      where: { status: "sold" },
       orderBy: [{ saleDate: "desc" }, { id: "desc" }],
       include: {
         weighings: {
@@ -66,9 +61,7 @@ async function LotSalesPage() {
     <div>
       <PageHeader
         title="Ventas"
-        subtitle={`${fmtNumber(lots.length)} lotes vendidos${
-          activeHacienda ? ` · ${activeHacienda}` : ""
-        }`}
+        subtitle={`${fmtNumber(lots.length)} lotes vendidos`}
         action={canEdit ? { href: "/sales/new", label: "Vender lote" } : undefined}
       />
 
@@ -166,16 +159,12 @@ async function LotSalesPage() {
 // Ventas por animal (modo "Por Animal"): registros de venta con ROI.
 // ---------------------------------------------------------------------------
 async function AnimalSalesPage() {
-  const activeHacienda = await getActiveHacienda();
   const [sales, stats, user] = await Promise.all([
     prisma.sale.findMany({
-      where: activeHacienda
-        ? { animals: { some: { ranch: activeHacienda } } }
-        : undefined,
       orderBy: { date: "desc" },
       include: { _count: { select: { animals: true } } },
     }),
-    getSaleStats(activeHacienda ?? undefined),
+    getSaleStats(),
     getCurrentUser(),
   ]);
   const canEdit = isEditor(user?.role);
@@ -186,9 +175,7 @@ async function AnimalSalesPage() {
     <div>
       <PageHeader
         title="Ventas"
-        subtitle={`${fmtNumber(sales.length)} ventas registradas${
-          activeHacienda ? ` · ${activeHacienda}` : ""
-        }`}
+        subtitle={`${fmtNumber(sales.length)} ventas registradas`}
         action={canEdit ? { href: "/sales/new", label: "Nueva venta" } : undefined}
       />
 

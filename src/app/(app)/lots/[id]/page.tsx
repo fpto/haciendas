@@ -14,7 +14,7 @@ import {
   ScaleIcon,
   MoneyIcon,
 } from "@/components/icons";
-import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getWeightMode } from "@/lib/settings";
 import { fmtNumber, fmtDate, fmtMoney } from "@/lib/utils";
 import {
   getWeightUnit,
@@ -76,7 +76,7 @@ export default async function LotShowPage({
     }),
     getCurrentUser(),
     getWeightUnit(),
-    getActiveWeightMode(),
+    getWeightMode(),
   ]);
   if (!lot) notFound();
 
@@ -158,7 +158,6 @@ export default async function LotShowPage({
                   </Badge>
                 ),
               },
-              { label: "Hacienda", value: lot.ranch ?? "—" },
               {
                 label: "Potrero",
                 value: lot.plot ? (

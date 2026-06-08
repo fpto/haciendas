@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { Animal, Lot, Sale } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Select, SubmitButton } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 import { toDateInput } from "@/lib/utils";
 
 const STATUSES = ["engorde", "cría", "reproducción", "vendido", "muerto"];
@@ -12,14 +11,12 @@ export function AnimalForm({
   animal,
   lots,
   sales,
-  haciendas,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   animal?: Animal | null;
   lots: Lot[];
   sales: Sale[];
-  haciendas: { id: number; name: string }[];
   submitLabel: string;
 }) {
   return (
@@ -33,9 +30,6 @@ export function AnimalForm({
               defaultValue={animal?.animalNumber ?? ""}
               placeholder="Ej. 1024"
             />
-          </Field>
-          <Field label="Hacienda">
-            <RanchSelect haciendas={haciendas} defaultValue={animal?.ranch} />
           </Field>
           <Field label="Estatus">
             <Select name="status" defaultValue={animal?.status ?? "engorde"}>
@@ -51,7 +45,7 @@ export function AnimalForm({
               <option value="">— Sin lote —</option>
               {lots.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {[l.ranch, l.number].filter(Boolean).join(" · ")}
+                  {l.name || (l.number ? `Lote ${l.number}` : `#${l.id}`)}
                 </option>
               ))}
             </Select>

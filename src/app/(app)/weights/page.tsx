@@ -4,27 +4,23 @@ import { PageHeader, EmptyState, TableWrap, Th, Td } from "@/components/ui";
 import { ScaleIcon, ChevronRightIcon } from "@/components/icons";
 import { fmtDate } from "@/lib/utils";
 import { getWeightUnit, fmtWeight } from "@/lib/units";
-import { getActiveHacienda } from "@/lib/activeHacienda";
-import { getActiveWeightMode } from "@/lib/activeWeightMode";
+import { getWeightMode } from "@/lib/settings";
 import { getCurrentUser, isEditor } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function WeightsPage() {
-  const [activeHacienda, mode, unit, user] = await Promise.all([
-    getActiveHacienda(),
-    getActiveWeightMode(),
+  const [mode, unit, user] = await Promise.all([
+    getWeightMode(),
     getWeightUnit(),
     getCurrentUser(),
   ]);
   const canEdit = isEditor(user?.role);
-  const suffix = activeHacienda ? ` · ${activeHacienda}` : "";
 
-  // Hacienda en modo "por lote": los pesos se registran a nivel de lote
-  // (LotWeighing), no por animal individual.
+  // En modo "por lote" los pesos se registran a nivel de lote (LotWeighing), no
+  // por animal individual.
   if (mode === "lot") {
     const weighings = await prisma.lotWeighing.findMany({
-      where: activeHacienda ? { lot: { ranch: activeHacienda } } : undefined,
       orderBy: [{ date: "desc" }, { id: "desc" }],
       take: 200,
       include: { lot: { select: { id: true, number: true, name: true } } },
@@ -34,7 +30,7 @@ export default async function WeightsPage() {
       <div>
         <PageHeader
           title="Pesos"
-          subtitle={`Pesados de lote más recientes${suffix}`}
+          subtitle="Pesados de lote más recientes"
           action={canEdit ? { href: "/lot_weighings/new", label: "Registrar pesado" } : undefined}
         />
 
@@ -92,9 +88,8 @@ export default async function WeightsPage() {
     );
   }
 
-  // Modo "por animal" o vista global: pesos individuales.
+  // Modo "por animal": pesos individuales.
   const weights = await prisma.weight.findMany({
-    where: activeHacienda ? { animal: { ranch: activeHacienda } } : undefined,
     orderBy: { date: "desc" },
     take: 200,
     include: { animal: true },
@@ -104,7 +99,7 @@ export default async function WeightsPage() {
     <div>
       <PageHeader
         title="Pesos"
-        subtitle={`Últimos registros de peso${suffix}`}
+        subtitle="Últimos registros de peso"
         action={canEdit ? { href: "/weights/new", label: "Registrar peso" } : undefined}
       />
 

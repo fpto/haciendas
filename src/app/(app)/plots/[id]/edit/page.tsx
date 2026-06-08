@@ -17,13 +17,7 @@ export default async function EditPlotPage({
   const { id } = await params;
   const plotId = Number(id);
   if (Number.isNaN(plotId)) notFound();
-  const [plot, haciendas] = await Promise.all([
-    prisma.plot.findUnique({ where: { id: plotId } }),
-    prisma.hacienda.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
-  ]);
+  const plot = await prisma.plot.findUnique({ where: { id: plotId } });
   if (!plot) notFound();
 
   return (
@@ -40,7 +34,6 @@ export default async function EditPlotPage({
       <PlotForm
         action={updatePlot.bind(null, plot.id)}
         plot={plot}
-        haciendas={haciendas}
         submitLabel="Guardar cambios"
       />
     </div>

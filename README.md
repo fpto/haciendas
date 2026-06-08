@@ -1,7 +1,12 @@
-# 🐄 Haciendas — Gestión Ganadera
+# 🐄 Nueva Joya — Gestión Ganadera
 
-Aplicación de gestión de haciendas ganaderas: animales, lotes, potreros, pesos y
-ventas, con estadísticas de rendimiento (GDP, ROI, scores de potreros).
+Aplicación de gestión de la hacienda ganadera **Nueva Joya**: animales, lotes,
+potreros, pesos y ventas, con estadísticas de rendimiento (GDP, ROI, scores de
+potreros).
+
+> El sistema gestiona una única hacienda (Nueva Joya). El nombre vive en
+> `src/lib/brand.ts` y se aplica automáticamente a cada registro; no hay
+> selector ni campo de hacienda en los formularios.
 
 Reescrita desde la app original de **Ruby on Rails** a **Next.js** para desplegar
 de forma nativa en **Vercel**, con una interfaz **moderna y mobile-first**.
@@ -88,8 +93,7 @@ exportado de Google Earth. Cada polígono se convierte en un potrero:
 - El **nombre** del polígono se usa como número de potrero.
 - El **área en hectáreas** se calcula automáticamente (geodésica).
 - Los **linderos** se guardan como GeoJSON en el campo `boundaries`.
-- Si ya existe un potrero con ese número (y misma hacienda) se **actualiza**;
-  si no, se **crea**.
+- Si ya existe un potrero con ese número se **actualiza**; si no, se **crea**.
 
 ## 📍 Corrales (ubicación puntual)
 
@@ -107,8 +111,7 @@ Google Earth. Cada **punto/marcador** se convierte en un corral:
 
 - El **nombre** del punto se usa como número de corral.
 - Las **coordenadas** del punto se guardan como latitud y longitud.
-- Si ya existe un corral con ese número (y misma hacienda) se **actualiza**;
-  si no, se **crea**.
+- Si ya existe un corral con ese número se **actualiza**; si no, se **crea**.
 
 > Migración de BD: si ya tienes la base de datos creada, aplica
 > `prisma/neon-corrals.sql` en el SQL Editor de Neon (o corre `npm run db:push`)
@@ -122,9 +125,18 @@ navegación. Internamente los pesos se almacenan siempre en kilogramos; la
 conversión se aplica solo a la visualización y la captura. Los importes en
 dinero (precio por libra, totales) no cambian con la unidad.
 
+## ⚙️ Configuración (modo de medición de peso)
+
+El modo de medición de peso se elige en **Configuración** (solo administradores):
+
+- **Por Lote**: se registra el peso promedio del lote completo en cada pesada.
+- **Por Animal**: se registra el peso individual de cada animal.
+
+El valor se guarda en `haciendas.weight_mode` y aplica a toda la operación.
+
 ## 🏷️ Estado y venta del lote (modo Por Lote)
 
-En las haciendas configuradas **Por Lote**, cada lote tiene un **estado**:
+Con el modo **Por Lote** activo, cada lote tiene un **estado**:
 
 - **En crecimiento** (`growing`): el lote sigue en engorde. Es el estado por
   defecto y el único que cuenta como **inventario activo** en las métricas de
@@ -143,7 +155,7 @@ En modo Por Lote la sección **Ventas** trabaja por lote (no por animales): list
 los lotes vendidos y, desde **Vender lote**, permite **elegir un lote en
 crecimiento** y capturar la venta, lo que marca el lote como vendido. También se
 puede vender desde el botón **Vender lote** de la ficha del lote. La función de
-venta por animales (con ROI) solo aparece en haciendas configuradas Por Animal.
+venta por animales (con ROI) solo aparece con el modo Por Animal.
 El detalle de cada venta por lote vive en la ficha del lote, y la tarjeta
 **Ventas** del tablero cuenta los lotes vendidos.
 

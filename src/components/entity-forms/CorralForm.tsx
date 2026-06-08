@@ -2,17 +2,14 @@ import Link from "next/link";
 import type { Corral } from "@prisma/client";
 import { Card } from "@/components/ui";
 import { Field, Input, Textarea, SubmitButton } from "@/components/forms";
-import { RanchSelect } from "@/components/RanchSelect";
 
 export function CorralForm({
   action,
   corral,
-  haciendas,
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   corral?: Corral | null;
-  haciendas: { id: number; name: string }[];
   submitLabel: string;
 }) {
   return (
@@ -21,9 +18,6 @@ export function CorralForm({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Número de corral">
             <Input name="number" defaultValue={corral?.number ?? ""} />
-          </Field>
-          <Field label="Hacienda">
-            <RanchSelect haciendas={haciendas} defaultValue={corral?.ranch} />
           </Field>
           <Field label="Latitud" hint="Ej. 14.0723">
             <Input

@@ -6,12 +6,13 @@ import { prisma } from "@/lib/db";
 import { requireEditor, requireAdmin } from "@/lib/auth";
 import { str, float } from "@/actions/helpers";
 import { parseKmzOrKml, ringToGeoJson } from "@/lib/kml";
+import { HACIENDA_NAME } from "@/lib/brand";
 
 function plotData(formData: FormData) {
   return {
     number: str(formData.get("number")),
     area: float(formData.get("area")),
-    ranch: str(formData.get("ranch")),
+    ranch: HACIENDA_NAME,
     plotType: str(formData.get("plot_type")),
     comment: str(formData.get("comment")),
     boundaries: str(formData.get("boundaries")),
@@ -44,13 +45,12 @@ export async function deletePlot(formData: FormData) {
 // Importa potreros desde un archivo .kmz/.kml de Google Earth.
 // Cada polígono (Placemark) se convierte en un potrero: su nombre se usa como
 // número, los linderos se guardan como GeoJSON y el área se calcula en hectáreas.
-// Si ya existe un potrero con ese número (y misma hacienda, si se indica) se
-// actualiza; de lo contrario se crea.
+// Si ya existe un potrero con ese número se actualiza; de lo contrario se crea.
 export async function importPlotsFromKmz(formData: FormData) {
   await requireEditor();
 
   const file = formData.get("file");
-  const ranch = str(formData.get("ranch"));
+  const ranch = HACIENDA_NAME;
   const plotType = str(formData.get("plot_type"));
 
   if (!file || typeof file === "string" || file.size === 0) {
